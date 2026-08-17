@@ -10,15 +10,17 @@ Eine Mission nach der anderen. Eine Mission wird erst abgeschlossen, bevor die n
 
 ## Aktive Mission
 
-**Mission 1 — ORBIT CORE Grundgerüst**
+Keine. Mission 3 wurde abgeschlossen; Mission 4 ist noch nicht gestartet.
 
-Status: **Abgeschlossen**
+## Abgeschlossene Missionen
 
-## Ergebnis Mission 1
+1. **ORBIT CORE Grundgerüst** — Fundament und Arbeitsregeln
+2. **Architektur-Grundstruktur** — fünf getrennte Kernebenen
+3. **ORBIT App-Kern V1** — erste ausführbare Kontrollzentrale
 
-Das ORBIT CORE-Grunddokument wurde angelegt und geprüft.
+## Aktueller Stand
 
-Damit sind Zweck, Arbeitsprinzip, Missionsdisziplin und Backlog-Regel als verbindlicher Kern dokumentiert.
+Das ORBIT Control Center besitzt eine responsive Desktop- und Mobiloberfläche mit Friday-Systemkern, Missionsstatus, Modulübersicht, Befehlseingabe und Schnellerfassung.
 
 ## Arbeitsprinzip
 
@@ -34,4 +36,4 @@ Neue Ideen und Nebenaufgaben werden gesammelt und nicht während der aktiven Mis
 
 ## Nächste Mission
 
-Noch nicht gestartet.
+Mission 4 wird als nächster klar abgegrenzter Funktionsausbau definiert.
