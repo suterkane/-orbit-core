@@ -25,6 +25,27 @@ Die späteren Benutzeroberflächen und Kommunikationswege von ORBIT.
 
 Die Ebenen werden getrennt aufgebaut. Neue Komponenten werden erst ergänzt, wenn ihre Aufgabe und ihr Platz in der Architektur klar sind.
 
+## Erste Verzeichnisstruktur
+
+```text
+ORBIT CORE
+├── core/        # Identität, Regeln und zentraler Zustand
+├── missions/    # Missionen und deren Lebenszyklus
+├── knowledge/   # Wissen und dauerhafte Dokumentation
+├── system/      # Technik, Automatisierung und Integrationen
+└── interface/   # Benutzeroberflächen und Kommunikationswege
+```
+
+Die Verzeichnisse bilden zunächst die logische Architektur ab. Konkrete Implementierungen werden erst in den jeweils zuständigen Missionen ergänzt.
+
+## Architekturregel
+
+Jede Komponente gehört eindeutig zu einer Ebene. Abhängigkeiten zwischen Ebenen werden bewusst definiert und nicht zufällig durch die Implementierung erzeugt.
+
 ## Status
 
 Mission 2 — Architektur-Grundstruktur: **In Arbeit**
+
+### Erledigter Schritt
+
+Die logische Verzeichnisstruktur für die fünf ORBIT-Kernebenen ist definiert.
