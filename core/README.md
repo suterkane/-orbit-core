@@ -19,6 +19,6 @@ Missionen, Wissen, technische Integrationen und Benutzeroberflächen gehören ni
 
 ## Status
 
-Mission 2 — Architektur-Grundstruktur: **In Arbeit**
+Mission 2 — Architektur-Grundstruktur: **Abgeschlossen**
 
 Erster Bereich angelegt: `core/`
