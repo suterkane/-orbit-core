@@ -12,7 +12,13 @@ Eine Mission nach der anderen. Eine Mission wird erst abgeschlossen, bevor die n
 
 **Mission 1 — ORBIT CORE Grundgerüst**
 
-Status: In Arbeit
+Status: **Abgeschlossen**
+
+## Ergebnis Mission 1
+
+Das ORBIT CORE-Grunddokument wurde angelegt und geprüft.
+
+Damit sind Zweck, Arbeitsprinzip, Missionsdisziplin und Backlog-Regel als verbindlicher Kern dokumentiert.
 
 ## Arbeitsprinzip
 
@@ -25,3 +31,7 @@ Status: In Arbeit
 ## Backlog
 
 Neue Ideen und Nebenaufgaben werden gesammelt und nicht während der aktiven Mission begonnen.
+
+## Nächste Mission
+
+Noch nicht gestartet.
