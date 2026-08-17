@@ -19,13 +19,13 @@ Wissen, Dokumentation und dauerhaft relevante Inhalte.
 Technische Komponenten, Automatisierung und Integrationen.
 
 ### 5. INTERFACE
-Die späteren Benutzeroberflächen und Kommunikationswege von ORBIT.
+Benutzeroberflächen und Kommunikationswege von ORBIT.
 
 ## Grundsatz
 
 Die Ebenen werden getrennt aufgebaut. Neue Komponenten werden erst ergänzt, wenn ihre Aufgabe und ihr Platz in der Architektur klar sind.
 
-## Erste Verzeichnisstruktur
+## Verzeichnisstruktur
 
 ```text
 ORBIT CORE
@@ -36,16 +36,17 @@ ORBIT CORE
 └── interface/   # Benutzeroberflächen und Kommunikationswege
 ```
 
-Die Verzeichnisse bilden zunächst die logische Architektur ab. Konkrete Implementierungen werden erst in den jeweils zuständigen Missionen ergänzt.
-
 ## Architekturregel
 
 Jede Komponente gehört eindeutig zu einer Ebene. Abhängigkeiten zwischen Ebenen werden bewusst definiert und nicht zufällig durch die Implementierung erzeugt.
 
+## Abnahme
+
+- alle fünf Kernebenen sind angelegt
+- Zweck und Verantwortungsbereich jeder Ebene sind dokumentiert
+- Abgrenzungen zwischen den Ebenen sind festgelegt
+- Desktop- und Mobil-Schwerpunkt sind im Interface verankert
+
 ## Status
 
-Mission 2 — Architektur-Grundstruktur: **In Arbeit**
-
-### Erledigter Schritt
-
-Die logische Verzeichnisstruktur für die fünf ORBIT-Kernebenen ist definiert.
+Mission 2 — Architektur-Grundstruktur: **Abgeschlossen**
