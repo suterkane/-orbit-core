@@ -22,6 +22,6 @@ Zentrale Identität, Regeln und Zustände gehören in `core/`. Aktive Aufgaben g
 
 ## Status
 
-Mission 2 — Architektur-Grundstruktur: **In Arbeit**
+Mission 2 — Architektur-Grundstruktur: **Abgeschlossen**
 
 Erster Bereich definiert: `system/`
