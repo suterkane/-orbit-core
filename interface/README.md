@@ -26,6 +26,6 @@ Zentrale Regeln und Zustände gehören in `core/`. Missionen gehören in `missio
 
 ## Status
 
-Mission 2 — Architektur-Grundstruktur: **In Arbeit**
+Mission 2 — Architektur-Grundstruktur: **Abgeschlossen**
 
 Erster Bereich definiert: `interface/`
