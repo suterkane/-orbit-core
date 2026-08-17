@@ -10,7 +10,7 @@ Eine Mission nach der anderen. Eine Mission wird erst abgeschlossen, bevor die n
 
 ## Aktive Mission
 
-Keine. Mission 5 wurde abgeschlossen; Mission 6 ist noch nicht definiert.
+Keine. Mission 6 wurde abgeschlossen; Mission 7 ist noch nicht definiert.
 
 ## Abgeschlossene Missionen
 
@@ -19,10 +19,11 @@ Keine. Mission 5 wurde abgeschlossen; Mission 6 ist noch nicht definiert.
 3. **ORBIT App-Kern V1** — erste ausführbare Kontrollzentrale
 4. **Schnellerfassung V1** — gemeinsame mobile und Desktop-Erfassung
 5. **ORBIT-Eingang V1** — offene und erledigte Einträge verarbeiten
+6. **Mobiler App-Start V1** — ORBIT vom iPhone-Home-Bildschirm starten
 
 ## Aktueller Stand
 
-Das ORBIT Control Center ist online und auf Desktop sowie iPhone nutzbar. Neue Gedanken werden dauerhaft gespeichert, im gemeinsamen Eingang angezeigt, als erledigt abgelegt und bei Bedarf zurückgeholt.
+Das ORBIT Control Center ist online und auf Desktop sowie iPhone nutzbar. Gedanken werden dauerhaft gespeichert und im gemeinsamen Eingang verarbeitet. Auf dem iPhone kann ORBIT als App-Start zum Home-Bildschirm hinzugefügt und bildschirmfüllend geöffnet werden.
 
 ## Arbeitsprinzip
 
@@ -38,4 +39,4 @@ Neue Ideen und Nebenaufgaben werden gesammelt und nicht während der aktiven Mis
 
 ## Nächste Mission
 
-Mission 6 wird als nächster klar abgegrenzter Funktionsausbau definiert.
+Mission 7 wird als nächster klar abgegrenzter Funktionsausbau definiert.
