@@ -33,6 +33,6 @@ Technische Komponenten gehören in `system/`, Wissen in `knowledge/`, zentrale R
 
 ## Status
 
-Mission 2 — Architektur-Grundstruktur: **In Arbeit**
+Mission 2 — Architektur-Grundstruktur: **Abgeschlossen**
 
 Erster Bereich definiert: `missions/`
