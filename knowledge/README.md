@@ -21,6 +21,6 @@ Aktive Aufgaben gehören in `missions/`. Zentrale Regeln und Zustände gehören 
 
 ## Status
 
-Mission 2 — Architektur-Grundstruktur: **In Arbeit**
+Mission 2 — Architektur-Grundstruktur: **Abgeschlossen**
 
 Erster Bereich definiert: `knowledge/`
