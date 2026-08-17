@@ -10,7 +10,7 @@ Eine Mission nach der anderen. Eine Mission wird erst abgeschlossen, bevor die n
 
 ## Aktive Mission
 
-Keine. Mission 9 wurde abgeschlossen; Mission 10 ist noch nicht definiert.
+Keine. Mission 10 wurde abgeschlossen; Mission 11 ist noch nicht definiert.
 
 ## Abgeschlossene Missionen
 
@@ -23,10 +23,11 @@ Keine. Mission 9 wurde abgeschlossen; Mission 10 ist noch nicht definiert.
 7. **Mobile Navigation V1** — Zentrale, Missionen, Eingang und System mit einer Hand erreichen
 8. **Gedankenbearbeitung V1** — gespeicherte Gedanken direkt korrigieren und ergänzen
 9. **Gedankensuche V1** — offene und erledigte Einträge nach Inhalt durchsuchen
+10. **Wichtige Gedanken V1** — Einträge dauerhaft markieren und automatisch oben halten
 
 ## Aktueller Stand
 
-Das ORBIT Control Center ist online und auf Desktop sowie iPhone nutzbar. Gedanken werden dauerhaft gespeichert, im gemeinsamen Eingang verarbeitet, direkt nachbearbeitet und per Sofortsuche wiedergefunden. Auf dem iPhone startet ORBIT vom Home-Bildschirm und bietet eine feste Navigation zu allen vorhandenen Funktionsbereichen.
+Das ORBIT Control Center ist online und auf Desktop sowie iPhone nutzbar. Gedanken werden dauerhaft gespeichert, verarbeitet, nachbearbeitet, durchsucht und bei Bedarf als wichtig markiert. Wichtige Einträge stehen automatisch oben. Die mobile Oberfläche ist gegen seitliche Verschiebung abgesichert.
 
 ## Arbeitsprinzip
 
@@ -42,4 +43,4 @@ Neue Ideen und Nebenaufgaben werden gesammelt und nicht während der aktiven Mis
 
 ## Nächste Mission
 
-Mission 10 wird als nächster klar abgegrenzter Funktionsausbau definiert.
+Mission 11 wird als nächster klar abgegrenzter Funktionsausbau definiert.
