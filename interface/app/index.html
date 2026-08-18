@@ -8,7 +8,7 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <title>ORBIT · FRIDAY</title>
   <link rel="manifest" href="manifest.webmanifest" />
-  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="styles.css?v=4" />
 </head>
 <body>
   <section id="splash" class="splash" aria-label="FRIDAY Start">
@@ -41,13 +41,7 @@
             <div class="hud-statusline"><i></i> CORE LINK <strong>STABIL</strong></div>
           </div>
           <div class="hud-core" aria-hidden="true">
-            <div class="hud-ring ring-a"></div>
-            <div class="hud-ring ring-b"></div>
-            <div class="hud-ring ring-c"></div>
-            <div class="hud-ticks"></div>
-            <div class="hud-crosshair"></div>
-            <div class="hud-energy"><span></span></div>
-            <div class="hud-core-label"><b>ORBIT</b><small>FRIDAY</small></div>
+            <div class="hud-ring ring-a"></div><div class="hud-ring ring-b"></div><div class="hud-ring ring-c"></div><div class="hud-ticks"></div><div class="hud-crosshair"></div><div class="hud-energy"><span></span></div><div class="hud-core-label"><b>ORBIT</b><small>FRIDAY</small></div>
           </div>
         </div>
         <div class="metric-grid">
@@ -57,17 +51,10 @@
           <button class="metric" data-route="open"><span>Offen</span><strong id="openCount">0</strong><small>QUEUE</small></button>
         </div>
         <button id="nextFocus" class="focus-card"><span>NÄCHSTER FOKUS</span><strong>Keine geplante Aufgabe</strong><small>Friday hält den Kurs frei.</small></button>
-        <section class="capture-card">
-          <label for="quickInput">SCHNELLERFASSUNG / COMMAND INPUT</label>
-          <div class="capture-row"><input id="quickInput" placeholder="Gedanke, Aufgabe oder Idee …" autocomplete="off" /><button id="captureBtn">Erfassen</button></div>
-        </section>
+        <section class="capture-card"><label for="quickInput">SCHNELLERFASSUNG / COMMAND INPUT</label><div class="capture-row"><input id="quickInput" placeholder="Gedanke, Aufgabe oder Idee …" autocomplete="off" /><button id="captureBtn">Erfassen</button></div></section>
       </section>
 
-      <section id="inbox" class="view">
-        <div class="section-head"><div><span class="eyebrow">EINGANG</span><h3>Alles an einem Ort.</h3></div><button id="newEntryBtn" class="small-btn">+ Neu</button></div>
-        <div class="toolbar"><input id="searchInput" type="search" placeholder="Suchen …" /><select id="categoryFilter"><option value="all">Alle Kategorien</option><option value="thought">Gedanken</option><option value="task">Aufgaben</option><option value="idea">Ideen</option></select><select id="dateFilter"><option value="all">Alle Termine</option><option value="today">Heute</option><option value="overdue">Überfällig</option><option value="planned">Geplant</option><option value="week">Nächste 7 Tage</option></select></div>
-        <div id="entryList" class="entry-list"></div>
-      </section>
+      <section id="inbox" class="view"><div class="section-head"><div><span class="eyebrow">EINGANG</span><h3>Alles an einem Ort.</h3></div><button id="newEntryBtn" class="small-btn">+ Neu</button></div><div class="toolbar"><input id="searchInput" type="search" placeholder="Suchen …" /><select id="categoryFilter"><option value="all">Alle Kategorien</option><option value="thought">Gedanken</option><option value="task">Aufgaben</option><option value="idea">Ideen</option></select><select id="dateFilter"><option value="all">Alle Termine</option><option value="today">Heute</option><option value="overdue">Überfällig</option><option value="planned">Geplant</option><option value="week">Nächste 7 Tage</option></select></div><div id="entryList" class="entry-list"></div></section>
 
       <section id="missions" class="view"><div class="section-head"><div><span class="eyebrow">MISSIONEN</span><h3>Mission 17 · Wochenblick V1</h3></div></div><article class="mission-card"><span class="live-dot"></span><strong>AKTIV</strong><p>Offene Aufgaben der kommenden sieben Tage sichtbar machen, ohne heutige oder überfällige Aufgaben doppelt zu zählen.</p><ul><li>Wochenzähler auf der Zentrale</li><li>Direkter Wochenfilter</li><li>Ruhiger Leerzustand</li><li>Mobile Darstellung ohne seitliches Verschieben</li><li>Gemeinsamer Cloud-Stand für PC und iPhone</li></ul></article></section>
 
@@ -80,6 +67,6 @@
   <dialog id="entryDialog"><form method="dialog" id="entryForm"><div class="dialog-head"><h3 id="dialogTitle">Eintrag</h3><button value="cancel" class="icon-btn">×</button></div><input id="editText" required placeholder="Inhalt" /><div class="form-row"><select id="editCategory"><option value="thought">Gedanke</option><option value="task">Aufgabe</option><option value="idea">Idee</option></select><input id="editDue" type="date" /></div><label class="check"><input id="editImportant" type="checkbox" /> Wichtig</label><div class="dialog-actions"><button type="button" id="deleteBtn" class="danger-btn">Löschen</button><button value="save" id="saveBtn" class="primary-btn">Speichern</button></div></form></dialog>
   <dialog id="settingsDialog"><form method="dialog"><div class="dialog-head"><h3>FRIDAY Einstellungen</h3><button value="close" class="icon-btn">×</button></div><p>ORBIT synchronisiert Einträge geschützt über ORBIT Sync. PC und iPhone verwenden denselben Sync-Code und damit denselben Datenstand.</p><button value="close" class="primary-btn full">Fertig</button></form></dialog>
 
-  <script src="app.js"></script>
+  <script src="app.js?v=4"></script>
 </body>
 </html>
