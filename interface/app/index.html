@@ -69,16 +69,16 @@
         <div id="entryList" class="entry-list"></div>
       </section>
 
-      <section id="missions" class="view"><div class="section-head"><div><span class="eyebrow">MISSIONEN</span><h3>Mission 17 · Wochenblick V1</h3></div></div><article class="mission-card"><span class="live-dot"></span><strong>AKTIV</strong><p>Offene Aufgaben der kommenden sieben Tage sichtbar machen, ohne heutige oder überfällige Aufgaben doppelt zu zählen.</p><ul><li>Wochenzähler auf der Zentrale</li><li>Direkter Wochenfilter</li><li>Ruhiger Leerzustand</li><li>Mobile Darstellung ohne seitliches Verschieben</li></ul></article></section>
+      <section id="missions" class="view"><div class="section-head"><div><span class="eyebrow">MISSIONEN</span><h3>Mission 17 · Wochenblick V1</h3></div></div><article class="mission-card"><span class="live-dot"></span><strong>AKTIV</strong><p>Offene Aufgaben der kommenden sieben Tage sichtbar machen, ohne heutige oder überfällige Aufgaben doppelt zu zählen.</p><ul><li>Wochenzähler auf der Zentrale</li><li>Direkter Wochenfilter</li><li>Ruhiger Leerzustand</li><li>Mobile Darstellung ohne seitliches Verschieben</li><li>Gemeinsamer Cloud-Stand für PC und iPhone</li></ul></article></section>
 
-      <section id="system" class="view"><div class="section-head"><div><span class="eyebrow">SYSTEM</span><h3>ORBIT Core</h3></div></div><div class="system-grid"><div><span>Status</span><strong>ONLINE</strong></div><div><span>Speicher</span><strong>LOKAL</strong></div><div><span>Mission</span><strong>17</strong></div><div><span>Theme</span><strong>FRIDAY HUD / RED-GOLD</strong></div></div></section>
+      <section id="system" class="view"><div class="section-head"><div><span class="eyebrow">SYSTEM</span><h3>ORBIT Core</h3></div></div><div class="system-grid"><div><span>Status</span><strong>ONLINE</strong></div><div><span>Speicher</span><strong id="storageStatus">LOKAL</strong></div><div><span>Mission</span><strong>17</strong></div><div><span>Theme</span><strong>FRIDAY HUD / RED-GOLD</strong></div></div></section>
     </main>
 
     <nav class="bottom-nav"><button data-view="dashboard" class="active">Zentrale</button><button data-view="inbox">Eingang</button><button data-view="missions">Missionen</button><button data-view="system">System</button></nav>
   </div>
 
   <dialog id="entryDialog"><form method="dialog" id="entryForm"><div class="dialog-head"><h3 id="dialogTitle">Eintrag</h3><button value="cancel" class="icon-btn">×</button></div><input id="editText" required placeholder="Inhalt" /><div class="form-row"><select id="editCategory"><option value="thought">Gedanke</option><option value="task">Aufgabe</option><option value="idea">Idee</option></select><input id="editDue" type="date" /></div><label class="check"><input id="editImportant" type="checkbox" /> Wichtig</label><div class="dialog-actions"><button type="button" id="deleteBtn" class="danger-btn">Löschen</button><button value="save" id="saveBtn" class="primary-btn">Speichern</button></div></form></dialog>
-  <dialog id="settingsDialog"><form method="dialog"><div class="dialog-head"><h3>FRIDAY Einstellungen</h3><button value="close" class="icon-btn">×</button></div><p>ORBIT speichert Einträge auf diesem Gerät. Das Rot-Gold-HUD ist der aktuelle visuelle Masterstand.</p><button value="close" class="primary-btn full">Fertig</button></form></dialog>
+  <dialog id="settingsDialog"><form method="dialog"><div class="dialog-head"><h3>FRIDAY Einstellungen</h3><button value="close" class="icon-btn">×</button></div><p>ORBIT synchronisiert Einträge geschützt über ORBIT Sync. PC und iPhone verwenden denselben Sync-Code und damit denselben Datenstand.</p><button value="close" class="primary-btn full">Fertig</button></form></dialog>
 
   <script src="app.js"></script>
 </body>
