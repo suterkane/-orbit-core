@@ -10,7 +10,9 @@ Eine Mission nach der anderen. Eine Mission wird erst abgeschlossen, bevor die n
 
 ## Aktive Mission
 
-Aktuell keine neue Mission gestartet. Mission 18 wurde abgeschlossen und abgenommen. Die nächste Mission wird erst danach bewusst festgelegt.
+Mission 19 — **FRIDAY Stimme V1**.
+
+FRIDAY erhält eine erste echte deutsche Sprachausgabe. Beim Start spricht FRIDAY eine kurze Begrüßung, während der Voice-Orb synchron sichtbar reagiert. Die Umsetzung bleibt bewusst klein: Begrüßung, Sprechsteuerung, robuster Fallback und Desktop-/iPhone-Abnahme. Bestehende Kernfunktionen und ORBIT Sync bleiben unangetastet.
 
 ## Abgeschlossene Missionen
 
@@ -75,6 +77,20 @@ FRIDAY Startscreen V2 wurde am 18. August 2026 abgeschlossen und abgenommen:
 
 Mission 18 ist **abgeschlossen**.
 
+## Mission 19 — Implementierungsstand
+
+FRIDAY Stimme V1 ist im App-Master begonnen:
+
+- Speech-Synthesis-Ausgabe beim Start implementiert
+- deutsche Stimme wird bevorzugt
+- Begrüßung wird nach Tageszeit gewählt
+- Voice-Orb wird während der tatsächlichen Sprachausgabe aktiviert
+- nach Ende der Begrüßung öffnet sich die Zentrale
+- Fallback für Geräte ohne Speech-Synthesis-Unterstützung vorhanden
+- Service Worker auf Voice-V1-Assets aktualisiert
+
+Mission 19 bleibt bis zur Desktop-/iPhone-Endkontrolle **aktiv**.
+
 ## Arbeitsprinzip
 
 1. Mission klar definieren.
@@ -90,8 +106,8 @@ Mission 18 ist **abgeschlossen**.
 
 ## Nächster Kontrollpunkt
 
-Mission 18 ist abgeschlossen. Vor Beginn der nächsten Mission den neuen Schwerpunkt bewusst festlegen.
+FRIDAY Stimme V1 über Vercel ausrollen und auf Desktop und iPhone prüfen: hörbare Begrüßung, synchroner Voice-Orb und zuverlässiger Übergang in die Zentrale.
 
 ## Nächste Mission
 
-Noch nicht gestartet.
+Erst nach Abschluss und Abnahme von Mission 19 festlegen.
