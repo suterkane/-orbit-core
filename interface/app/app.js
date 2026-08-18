@@ -1,9 +1,71 @@
 const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
 const KEY='orbit.entries.v1';
+const SYNC_KEY_STORAGE='orbit.sync.key.v1';
+const SYNC_URL='https://vhmokhunkvoctavmrjwl.supabase.co/functions/v1/orbit-sync';
 let entries=JSON.parse(localStorage.getItem(KEY)||'[]');
 let editingId=null;
+let syncKey=localStorage.getItem(SYNC_KEY_STORAGE)||'';
+let syncReady=false;
+let syncBusy=false;
+let syncTimer=null;
+let pollTimer=null;
 
-function save(){localStorage.setItem(KEY,JSON.stringify(entries));renderAll()}
+function setStorageStatus(text){const el=$('#storageStatus');if(el)el.textContent=text}
+function persistLocal(){localStorage.setItem(KEY,JSON.stringify(entries))}
+async function syncRequest(method,body){
+  const r=await fetch(SYNC_URL,{method,headers:{'Content-Type':'application/json','x-orbit-sync-key':syncKey},body:body?JSON.stringify(body):undefined});
+  if(r.status===401)throw new Error('SYNC_KEY');
+  if(!r.ok)throw new Error(`SYNC_${r.status}`);
+  return r.json();
+}
+async function pushCloud(){
+  if(!syncReady||syncBusy)return;
+  syncBusy=true;
+  try{await syncRequest('POST',{entries});setStorageStatus('CLOUD · SYNCHRON')}catch{setStorageStatus('CLOUD · FEHLER')}finally{syncBusy=false}
+}
+function scheduleCloudPush(){
+  if(!syncReady)return;
+  clearTimeout(syncTimer);
+  syncTimer=setTimeout(pushCloud,180);
+}
+async function pullCloud(){
+  if(!syncReady||syncBusy)return;
+  syncBusy=true;
+  try{
+    const state=await syncRequest('GET');
+    if(Array.isArray(state.entries)&&state.entries.length){
+      const remote=JSON.stringify(state.entries),local=JSON.stringify(entries);
+      if(remote!==local){entries=state.entries;persistLocal();renderAll()}
+    }
+    setStorageStatus('CLOUD · SYNCHRON');
+  }catch{setStorageStatus('CLOUD · FEHLER')}finally{syncBusy=false}
+}
+async function connectSync(){
+  if(!syncKey){
+    const entered=prompt('ORBIT Sync-Code eingeben. Derselbe Code verbindet PC und iPhone.');
+    if(!entered){setStorageStatus('LOKAL');return}
+    syncKey=entered.trim();
+    localStorage.setItem(SYNC_KEY_STORAGE,syncKey);
+  }
+  setStorageStatus('CLOUD · VERBINDEN');
+  try{
+    const state=await syncRequest('GET');
+    if(Array.isArray(state.entries)&&state.entries.length){entries=state.entries;persistLocal()}
+    else if(entries.length){await syncRequest('POST',{entries})}
+    syncReady=true;
+    setStorageStatus('CLOUD · SYNCHRON');
+    renderAll();
+    if(!pollTimer)pollTimer=setInterval(pullCloud,15000);
+  }catch(err){
+    syncReady=false;
+    if(err.message==='SYNC_KEY'){
+      localStorage.removeItem(SYNC_KEY_STORAGE);syncKey='';setStorageStatus('SYNC-CODE FALSCH');
+      alert('Der ORBIT Sync-Code ist nicht korrekt. Bitte Seite neu laden und erneut eingeben.');
+    }else setStorageStatus('CLOUD · FEHLER');
+  }
+}
+
+function save(){persistLocal();renderAll();scheduleCloudPush()}
 function isoToday(){const d=new Date();return new Date(d.getTime()-d.getTimezoneOffset()*60000).toISOString().slice(0,10)}
 function dateOnly(v){return v?new Date(v+'T12:00:00'):null}
 function diffDays(v){if(!v)return null;const t=dateOnly(isoToday()),d=dateOnly(v);return Math.round((d-t)/86400000)}
@@ -14,7 +76,7 @@ function overdueTasks(){return taskEntries().filter(e=>diffDays(e.due)<0)}
 function weekTasks(){return taskEntries().filter(e=>{const n=diffDays(e.due);return n>=1&&n<=7})}
 function plannedTasks(){return taskEntries().filter(e=>diffDays(e.due)>=1).sort((a,b)=>a.due.localeCompare(b.due))}
 
-function showApp(){localStorage.setItem('orbit.started','1');$('#splash').classList.add('hidden');$('#app').classList.remove('hidden');renderAll()}
+function showApp(){localStorage.setItem('orbit.started','1');$('#splash').classList.add('hidden');$('#app').classList.remove('hidden');renderAll();connectSync()}
 $('#initiateBtn').onclick=showApp;
 if(localStorage.getItem('orbit.started')==='1')showApp();
 
@@ -43,4 +105,6 @@ $('#searchInput').oninput=renderEntries;$('#categoryFilter').onchange=renderEntr
 function renderDashboard(){const today=todayTasks(),over=overdueTasks(),week=weekTasks(),open=openEntries(),next=plannedTasks()[0];$('#todayCount').textContent=today.length;$('#overdueCount').textContent=over.length;$('#weekCount').textContent=week.length;$('#openCount').textContent=open.length;$('#heroText').textContent=over.length?`${over.length} überfällige Aufgabe${over.length===1?' wartet':'n warten'}. Priorität empfohlen.`:today.length?`${today.length} Aufgabe${today.length===1?' ist':'n sind'} heute fällig.`:week.length?`${week.length} Aufgabe${week.length===1?' liegt':'n liegen'} in den nächsten sieben Tagen.`:'Keine akute Terminlage.';const f=$('#nextFocus');if(next){f.querySelector('strong').textContent=next.text;f.querySelector('small').textContent=`${formatDue(next.due)} · Antippen für geplante Aufgaben`;f.onclick=()=>routeFilter('planned')}else{f.querySelector('strong').textContent='Keine geplante Aufgabe';f.querySelector('small').textContent='Friday hält den Kurs frei.';f.onclick=null}}
 function renderAll(){renderDashboard();renderEntries()}
 renderAll();
+document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible')pullCloud()});
+window.addEventListener('online',()=>pullCloud());
 if('serviceWorker'in navigator)window.addEventListener('load',()=>navigator.serviceWorker.register('service-worker.js').catch(()=>{}));
