@@ -39,5 +39,31 @@ radial-gradient(circle at 50% 46%,rgba(255,248,218,.98) 0 4%,#ffc666 5% 10%,#ff4
 @keyframes fridayIdle{0%,100%{transform:scale(.96);opacity:.18}50%{transform:scale(1.04);opacity:.48}}
 @keyframes fridaySpeak{from{transform:scale(.96)}to{transform:scale(1.06)}}
 @keyframes fridayVoice{0%{transform:scale(.78);opacity:.72}100%{transform:scale(1.18);opacity:0}}
-@media(max-width:620px){.splash-frame{min-height:calc(100dvh - 24px);padding:26px 18px 24px}.friday-core-wrap{width:min(72vw,280px)}.friday-statusbar{width:92%}.splash .friday-title h1{font-size:clamp(44px,14vw,68px)}}
+@media(max-width:620px){
+  .splash{padding:max(10px,env(safe-area-inset-top)) 10px max(10px,env(safe-area-inset-bottom))}
+  .splash-frame{width:100%;min-height:calc(100dvh - max(20px,env(safe-area-inset-top)) - max(20px,env(safe-area-inset-bottom)));padding:24px 16px 22px}
+  .friday-core-wrap{width:min(68vw,270px)}
+  .friday-statusbar{width:94%}
+  .splash .friday-title h1{font-size:clamp(42px,14vw,66px)}
+}
+@media(max-width:430px) and (max-height:780px){
+  .splash-frame{padding:18px 14px 16px}
+  .brand-top{font-size:11px}.brand-top span{font-size:7px;margin-top:5px}
+  .friday-kicker{font-size:7px;margin-top:3px}
+  .splash .friday-title h1{font-size:44px}
+  .friday-subtitle{font-size:7px}
+  .friday-core-wrap{width:min(54vw,220px);margin:2px auto}
+  .friday-core-label{font-size:6px}
+  .friday-greeting{gap:3px;margin-top:0}.friday-greeting strong{font-size:12px}.friday-greeting span{font-size:7px}
+  .friday-statusbar{padding:9px 10px}.friday-statusbar span,.friday-statusbar strong{font-size:7px}
+  .splash .initiate{padding:12px 24px;min-width:190px}
+  .splash .start-hint{font-size:6px}
+}
+@media(orientation:landscape) and (max-height:520px){
+  .splash{overflow:auto;place-items:start center}
+  .splash-frame{min-height:auto;width:min(96vw,760px);display:grid;grid-template-columns:1fr 220px;grid-template-rows:auto auto auto;gap:8px 20px;padding:18px 22px}
+  .splash-frame>div:first-child{grid-column:1;align-self:end}.friday-core-wrap{grid-column:2;grid-row:1/4;width:200px;margin:auto}
+  .friday-greeting,.friday-statusbar,.splash .initiate,.splash .start-hint{grid-column:1}
+  .friday-statusbar{width:100%}
+}
 @media(prefers-reduced-motion:reduce){.friday-core-wrap:before,.friday-core-wrap:after,.friday-orb,.friday-orb .voice-wave{animation:none!important}}
