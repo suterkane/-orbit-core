@@ -2,11 +2,15 @@
   // FRIDAY is the real launch screen, not a one-time onboarding screen.
   localStorage.removeItem('orbit.started');
 
+  const VOICE_URL='https://vhmokhunkvoctavmrjwl.supabase.co/functions/v1/friday-voice';
+  const SYNC_KEY_STORAGE='orbit.sync.key.v1';
   const orb=()=>document.querySelector('#fridayVoiceOrb');
   const statusText=()=>document.querySelector('.friday-greeting span');
   let speakTimer=null;
   let launchTimer=null;
   let launching=false;
+  let activeAudio=null;
+  let activeAudioUrl='';
 
   function setSpeaking(active=true,duration=0){
     const el=orb();if(!el)return;
@@ -23,6 +27,58 @@
     return'Guten Abend, Rene. Friday ist bereit.';
   }
 
+  function cleanupAudio(){
+    try{activeAudio?.pause()}catch{}
+    activeAudio=null;
+    if(activeAudioUrl){URL.revokeObjectURL(activeAudioUrl);activeAudioUrl=''}
+  }
+
+  async function speakSeraphina(text,{onend}={}){
+    const syncKey=(localStorage.getItem(SYNC_KEY_STORAGE)||'').trim();
+    if(!syncKey)return false;
+
+    try{
+      const response=await fetch(VOICE_URL,{
+        method:'POST',
+        headers:{'Content-Type':'application/json','x-orbit-sync-key':syncKey},
+        body:JSON.stringify({text})
+      });
+      if(!response.ok)return false;
+
+      const blob=await response.blob();
+      if(!blob.size)return false;
+      cleanupAudio();
+      activeAudioUrl=URL.createObjectURL(blob);
+      activeAudio=new Audio(activeAudioUrl);
+      activeAudio.preload='auto';
+
+      let finished=false;
+      const finish=()=>{
+        if(finished)return;
+        finished=true;
+        clearTimeout(launchTimer);
+        setSpeaking(false);
+        cleanupAudio();
+        onend?.();
+      };
+
+      activeAudio.onplay=()=>{
+        setSpeaking(true);
+        const status=statusText();
+        if(status)status.textContent='FRIDAY spricht · SERAPHINA HD';
+      };
+      activeAudio.onended=finish;
+      activeAudio.onerror=finish;
+      await activeAudio.play();
+      launchTimer=setTimeout(finish,9000);
+      return true;
+    }catch{
+      cleanupAudio();
+      setSpeaking(false);
+      return false;
+    }
+  }
+
   function getGermanVoices(){
     if(!('speechSynthesis'in window))return[];
     return window.speechSynthesis.getVoices().filter(v=>(v.lang||'').toLowerCase().startsWith('de'));
@@ -31,24 +87,19 @@
   function pickGermanVoice(){
     const german=getGermanVoices();
     if(!german.length)return null;
-
-    const preferredNames=[
-      /anna/i,/petra/i,/katja/i,/hedda/i,/marlene/i,/vicki/i,/siri/i,/google deutsch/i
-    ];
+    const preferredNames=[/anna/i,/petra/i,/katja/i,/hedda/i,/marlene/i,/vicki/i,/siri/i,/google deutsch/i];
     for(const pattern of preferredNames){
       const match=german.find(v=>pattern.test(v.name||''));
       if(match)return match;
     }
-
     return german.find(v=>(v.lang||'').toLowerCase()==='de-de')||german[0];
   }
 
   function warmVoices(){
-    if(!('speechSynthesis'in window))return;
-    window.speechSynthesis.getVoices();
+    if('speechSynthesis'in window)window.speechSynthesis.getVoices();
   }
 
-  function speak(text,{onend}={}){
+  function speakBrowser(text,{onend}={}){
     if(!('speechSynthesis'in window)||typeof SpeechSynthesisUtterance==='undefined'){
       setSpeaking(true,1100);
       setTimeout(()=>{setSpeaking(false);onend?.()},1000);
@@ -62,7 +113,7 @@
     const voice=pickGermanVoice();
     if(voice)utterance.voice=voice;
     utterance.rate=.94;
-    utterance.pitch=1.08;
+    utterance.pitch=1.05;
     utterance.volume=1;
 
     let finished=false;
@@ -77,18 +128,24 @@
     utterance.onstart=()=>{
       setSpeaking(true);
       const status=statusText();
-      if(status)status.textContent='FRIDAY spricht …';
+      if(status)status.textContent='FRIDAY spricht · FALLBACK';
     };
     utterance.onend=finish;
     utterance.onerror=finish;
-
-    // iOS Safari occasionally pauses synthesis when the page changes state.
-    // resume() is harmless elsewhere and keeps the greeting deterministic.
     synth.resume?.();
     synth.speak(utterance);
     setSpeaking(true);
     launchTimer=setTimeout(finish,6000);
     return true;
+  }
+
+  async function speak(text,{onend}={}){
+    const status=statusText();
+    if(status)status.textContent='SERAPHINA HD wird geladen …';
+    const played=await speakSeraphina(text,{onend});
+    if(played)return true;
+    if(status)status.textContent='FRIDAY startet mit Ersatzstimme …';
+    return speakBrowser(text,{onend});
   }
 
   function launchApp(){
@@ -107,14 +164,12 @@
     speak(getGreeting(),{onend:launchApp});
   }
 
-  window.ORBITFriday={setSpeaking,speak,getGreeting,pickGermanVoice};
+  window.ORBITFriday={setSpeaking,speak,getGreeting,pickGermanVoice,speakSeraphina};
 
   document.addEventListener('DOMContentLoaded',()=>{
     const btn=document.querySelector('#initiateBtn');
     if(btn)btn.addEventListener('click',launchWithVoice,{capture:true});
     warmVoices();
-    if('speechSynthesis'in window){
-      window.speechSynthesis.addEventListener?.('voiceschanged',warmVoices,{once:true});
-    }
+    if('speechSynthesis'in window)window.speechSynthesis.addEventListener?.('voiceschanged',warmVoices,{once:true});
   });
 })();
