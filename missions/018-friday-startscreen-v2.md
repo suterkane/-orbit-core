@@ -24,6 +24,18 @@ FRIDAY erhält einen deutlich hochwertigeren Startscreen im ORBIT Rot-Gold-HUD-S
 - Desktop und iPhone zeigen denselben visuellen Master ohne horizontales Verschieben
 - ORBIT Sync bleibt stabil
 
+## Abschluss
+
+Mission 18 wurde am 18. August 2026 auf Desktop und iPhone erfolgreich abgenommen.
+
+- FRIDAY Startscreen V2 ist produktiv ausgerollt
+- normaler Desktop-Browser zeigt nach Cache-Bereinigung den aktuellen Produktionsstand
+- iPhone-Darstellung passt ohne horizontales Verschieben
+- Voice-Orb ist im Idle-Zustand sichtbar animiert
+- beim Start reagiert der Orb mit einem klar erkennbaren Sprech-/Verbindungszustand
+- INITIATE führt anschließend zuverlässig in die ORBIT-Zentrale
+- ORBIT Sync und bestehende App-Funktionen bleiben erhalten
+
 ## Status
 
-Aktiv. Umsetzung ist im App-Master begonnen; visuelle Desktop-/iPhone-Endkontrolle steht aus.
+Abgeschlossen.
