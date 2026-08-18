@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#160704" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <title>ORBIT · FRIDAY</title>
+  <link rel="manifest" href="manifest.webmanifest" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <section id="splash" class="splash" aria-label="FRIDAY Start">
+    <div class="splash-frame">
+      <div class="brand-top">ORBIT <span>AI ASSISTANT SYSTEM</span></div>
+      <h1>FRIDAY</h1>
+      <p class="tagline">INTELLIGENCE · PRECISION · EVOLVED</p>
+      <div class="reactor" aria-hidden="true"><i></i><b></b><span></span></div>
+      <div class="orbit-mark">ORBIT</div>
+      <p class="priority">YOUR ORBIT. MY PRIORITY.</p>
+      <div class="status"><span></span> SYSTEM STATUS <strong>ONLINE</strong></div>
+      <button id="initiateBtn" class="initiate">INITIATE</button>
+      <small>TAP TO CONNECT</small>
+    </div>
+  </section>
+
+  <div id="app" class="app hidden">
+    <header class="topbar">
+      <div><span class="eyebrow">ORBIT CONTROL CENTER</span><h2>Guten Tag, Rene.</h2></div>
+      <button id="settingsBtn" class="icon-btn" aria-label="Einstellungen">⚙</button>
+    </header>
+
+    <main>
+      <section id="dashboard" class="view active">
+        <div class="hero-card"><span>FRIDAY</span><h3>System online.</h3><p id="heroText">Bereit für die nächste präzise Aktion.</p></div>
+        <div class="metric-grid">
+          <button class="metric" data-route="today"><span>Heute</span><strong id="todayCount">0</strong></button>
+          <button class="metric danger" data-route="overdue"><span>Überfällig</span><strong id="overdueCount">0</strong></button>
+          <button class="metric gold" data-route="week"><span>Nächste 7 Tage</span><strong id="weekCount">0</strong></button>
+          <button class="metric" data-route="open"><span>Offen</span><strong id="openCount">0</strong></button>
+        </div>
+        <button id="nextFocus" class="focus-card"><span>NÄCHSTER FOKUS</span><strong>Keine geplante Aufgabe</strong><small>Friday hält den Kurs frei.</small></button>
+        <section class="capture-card">
+          <label for="quickInput">Schnellerfassung</label>
+          <div class="capture-row"><input id="quickInput" placeholder="Gedanke, Aufgabe oder Idee …" autocomplete="off" /><button id="captureBtn">Erfassen</button></div>
+        </section>
+      </section>
+
+      <section id="inbox" class="view">
+        <div class="section-head"><div><span class="eyebrow">EINGANG</span><h3>Alles an einem Ort.</h3></div><button id="newEntryBtn" class="small-btn">+ Neu</button></div>
+        <div class="toolbar"><input id="searchInput" type="search" placeholder="Suchen …" /><select id="categoryFilter"><option value="all">Alle Kategorien</option><option value="thought">Gedanken</option><option value="task">Aufgaben</option><option value="idea">Ideen</option></select><select id="dateFilter"><option value="all">Alle Termine</option><option value="today">Heute</option><option value="overdue">Überfällig</option><option value="planned">Geplant</option><option value="week">Nächste 7 Tage</option></select></div>
+        <div id="entryList" class="entry-list"></div>
+      </section>
+
+      <section id="missions" class="view"><div class="section-head"><div><span class="eyebrow">MISSIONEN</span><h3>Mission 17 · Wochenblick V1</h3></div></div><article class="mission-card"><span class="live-dot"></span><strong>AKTIV</strong><p>Offene Aufgaben der kommenden sieben Tage sichtbar machen, ohne heutige oder überfällige Aufgaben doppelt zu zählen.</p><ul><li>Wochenzähler auf der Zentrale</li><li>Direkter Wochenfilter</li><li>Ruhiger Leerzustand</li><li>Mobile Darstellung ohne seitliches Verschieben</li></ul></article></section>
+
+      <section id="system" class="view"><div class="section-head"><div><span class="eyebrow">SYSTEM</span><h3>ORBIT Core</h3></div></div><div class="system-grid"><div><span>Status</span><strong>ONLINE</strong></div><div><span>Speicher</span><strong>LOKAL</strong></div><div><span>Mission</span><strong>17</strong></div><div><span>Theme</span><strong>FRIDAY RED/GOLD</strong></div></div></section>
+    </main>
+
+    <nav class="bottom-nav"><button data-view="dashboard" class="active">Zentrale</button><button data-view="inbox">Eingang</button><button data-view="missions">Missionen</button><button data-view="system">System</button></nav>
+  </div>
+
+  <dialog id="entryDialog"><form method="dialog" id="entryForm"><div class="dialog-head"><h3 id="dialogTitle">Eintrag</h3><button value="cancel" class="icon-btn">×</button></div><input id="editText" required placeholder="Inhalt" /><div class="form-row"><select id="editCategory"><option value="thought">Gedanke</option><option value="task">Aufgabe</option><option value="idea">Idee</option></select><input id="editDue" type="date" /></div><label class="check"><input id="editImportant" type="checkbox" /> Wichtig</label><div class="dialog-actions"><button type="button" id="deleteBtn" class="danger-btn">Löschen</button><button value="save" id="saveBtn" class="primary-btn">Speichern</button></div></form></dialog>
+  <dialog id="settingsDialog"><form method="dialog"><div class="dialog-head"><h3>FRIDAY Einstellungen</h3><button value="close" class="icon-btn">×</button></div><p>ORBIT speichert Einträge auf diesem Gerät. Das Rot-Gold-Theme ist der neue visuelle Masterstand.</p><button value="close" class="primary-btn full">Fertig</button></form></dialog>
+
+  <script src="app.js"></script>
+</body>
+</html>
