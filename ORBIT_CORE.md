@@ -10,9 +10,7 @@ Eine Mission nach der anderen. Eine Mission wird erst abgeschlossen, bevor die n
 
 ## Aktive Mission
 
-Mission 17 — **Wochenblick V1**.
-
-Friday erweitert die Zentrale um einen kompakten Überblick über offene Aufgaben, die in den kommenden sieben Tagen anstehen. Der Wochenblick führt direkt zu den betroffenen Aufgaben und ergänzt die bestehende Tageslage, ohne heutige oder überfällige Aufgaben doppelt zu zählen.
+Aktuell keine neue Mission gestartet. Mission 17 wurde abgeschlossen und abgenommen. Die nächste Mission wird erst danach bewusst festgelegt.
 
 ## Abgeschlossene Missionen
 
@@ -32,6 +30,7 @@ Friday erweitert die Zentrale um einen kompakten Überblick über offene Aufgabe
 14. **Terminübersicht V1** — Aufgaben nach heute, überfällig, geplant oder allen Aufgaben filtern
 15. **Tageslage V1** — heutige und überfällige Aufgaben direkt auf der Zentrale anzeigen und öffnen
 16. **Nächster Fokus V1** — die nächste geplante Aufgabe direkt auf der Zentrale anzeigen und öffnen
+17. **Wochenblick V1** — offene Aufgaben der kommenden sieben Tage auf der Zentrale anzeigen, direkt filtern und über einen gemeinsamen Cloud-Stand auf Desktop und iPhone synchron halten
 
 ## Rekonstruktions-Checkpoint — 18. August 2026
 
@@ -41,21 +40,23 @@ Neuer App-Master:
 
 `interface/app/`
 
-Enthalten sind die Funktionen der Missionen 3 bis 16 sowie die Implementierung von Mission 17, darunter Schnellerfassung, Eingang, Suche, Kategorien, Wichtig-Markierung, Bearbeitung, zweistufiges Löschen, Aufgaben-Fälligkeiten, Terminfilter, Tageslage, nächster Fokus und Wochenblick.
+Enthalten sind die Funktionen der Missionen 3 bis 17, darunter Schnellerfassung, Eingang, Suche, Kategorien, Wichtig-Markierung, Bearbeitung, zweistufiges Löschen, Aufgaben-Fälligkeiten, Terminfilter, Tageslage, nächster Fokus, Wochenblick und geräteübergreifender ORBIT Sync.
 
-Der neue visuelle Masterstil ist **FRIDAY Rot/Gold** auf dunkler Oberfläche. Die App ist responsive, nutzt lokale dauerhafte Speicherung und besitzt eine installierbare PWA-/Offline-Grundlage.
+Der neue visuelle Masterstil ist **FRIDAY Rot/Gold** auf dunkler Oberfläche. Die App ist responsive, besitzt eine installierbare PWA-/Offline-Grundlage und synchronisiert den ORBIT-Datenstand über ORBIT Sync zwischen PC und iPhone.
 
-## Mission 17 — Implementierungsstand
+## Mission 17 — Abschlussstand
 
-Der Wochenblick ist im rekonstruierten App-Code umgesetzt:
+Der Wochenblick ist umgesetzt und am 18. August 2026 abgenommen:
 
 - gezählt werden offene Aufgaben mit Fälligkeit von Tag +1 bis Tag +7
 - heutige und überfällige Aufgaben werden nicht doppelt gezählt
 - erledigte Aufgaben werden ausgeschlossen
 - Antippen führt in den Wochenfilter
 - ein leerer Wochenblick bleibt ruhig und eindeutig
+- Desktop und iPhone verwenden denselben Cloud-Datenstand
+- Endtest mit einer für den Folgetag geplanten Testaufgabe auf beiden Geräten bestanden
 
-Mission 17 bleibt bis zur Deployment- und Endkontrolle **aktiv**.
+Mission 17 ist **abgeschlossen**.
 
 ## Arbeitsprinzip
 
@@ -68,12 +69,12 @@ Mission 17 bleibt bis zur Deployment- und Endkontrolle **aktiv**.
 ## Backlog
 
 - Gmail in Friday einbinden, sobald die Gmail-Verbindung echte Postfachdaten liefert.
-- Neue Ideen und Nebenaufgaben werden gesammelt und nicht während der aktiven Mission begonnen.
+- Neue Ideen und Nebenaufgaben werden gesammelt und nicht während einer aktiven Mission begonnen.
 
 ## Nächster Kontrollpunkt
 
-Den rekonstruierten Master deployen, auf Desktop und iPhone prüfen und Mission 17 erst danach abnehmen.
+Mission 17 ist abgeschlossen. Vor Beginn der nächsten Mission den neuen Schwerpunkt bewusst festlegen.
 
 ## Nächste Mission
 
-Erst nach Abschluss und Abnahme von Mission 17 festlegen.
+Noch nicht gestartet.
