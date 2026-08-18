@@ -1,0 +1,11 @@
+{
+  "name": "ORBIT · FRIDAY",
+  "short_name": "ORBIT",
+  "description": "ORBIT Control Center mit FRIDAY Interface",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#090504",
+  "theme_color": "#160704",
+  "orientation": "portrait-primary"
+}
