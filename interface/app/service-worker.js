@@ -1,6 +1,6 @@
-const CACHE='orbit-friday-v4-network-first';
+const CACHE='orbit-friday-v5-startscreen-v2';
 const FALLBACK='index.html';
-const CORE=['./','index.html','styles.css?v=4','app.js?v=4','manifest.webmanifest'];
+const CORE=['./','index.html','styles.css?v=4','start-v2.css?v=1','start-v2.js?v=1','app.js?v=4','manifest.webmanifest'];
 
 self.addEventListener('install',event=>{
   event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(CORE)).then(()=>self.skipWaiting()));
