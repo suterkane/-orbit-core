@@ -3,6 +3,7 @@
   localStorage.removeItem('orbit.started');
 
   const orb=()=>document.querySelector('#fridayVoiceOrb');
+  const statusText=()=>document.querySelector('.friday-greeting span');
   let speakTimer=null;
   let launchTimer=null;
   let launching=false;
@@ -10,6 +11,7 @@
   function setSpeaking(active=true,duration=0){
     const el=orb();if(!el)return;
     el.classList.toggle('speaking',!!active);
+    el.setAttribute('aria-busy',active?'true':'false');
     clearTimeout(speakTimer);
     if(active&&duration>0)speakTimer=setTimeout(()=>setSpeaking(false),duration);
   }
@@ -21,13 +23,29 @@
     return'Guten Abend, Rene. Friday ist bereit.';
   }
 
+  function getGermanVoices(){
+    if(!('speechSynthesis'in window))return[];
+    return window.speechSynthesis.getVoices().filter(v=>(v.lang||'').toLowerCase().startsWith('de'));
+  }
+
   function pickGermanVoice(){
-    if(!('speechSynthesis'in window))return null;
-    const voices=window.speechSynthesis.getVoices();
-    const german=voices.filter(v=>(v.lang||'').toLowerCase().startsWith('de'));
+    const german=getGermanVoices();
     if(!german.length)return null;
-    const preferred=german.find(v=>/female|anna|katja|petra|hedda|siri|google deutsch/i.test(v.name||''));
-    return preferred||german[0];
+
+    const preferredNames=[
+      /anna/i,/petra/i,/katja/i,/hedda/i,/marlene/i,/vicki/i,/siri/i,/google deutsch/i
+    ];
+    for(const pattern of preferredNames){
+      const match=german.find(v=>pattern.test(v.name||''));
+      if(match)return match;
+    }
+
+    return german.find(v=>(v.lang||'').toLowerCase()==='de-de')||german[0];
+  }
+
+  function warmVoices(){
+    if(!('speechSynthesis'in window))return;
+    window.speechSynthesis.getVoices();
   }
 
   function speak(text,{onend}={}){
@@ -43,8 +61,8 @@
     utterance.lang='de-DE';
     const voice=pickGermanVoice();
     if(voice)utterance.voice=voice;
-    utterance.rate=.96;
-    utterance.pitch=1.06;
+    utterance.rate=.94;
+    utterance.pitch=1.08;
     utterance.volume=1;
 
     let finished=false;
@@ -56,18 +74,26 @@
       onend?.();
     };
 
-    utterance.onstart=()=>setSpeaking(true);
+    utterance.onstart=()=>{
+      setSpeaking(true);
+      const status=statusText();
+      if(status)status.textContent='FRIDAY spricht …';
+    };
     utterance.onend=finish;
     utterance.onerror=finish;
-    setSpeaking(true);
+
+    // iOS Safari occasionally pauses synthesis when the page changes state.
+    // resume() is harmless elsewhere and keeps the greeting deterministic.
+    synth.resume?.();
     synth.speak(utterance);
-    launchTimer=setTimeout(finish,5000);
+    setSpeaking(true);
+    launchTimer=setTimeout(finish,6000);
     return true;
   }
 
   function launchApp(){
-    const greeting=document.querySelector('.friday-greeting span');
-    if(greeting)greeting.textContent='ORBIT ist bereit.';
+    const status=statusText();
+    if(status)status.textContent='ORBIT ist bereit.';
     if(typeof window.showApp==='function')window.showApp();
   }
 
@@ -76,19 +102,19 @@
     launching=true;
     event.preventDefault();
     event.stopImmediatePropagation();
-    const greeting=document.querySelector('.friday-greeting span');
-    if(greeting)greeting.textContent='FRIDAY spricht …';
+    const status=statusText();
+    if(status)status.textContent='FRIDAY initialisiert …';
     speak(getGreeting(),{onend:launchApp});
   }
 
-  window.ORBITFriday={setSpeaking,speak};
+  window.ORBITFriday={setSpeaking,speak,getGreeting,pickGermanVoice};
 
   document.addEventListener('DOMContentLoaded',()=>{
     const btn=document.querySelector('#initiateBtn');
     if(btn)btn.addEventListener('click',launchWithVoice,{capture:true});
+    warmVoices();
     if('speechSynthesis'in window){
-      window.speechSynthesis.getVoices();
-      window.speechSynthesis.addEventListener?.('voiceschanged',()=>window.speechSynthesis.getVoices(),{once:true});
+      window.speechSynthesis.addEventListener?.('voiceschanged',warmVoices,{once:true});
     }
   });
 })();
