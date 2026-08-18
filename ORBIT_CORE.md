@@ -12,7 +12,7 @@ Eine Mission nach der anderen. Eine Mission wird erst abgeschlossen, bevor die n
 
 Mission 17 — **Wochenblick V1**.
 
-Friday erweitert die Zentrale um einen kompakten Überblick über offene Aufgaben, die in den kommenden sieben Tagen anstehen. Der Wochenblick soll direkt zu den betroffenen Aufgaben führen und die bestehende Tageslage sinnvoll ergänzen, ohne heutige oder überfällige Aufgaben doppelt zu zählen.
+Friday erweitert die Zentrale um einen kompakten Überblick über offene Aufgaben, die in den kommenden sieben Tagen anstehen. Der Wochenblick führt direkt zu den betroffenen Aufgaben und ergänzt die bestehende Tageslage, ohne heutige oder überfällige Aufgaben doppelt zu zählen.
 
 ## Abgeschlossene Missionen
 
@@ -33,11 +33,29 @@ Friday erweitert die Zentrale um einen kompakten Überblick über offene Aufgabe
 15. **Tageslage V1** — heutige und überfällige Aufgaben direkt auf der Zentrale anzeigen und öffnen
 16. **Nächster Fokus V1** — die nächste geplante Aufgabe direkt auf der Zentrale anzeigen und öffnen
 
-## Aktueller Stand
+## Rekonstruktions-Checkpoint — 18. August 2026
 
-Das ORBIT Control Center ist online und auf Desktop sowie iPhone nutzbar. Gedanken werden dauerhaft gespeichert, verarbeitet, nachbearbeitet, durchsucht, kategorisiert und bei Bedarf als wichtig markiert. Einträge lassen sich als Gedanke, Aufgabe oder Idee einordnen und gezielt filtern. Aufgaben können zusätzlich ein Fälligkeitsdatum erhalten; Friday kennzeichnet heutige und überfällige Termine direkt im Eingang. Eine eigene Terminübersicht filtert Aufgaben nach heute, überfällig, geplant oder allen Aufgaben und lässt sich mit der Suche kombinieren. Die Zentrale zeigt die Tageslage mit aktuellen Zählern für heute fällige und überfällige Aufgaben. Zusätzlich hebt Friday die nächste zukünftige Aufgabe mit Datum hervor; ein Antippen öffnet direkt die geplanten Aufgaben. Nicht mehr benötigte Einträge können kontrolliert über eine zweistufige Sicherheitsabfrage gelöscht werden. Die mobile Oberfläche ist einschließlich des System-/Settings-Dialogs gegen seitliche Verschiebung abgesichert.
+Der zuvor laufende App-Quellstand war weder im alten Interface-Ordner noch im verbundenen Vercel-Team vollständig greifbar. Deshalb wurde der ORBIT-App-Master kontrolliert rekonstruiert und wieder im GitHub-Repository gesichert.
 
-Mission 17 ergänzt diesen Stand um einen Wochenblick für die kommenden sieben Tage.
+Neuer App-Master:
+
+`interface/app/`
+
+Enthalten sind die Funktionen der Missionen 3 bis 16 sowie die Implementierung von Mission 17, darunter Schnellerfassung, Eingang, Suche, Kategorien, Wichtig-Markierung, Bearbeitung, zweistufiges Löschen, Aufgaben-Fälligkeiten, Terminfilter, Tageslage, nächster Fokus und Wochenblick.
+
+Der neue visuelle Masterstil ist **FRIDAY Rot/Gold** auf dunkler Oberfläche. Die App ist responsive, nutzt lokale dauerhafte Speicherung und besitzt eine installierbare PWA-/Offline-Grundlage.
+
+## Mission 17 — Implementierungsstand
+
+Der Wochenblick ist im rekonstruierten App-Code umgesetzt:
+
+- gezählt werden offene Aufgaben mit Fälligkeit von Tag +1 bis Tag +7
+- heutige und überfällige Aufgaben werden nicht doppelt gezählt
+- erledigte Aufgaben werden ausgeschlossen
+- Antippen führt in den Wochenfilter
+- ein leerer Wochenblick bleibt ruhig und eindeutig
+
+Mission 17 bleibt bis zur Deployment- und Endkontrolle **aktiv**.
 
 ## Arbeitsprinzip
 
@@ -51,6 +69,10 @@ Mission 17 ergänzt diesen Stand um einen Wochenblick für die kommenden sieben 
 
 - Gmail in Friday einbinden, sobald die Gmail-Verbindung echte Postfachdaten liefert.
 - Neue Ideen und Nebenaufgaben werden gesammelt und nicht während der aktiven Mission begonnen.
+
+## Nächster Kontrollpunkt
+
+Den rekonstruierten Master deployen, auf Desktop und iPhone prüfen und Mission 17 erst danach abnehmen.
 
 ## Nächste Mission
 
