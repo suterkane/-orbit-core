@@ -10,7 +10,7 @@ Eine Mission nach der anderen. Eine Mission wird erst abgeschlossen, bevor die n
 
 ## Aktive Mission
 
-Keine. Mission 14 wurde abgeschlossen; Mission 15 ist noch nicht definiert.
+Keine. Mission 15 wurde abgeschlossen; Mission 16 ist noch nicht definiert.
 
 ## Abgeschlossene Missionen
 
@@ -28,10 +28,11 @@ Keine. Mission 14 wurde abgeschlossen; Mission 15 ist noch nicht definiert.
 12. **Gedanken-Kategorien V1** — Einträge dauerhaft als Gedanke, Aufgabe oder Idee einordnen, filtern und nachträglich ändern
 13. **Aufgaben-Fälligkeit V1** — Aufgaben optional mit einem Datum versehen und heutige sowie überfällige Termine direkt erkennen
 14. **Terminübersicht V1** — Aufgaben nach heute, überfällig, geplant oder allen Aufgaben filtern
+15. **Tageslage V1** — heutige und überfällige Aufgaben direkt auf der Zentrale anzeigen und öffnen
 
 ## Aktueller Stand
 
-Das ORBIT Control Center ist online und auf Desktop sowie iPhone nutzbar. Gedanken werden dauerhaft gespeichert, verarbeitet, nachbearbeitet, durchsucht, kategorisiert und bei Bedarf als wichtig markiert. Einträge lassen sich als Gedanke, Aufgabe oder Idee einordnen und gezielt filtern. Aufgaben können zusätzlich ein Fälligkeitsdatum erhalten; Friday kennzeichnet heutige und überfällige Termine direkt im Eingang. Eine eigene Terminübersicht filtert Aufgaben nach heute, überfällig, geplant oder allen Aufgaben und lässt sich mit der Suche kombinieren. Nicht mehr benötigte Einträge können kontrolliert über eine zweistufige Sicherheitsabfrage gelöscht werden. Die mobile Oberfläche ist gegen seitliche Verschiebung abgesichert.
+Das ORBIT Control Center ist online und auf Desktop sowie iPhone nutzbar. Gedanken werden dauerhaft gespeichert, verarbeitet, nachbearbeitet, durchsucht, kategorisiert und bei Bedarf als wichtig markiert. Einträge lassen sich als Gedanke, Aufgabe oder Idee einordnen und gezielt filtern. Aufgaben können zusätzlich ein Fälligkeitsdatum erhalten; Friday kennzeichnet heutige und überfällige Termine direkt im Eingang. Eine eigene Terminübersicht filtert Aufgaben nach heute, überfällig, geplant oder allen Aufgaben und lässt sich mit der Suche kombinieren. Die Zentrale zeigt die Tageslage mit aktuellen Zählern für heute fällige und überfällige Aufgaben; ein Antippen öffnet den passenden Filter. Nicht mehr benötigte Einträge können kontrolliert über eine zweistufige Sicherheitsabfrage gelöscht werden. Die mobile Oberfläche ist gegen seitliche Verschiebung abgesichert.
 
 ## Arbeitsprinzip
 
@@ -47,4 +48,4 @@ Neue Ideen und Nebenaufgaben werden gesammelt und nicht während der aktiven Mis
 
 ## Nächste Mission
 
-Mission 15 wird als nächster klar abgegrenzter Funktionsausbau definiert.
+Mission 16 wird als nächster klar abgegrenzter Funktionsausbau definiert.
