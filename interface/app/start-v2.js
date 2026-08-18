@@ -1,4 +1,7 @@
 (()=>{
+  // Mission 18: the FRIDAY interface is the real launch screen, not a one-time onboarding screen.
+  localStorage.removeItem('orbit.started');
+
   const orb=()=>document.querySelector('#fridayVoiceOrb');
   let speakTimer=null;
   let launching=false;
@@ -21,7 +24,6 @@
     setTimeout(()=>{
       setSpeaking(false);
       if(typeof window.showApp==='function')window.showApp();
-      else document.querySelector('#initiateBtn')?.click();
     },900);
   }
 
