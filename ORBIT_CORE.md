@@ -10,7 +10,9 @@ Eine Mission nach der anderen. Eine Mission wird erst abgeschlossen, bevor die n
 
 ## Aktive Mission
 
-Aktuell keine neue Mission gestartet. Mission 17 wurde abgeschlossen und abgenommen. Die nächste Mission wird erst danach bewusst festgelegt.
+Mission 18 — **FRIDAY Startscreen V2**.
+
+Der ORBIT-Start wird visuell auf die festgelegte FRIDAY-Richtung angehoben: dunkles Rot/Schwarz, dezente Goldakzente, zentraler Voice-Core/Orb und ein sichtbarer Sprechzustand. Desktop und iPhone werden gemeinsam abgenommen; bestehende Kernfunktionen und ORBIT Sync bleiben unangetastet.
 
 ## Abgeschlossene Missionen
 
@@ -42,7 +44,7 @@ Neuer App-Master:
 
 Enthalten sind die Funktionen der Missionen 3 bis 17, darunter Schnellerfassung, Eingang, Suche, Kategorien, Wichtig-Markierung, Bearbeitung, zweistufiges Löschen, Aufgaben-Fälligkeiten, Terminfilter, Tageslage, nächster Fokus, Wochenblick und geräteübergreifender ORBIT Sync.
 
-Der neue visuelle Masterstil ist **FRIDAY Rot/Gold** auf dunkler Oberfläche. Die App ist responsive, besitzt eine installierbare PWA-/Offline-Grundlage und synchronisiert den ORBIT-Datenstand über ORBIT Sync zwischen PC und iPhone.
+Der visuelle Masterstil ist **FRIDAY Rot/Gold** auf dunkler Oberfläche. Die App ist responsive, besitzt eine installierbare PWA-/Offline-Grundlage und synchronisiert den ORBIT-Datenstand über ORBIT Sync zwischen PC und iPhone.
 
 ## Mission 17 — Abschlussstand
 
@@ -57,6 +59,21 @@ Der Wochenblick ist umgesetzt und am 18. August 2026 abgenommen:
 - Endtest mit einer für den Folgetag geplanten Testaufgabe auf beiden Geräten bestanden
 
 Mission 17 ist **abgeschlossen**.
+
+## Mission 18 — Implementierungsstand
+
+FRIDAY Startscreen V2 ist im App-Master begonnen:
+
+- Startscreen als separate V2-Schicht umgesetzt
+- dunkle Rot-/Schwarz-Basis mit feinen Goldakzenten
+- zentraler FRIDAY Voice-Core / Orb
+- ruhige Idle-Animation
+- eigener Sprechzustand mit pulsierenden Voice-Wellen
+- Steuer-Hook `ORBITFriday.setSpeaking(...)` für spätere echte Sprachausgabe
+- Service Worker auf neue V2-Assets aktualisiert
+- bestehender ORBIT Sync und App-Kern nicht verändert
+
+Mission 18 bleibt bis zur Desktop-/iPhone-Endkontrolle **aktiv**.
 
 ## Arbeitsprinzip
 
@@ -73,8 +90,8 @@ Mission 17 ist **abgeschlossen**.
 
 ## Nächster Kontrollpunkt
 
-Mission 17 ist abgeschlossen. Vor Beginn der nächsten Mission den neuen Schwerpunkt bewusst festlegen.
+FRIDAY Startscreen V2 über Vercel ausrollen, auf Desktop und iPhone visuell prüfen und den Voice-Orb abnehmen.
 
 ## Nächste Mission
 
-Noch nicht gestartet.
+Erst nach Abschluss und Abnahme von Mission 18 festlegen.
