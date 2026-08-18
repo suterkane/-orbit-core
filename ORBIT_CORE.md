@@ -10,7 +10,7 @@ Eine Mission nach der anderen. Eine Mission wird erst abgeschlossen, bevor die n
 
 ## Aktive Mission
 
-Keine. Mission 15 wurde abgeschlossen; Mission 16 ist noch nicht definiert.
+Keine. Mission 16 wurde abgeschlossen; Mission 17 ist noch nicht definiert.
 
 ## Abgeschlossene Missionen
 
@@ -29,10 +29,11 @@ Keine. Mission 15 wurde abgeschlossen; Mission 16 ist noch nicht definiert.
 13. **Aufgaben-Fälligkeit V1** — Aufgaben optional mit einem Datum versehen und heutige sowie überfällige Termine direkt erkennen
 14. **Terminübersicht V1** — Aufgaben nach heute, überfällig, geplant oder allen Aufgaben filtern
 15. **Tageslage V1** — heutige und überfällige Aufgaben direkt auf der Zentrale anzeigen und öffnen
+16. **Nächster Fokus V1** — die nächste geplante Aufgabe direkt auf der Zentrale anzeigen und öffnen
 
 ## Aktueller Stand
 
-Das ORBIT Control Center ist online und auf Desktop sowie iPhone nutzbar. Gedanken werden dauerhaft gespeichert, verarbeitet, nachbearbeitet, durchsucht, kategorisiert und bei Bedarf als wichtig markiert. Einträge lassen sich als Gedanke, Aufgabe oder Idee einordnen und gezielt filtern. Aufgaben können zusätzlich ein Fälligkeitsdatum erhalten; Friday kennzeichnet heutige und überfällige Termine direkt im Eingang. Eine eigene Terminübersicht filtert Aufgaben nach heute, überfällig, geplant oder allen Aufgaben und lässt sich mit der Suche kombinieren. Die Zentrale zeigt die Tageslage mit aktuellen Zählern für heute fällige und überfällige Aufgaben; ein Antippen öffnet den passenden Filter. Nicht mehr benötigte Einträge können kontrolliert über eine zweistufige Sicherheitsabfrage gelöscht werden. Die mobile Oberfläche ist gegen seitliche Verschiebung abgesichert.
+Das ORBIT Control Center ist online und auf Desktop sowie iPhone nutzbar. Gedanken werden dauerhaft gespeichert, verarbeitet, nachbearbeitet, durchsucht, kategorisiert und bei Bedarf als wichtig markiert. Einträge lassen sich als Gedanke, Aufgabe oder Idee einordnen und gezielt filtern. Aufgaben können zusätzlich ein Fälligkeitsdatum erhalten; Friday kennzeichnet heutige und überfällige Termine direkt im Eingang. Eine eigene Terminübersicht filtert Aufgaben nach heute, überfällig, geplant oder allen Aufgaben und lässt sich mit der Suche kombinieren. Die Zentrale zeigt die Tageslage mit aktuellen Zählern für heute fällige und überfällige Aufgaben. Zusätzlich hebt Friday die nächste zukünftige Aufgabe mit Datum hervor; ein Antippen öffnet direkt die geplanten Aufgaben. Nicht mehr benötigte Einträge können kontrolliert über eine zweistufige Sicherheitsabfrage gelöscht werden. Die mobile Oberfläche ist einschließlich des System-/Settings-Dialogs gegen seitliche Verschiebung abgesichert.
 
 ## Arbeitsprinzip
 
@@ -44,8 +45,9 @@ Das ORBIT Control Center ist online und auf Desktop sowie iPhone nutzbar. Gedank
 
 ## Backlog
 
-Neue Ideen und Nebenaufgaben werden gesammelt und nicht während der aktiven Mission begonnen.
+- Gmail in Friday einbinden, sobald die Gmail-Verbindung echte Postfachdaten liefert.
+- Neue Ideen und Nebenaufgaben werden gesammelt und nicht während der aktiven Mission begonnen.
 
 ## Nächste Mission
 
-Mission 16 wird als nächster klar abgegrenzter Funktionsausbau definiert.
+Mission 17 wird als nächster klar abgegrenzter Funktionsausbau definiert.
