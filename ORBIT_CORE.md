@@ -10,7 +10,9 @@ Eine Mission nach der anderen. Eine Mission wird erst abgeschlossen, bevor die n
 
 ## Aktive Mission
 
-Keine. Mission 16 wurde abgeschlossen; Mission 17 ist noch nicht definiert.
+Mission 17 — **Wochenblick V1**.
+
+Friday erweitert die Zentrale um einen kompakten Überblick über offene Aufgaben, die in den kommenden sieben Tagen anstehen. Der Wochenblick soll direkt zu den betroffenen Aufgaben führen und die bestehende Tageslage sinnvoll ergänzen, ohne heutige oder überfällige Aufgaben doppelt zu zählen.
 
 ## Abgeschlossene Missionen
 
@@ -35,6 +37,8 @@ Keine. Mission 16 wurde abgeschlossen; Mission 17 ist noch nicht definiert.
 
 Das ORBIT Control Center ist online und auf Desktop sowie iPhone nutzbar. Gedanken werden dauerhaft gespeichert, verarbeitet, nachbearbeitet, durchsucht, kategorisiert und bei Bedarf als wichtig markiert. Einträge lassen sich als Gedanke, Aufgabe oder Idee einordnen und gezielt filtern. Aufgaben können zusätzlich ein Fälligkeitsdatum erhalten; Friday kennzeichnet heutige und überfällige Termine direkt im Eingang. Eine eigene Terminübersicht filtert Aufgaben nach heute, überfällig, geplant oder allen Aufgaben und lässt sich mit der Suche kombinieren. Die Zentrale zeigt die Tageslage mit aktuellen Zählern für heute fällige und überfällige Aufgaben. Zusätzlich hebt Friday die nächste zukünftige Aufgabe mit Datum hervor; ein Antippen öffnet direkt die geplanten Aufgaben. Nicht mehr benötigte Einträge können kontrolliert über eine zweistufige Sicherheitsabfrage gelöscht werden. Die mobile Oberfläche ist einschließlich des System-/Settings-Dialogs gegen seitliche Verschiebung abgesichert.
 
+Mission 17 ergänzt diesen Stand um einen Wochenblick für die kommenden sieben Tage.
+
 ## Arbeitsprinzip
 
 1. Mission klar definieren.
@@ -50,4 +54,4 @@ Das ORBIT Control Center ist online und auf Desktop sowie iPhone nutzbar. Gedank
 
 ## Nächste Mission
 
-Mission 17 wird als nächster klar abgegrenzter Funktionsausbau definiert.
+Erst nach Abschluss und Abnahme von Mission 17 festlegen.
