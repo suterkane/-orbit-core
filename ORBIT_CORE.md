@@ -10,7 +10,7 @@ Eine Mission nach der anderen. Eine Mission wird erst abgeschlossen, bevor die n
 
 ## Aktive Mission
 
-Keine. Mission 11 wurde abgeschlossen; Mission 12 ist noch nicht definiert.
+Keine. Mission 12 wurde abgeschlossen; Mission 13 ist noch nicht definiert.
 
 ## Abgeschlossene Missionen
 
@@ -25,10 +25,11 @@ Keine. Mission 11 wurde abgeschlossen; Mission 12 ist noch nicht definiert.
 9. **Gedankensuche V1** — offene und erledigte Einträge nach Inhalt durchsuchen
 10. **Wichtige Gedanken V1** — Einträge dauerhaft markieren und automatisch oben halten
 11. **Gedanken löschen V1** — nicht mehr benötigte Einträge nach einer Sicherheitsabfrage dauerhaft entfernen
+12. **Gedanken-Kategorien V1** — Einträge dauerhaft als Gedanke, Aufgabe oder Idee einordnen, filtern und nachträglich ändern
 
 ## Aktueller Stand
 
-Das ORBIT Control Center ist online und auf Desktop sowie iPhone nutzbar. Gedanken werden dauerhaft gespeichert, verarbeitet, nachbearbeitet, durchsucht und bei Bedarf als wichtig markiert. Nicht mehr benötigte Einträge können kontrolliert über eine zweistufige Sicherheitsabfrage gelöscht werden. Die mobile Oberfläche ist gegen seitliche Verschiebung abgesichert.
+Das ORBIT Control Center ist online und auf Desktop sowie iPhone nutzbar. Gedanken werden dauerhaft gespeichert, verarbeitet, nachbearbeitet, durchsucht, kategorisiert und bei Bedarf als wichtig markiert. Einträge lassen sich als Gedanke, Aufgabe oder Idee einordnen und gezielt filtern. Nicht mehr benötigte Einträge können kontrolliert über eine zweistufige Sicherheitsabfrage gelöscht werden. Die mobile Oberfläche ist gegen seitliche Verschiebung abgesichert.
 
 ## Arbeitsprinzip
 
@@ -44,4 +45,4 @@ Neue Ideen und Nebenaufgaben werden gesammelt und nicht während der aktiven Mis
 
 ## Nächste Mission
 
-Mission 12 wird als nächster klar abgegrenzter Funktionsausbau definiert.
+Mission 13 wird als nächster klar abgegrenzter Funktionsausbau definiert.
