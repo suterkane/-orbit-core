@@ -11,6 +11,7 @@
   <link rel="stylesheet" href="styles.css?v=4" />
   <link rel="stylesheet" href="start-v2.css?v=2" />
   <link rel="stylesheet" href="boot-sequence.css?v=3" />
+  <link rel="stylesheet" href="integrations.css?v=1" />
 </head>
 <body>
   <section id="splash" class="splash" aria-label="FRIDAY Start">
@@ -70,6 +71,33 @@
           <button class="metric gold" data-route="week"><span>Nächste 7 Tage</span><strong id="weekCount">0</strong><small>VORAUSSCHAU</small></button>
           <button class="metric" data-route="open"><span>Offen</span><strong id="openCount">0</strong><small>QUEUE</small></button>
         </div>
+
+        <section class="integration-grid" aria-label="Kommunikation und Planung">
+          <article class="integration-card mail-card">
+            <div class="integration-head"><span>✉</span><small>GMAIL</small></div>
+            <strong id="mailHeadline">E-Mail</strong>
+            <p id="mailStatus">Google-Verbindung erforderlich</p>
+            <div id="mailPreview" class="integration-preview"><span>Neue Nachrichten erscheinen hier.</span></div>
+            <button id="mailConnectBtn" class="integration-action">Gmail verbinden</button>
+          </article>
+
+          <article class="integration-card calendar-card">
+            <div class="integration-head"><span>◫</span><small>KALENDER</small></div>
+            <strong id="calendarHeadline">Nächste Termine</strong>
+            <p id="calendarStatus">Google-Verbindung erforderlich</p>
+            <div id="calendarPreview" class="integration-preview"><span>Deine nächsten Termine erscheinen hier.</span></div>
+            <button id="calendarConnectBtn" class="integration-action">Kalender verbinden</button>
+          </article>
+
+          <article class="integration-card task-card">
+            <div class="integration-head"><span>＋</span><small>AUFGABEN</small></div>
+            <strong>Neue Aufgabe</strong>
+            <p>Direkt in ORBIT erfassen.</p>
+            <div class="integration-preview"><span id="taskQuickStatus">Bereit für einen neuen Auftrag.</span></div>
+            <button id="taskQuickBtn" class="integration-action">Aufgabe anlegen</button>
+          </article>
+        </section>
+
         <button id="nextFocus" class="focus-card"><span>NÄCHSTER FOKUS</span><strong>Keine geplante Aufgabe</strong><small>Friday hält den Kurs frei.</small></button>
         <section class="capture-card"><label for="quickInput">SCHNELLERFASSUNG / COMMAND INPUT</label><div class="capture-row"><input id="quickInput" placeholder="Gedanke, Aufgabe oder Idee …" autocomplete="off" /><button id="captureBtn">Erfassen</button></div></section>
       </section>
@@ -85,10 +113,10 @@
   </div>
 
   <dialog id="entryDialog"><form method="dialog" id="entryForm"><div class="dialog-head"><h3 id="dialogTitle">Eintrag</h3><button value="cancel" class="icon-btn">×</button></div><input id="editText" required placeholder="Inhalt" /><div class="form-row"><select id="editCategory"><option value="thought">Gedanke</option><option value="task">Aufgabe</option><option value="idea">Idee</option></select><input id="editDue" type="date" /></div><label class="check"><input id="editImportant" type="checkbox" /> Wichtig</label><div class="dialog-actions"><button type="button" id="deleteBtn" class="danger-btn">Löschen</button><button value="save" id="saveBtn" class="primary-btn">Speichern</button></div></form></dialog>
-  <dialog id="settingsDialog"><form method="dialog"><div class="dialog-head"><h3>FRIDAY Einstellungen</h3><button value="close" class="icon-btn">×</button></div><p>ORBIT synchronisiert Einträge geschützt über ORBIT Sync. PC und iPhone verwenden denselben Sync-Code und damit denselben Datenstand.</p><button value="close" class="primary-btn full">Fertig</button></form></dialog>
+  <dialog id="settingsDialog"><form method="dialog"><div class="dialog-head"><h3>FRIDAY Einstellungen</h3><button value="close" class="icon-btn">×</button></div><p>ORBIT synchronisiert Einträge geschützt über ORBIT Sync. PC und iPhone verwenden denselben Sync-Code und damit denselben Datenstand.</p><p>Gmail und Google Kalender werden separat über Google OAuth verbunden. Private Inhalte werden nicht im GitHub-Repository gespeichert.</p><button value="close" class="primary-btn full">Fertig</button></form></dialog>
 
   <script src="boot-sequence.js?v=3"></script>
   <script src="start-v2.js?v=7"></script>
-  <script src="app.js?v=4"></script>
+  <script src="app.js?v=6"></script>
 </body>
 </html>
