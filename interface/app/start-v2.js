@@ -147,7 +147,6 @@
 
   async function speak(text,{onend}={}){
     const status=statusText();
-    setOrbState('booting');
     if(status)status.textContent='FRIDAY initialisiert Sprachkern …';
     const played=await speakSeraphina(text,{onend});
     if(played)return true;
@@ -162,7 +161,7 @@
     if(typeof window.showApp==='function')window.showApp();
   }
 
-  function launchWithVoice(event){
+  async function launchWithVoice(event){
     if(launching)return;
     launching=true;
     event.preventDefault();
@@ -170,7 +169,14 @@
     const status=statusText();
     setOrbState('booting');
     if(status)status.textContent='FRIDAY fährt Systeme hoch …';
-    speak(getGreeting(),{onend:launchApp});
+
+    try{
+      if(window.ORBITBoot?.play)await window.ORBITBoot.play();
+    }catch{}
+
+    if(status)status.textContent='FRIDAY Sprachkern wird aktiviert …';
+    const started=await speak(getGreeting(),{onend:launchApp});
+    if(!started)launchApp();
   }
 
   window.ORBITFriday={setSpeaking,setOrbState,speak,getGreeting,pickGermanVoice,speakSeraphina};
