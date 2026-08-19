@@ -1,6 +1,6 @@
-const CACHE='orbit-friday-v8-seraphina-hd';
+const CACHE='orbit-friday-v9-voice-core-states';
 const FALLBACK='index.html';
-const CORE=['./','index.html','styles.css?v=4','start-v2.css?v=1','start-v2.js?v=4','app.js?v=4','manifest.webmanifest'];
+const CORE=['./','index.html','styles.css?v=4','start-v2.css?v=2','start-v2.js?v=5','app.js?v=4','manifest.webmanifest'];
 
 self.addEventListener('install',event=>{
   event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(CORE)).then(()=>self.skipWaiting()));
