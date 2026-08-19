@@ -6,8 +6,8 @@
   const SYNC_KEY_STORAGE='orbit.sync.key.v1';
   const FRIDAY_VOICE_PROFILE={
     lang:'de-DE',
-    rate:1.03,
-    pitch:1.08,
+    rate:1.08,
+    pitch:1.02,
     volume:1
   };
   const orb=()=>document.querySelector('#fridayVoiceOrb');
@@ -77,7 +77,7 @@
       activeAudio.onplay=()=>{
         setSpeaking(true);
         const status=statusText();
-        if(status)status.textContent='FRIDAY spricht · SERAPHINA HD';
+        if(status)status.textContent='FRIDAY spricht · CLOUD';
       };
       activeAudio.onended=finish;
       activeAudio.onerror=finish;
@@ -99,12 +99,19 @@
   function pickGermanVoice(){
     const german=getGermanVoices();
     if(!german.length)return null;
-    const preferredNames=[/anna/i,/katja/i,/petra/i,/hedda/i,/marlene/i,/vicki/i,/siri/i,/google deutsch/i];
-    for(const pattern of preferredNames){
-      const match=german.find(v=>pattern.test(v.name||''));
-      if(match)return match;
-    }
-    return german.find(v=>(v.lang||'').toLowerCase()==='de-de')||german[0];
+    const scored=german.map(v=>{
+      const n=(v.name||'').toLowerCase();
+      let score=0;
+      if(n.includes('online')&&n.includes('natural'))score+=100;
+      if(n.includes('katja'))score+=90;
+      if(n.includes('anna'))score+=70;
+      if(n.includes('microsoft'))score+=45;
+      if(n.includes('google deutsch'))score+=35;
+      if(n.includes('petra')||n.includes('hedda')||n.includes('marlene'))score+=20;
+      if((v.lang||'').toLowerCase()==='de-de')score+=15;
+      return{v,score};
+    }).sort((a,b)=>b.score-a.score);
+    return scored[0]?.v||german[0];
   }
 
   function warmVoices(){
@@ -140,7 +147,7 @@
     utterance.onstart=()=>{
       setSpeaking(true);
       const status=statusText();
-      if(status)status.textContent='FRIDAY spricht · FALLBACK';
+      if(status)status.textContent=`FRIDAY spricht · ${voice?.name||'BROWSER'}`;
     };
     utterance.onend=finish;
     utterance.onerror=finish;
@@ -156,7 +163,7 @@
     if(status)status.textContent='FRIDAY initialisiert Sprachkern …';
     const played=await speakSeraphina(text,{onend});
     if(played)return true;
-    if(status)status.textContent='FRIDAY startet mit Ersatzstimme …';
+    if(status)status.textContent='FRIDAY startet mit lokaler Stimme …';
     return speakBrowser(text,{onend});
   }
 
