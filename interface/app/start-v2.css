@@ -1,7 +1,7 @@
-/* FRIDAY STARTSCREEN V2 */
+/* FRIDAY STARTSCREEN V2 · VOICE CORE */
 .splash{overflow:hidden;position:relative;background:
-radial-gradient(circle at 50% 44%,rgba(255,50,36,.16),transparent 24%),
-radial-gradient(circle at 50% 44%,rgba(242,189,98,.055),transparent 40%),
+radial-gradient(circle at 50% 44%,rgba(255,50,36,.18),transparent 23%),
+radial-gradient(circle at 50% 44%,rgba(242,189,98,.065),transparent 40%),
 linear-gradient(180deg,#100302 0%,#050303 48%,#090403 100%)}
 .splash:before{content:"";position:absolute;inset:0;background:
 linear-gradient(rgba(242,189,98,.026) 1px,transparent 1px),
@@ -13,32 +13,43 @@ linear-gradient(90deg,rgba(255,59,47,.018) 1px,transparent 1px);background-size:
 .splash .friday-title h1{font-size:clamp(48px,12vw,82px);letter-spacing:.16em;margin:0;color:#ff4b3d;font-weight:470;text-shadow:0 0 22px rgba(255,58,45,.25)}
 .friday-title em{font-style:normal;color:#f1bf6a;font-size:10px;letter-spacing:.24em;writing-mode:vertical-rl;opacity:.72}
 .friday-subtitle{margin:3px 0 0;color:#bda57b;font-size:9px;letter-spacing:.22em;text-transform:uppercase}
-.friday-core-wrap{position:relative;width:min(74vw,330px);aspect-ratio:1;margin:8px auto;display:grid;place-items:center}
-.friday-core-wrap:before,.friday-core-wrap:after{content:"";position:absolute;border-radius:50%;pointer-events:none}
+.friday-core-wrap{position:relative;width:min(74vw,330px);aspect-ratio:1;margin:8px auto;display:grid;place-items:center;filter:drop-shadow(0 0 18px rgba(255,55,38,.08))}
+.friday-core-wrap:before,.friday-core-wrap:after{content:"";position:absolute;border-radius:50%;pointer-events:none;transition:opacity .3s ease,filter .3s ease}
 .friday-core-wrap:before{inset:0;border:1px solid rgba(242,189,98,.32);background:repeating-conic-gradient(from 10deg,rgba(242,189,98,.62) 0 .5deg,transparent .5deg 7deg);mask:radial-gradient(circle,transparent 0 84%,#000 85% 88%,transparent 89%);animation:fridaySpin 38s linear infinite}
-.friday-core-wrap:after{inset:10%;border:1px dashed rgba(255,71,53,.5);animation:fridaySpin 24s linear infinite reverse}
+.friday-core-wrap:after{inset:10%;border:1px dashed rgba(255,71,53,.5);box-shadow:0 0 22px rgba(255,65,45,.08),inset 0 0 22px rgba(242,189,98,.04);animation:fridaySpin 24s linear infinite reverse}
 .friday-orb{position:relative;width:46%;aspect-ratio:1;border-radius:50%;display:grid;place-items:center;background:
-radial-gradient(circle at 50% 46%,rgba(255,248,218,.98) 0 4%,#ffc666 5% 10%,#ff4b35 11% 25%,#7a150f 26% 42%,rgba(255,61,43,.12) 43% 61%,transparent 62%);box-shadow:0 0 24px rgba(255,65,45,.8),0 0 60px rgba(255,49,34,.26),0 0 110px rgba(242,189,98,.08);transition:transform .22s ease,filter .22s ease}
-.friday-orb:before,.friday-orb:after{content:"";position:absolute;border-radius:50%;border:1px solid rgba(242,189,98,.55)}
+radial-gradient(circle at 50% 46%,rgba(255,248,218,.98) 0 4%,#ffc666 5% 10%,#ff4b35 11% 25%,#7a150f 26% 42%,rgba(255,61,43,.12) 43% 61%,transparent 62%);box-shadow:0 0 24px rgba(255,65,45,.8),0 0 60px rgba(255,49,34,.26),0 0 110px rgba(242,189,98,.08);transition:transform .22s ease,filter .22s ease,box-shadow .3s ease}
+.friday-orb:before,.friday-orb:after{content:"";position:absolute;border-radius:50%;border:1px solid rgba(242,189,98,.55);transition:inset .3s ease,border-color .3s ease,box-shadow .3s ease}
 .friday-orb:before{inset:-18%;border-style:dashed;animation:fridaySpin 14s linear infinite}
 .friday-orb:after{inset:24%;box-shadow:0 0 20px rgba(255,72,49,.4)}
 .friday-orb .voice-wave{position:absolute;inset:-34%;border-radius:50%;border:1px solid rgba(255,75,52,.16);opacity:.4;animation:fridayIdle 3.2s ease-in-out infinite}
 .friday-orb .voice-wave:nth-child(2){inset:-50%;border-color:rgba(242,189,98,.12);animation-delay:.8s}
-.friday-orb.speaking{animation:fridaySpeak .38s ease-in-out infinite alternate;filter:brightness(1.18)}
-.friday-orb.speaking .voice-wave{animation:fridayVoice 1s ease-out infinite;border-color:rgba(255,77,52,.48)}
-.friday-orb.speaking .voice-wave:nth-child(2){animation-delay:.28s;border-color:rgba(242,189,98,.34)}
+.friday-orb[data-state="booting"]{animation:fridayBoot .72s ease-in-out infinite alternate;filter:brightness(1.16) saturate(1.12);box-shadow:0 0 34px rgba(255,65,45,.92),0 0 88px rgba(255,49,34,.34),0 0 130px rgba(242,189,98,.12)}
+.friday-orb[data-state="booting"]:before{inset:-23%;border-color:rgba(242,189,98,.82);animation-duration:2.4s}
+.friday-orb[data-state="booting"]:after{inset:18%;border-color:rgba(255,91,67,.84);box-shadow:0 0 28px rgba(255,72,49,.65)}
+.friday-orb[data-state="booting"] .voice-wave{animation:fridayBootWave 1.1s ease-out infinite;border-color:rgba(255,86,59,.4)}
+.friday-orb[data-state="booting"] .voice-wave:nth-child(2){animation-delay:.34s;border-color:rgba(242,189,98,.3)}
+.friday-orb.speaking{animation:fridaySpeak .38s ease-in-out infinite alternate;filter:brightness(1.22) saturate(1.08);box-shadow:0 0 36px rgba(255,65,45,.95),0 0 92px rgba(255,49,34,.38),0 0 145px rgba(242,189,98,.14)}
+.friday-orb.speaking:before{animation-duration:4.2s;border-color:rgba(242,189,98,.76)}
+.friday-orb.speaking .voice-wave{animation:fridayVoice 1s ease-out infinite;border-color:rgba(255,77,52,.52)}
+.friday-orb.speaking .voice-wave:nth-child(2){animation-delay:.28s;border-color:rgba(242,189,98,.38)}
+.friday-orb[data-state="online"]{filter:brightness(1.08);box-shadow:0 0 26px rgba(255,65,45,.76),0 0 66px rgba(255,49,34,.22),0 0 110px rgba(242,189,98,.09)}
+.friday-orb[data-state="online"]:after{border-color:rgba(242,189,98,.65);box-shadow:0 0 24px rgba(242,189,98,.22)}
 .friday-core-label{position:absolute;bottom:8%;font-size:8px;letter-spacing:.28em;color:#c79a55;text-transform:uppercase}
 .friday-greeting{display:grid;gap:5px;text-align:center;margin-top:4px}
 .friday-greeting strong{font-size:14px;letter-spacing:.08em;font-weight:520;color:#f7eee4}
-.friday-greeting span{font-size:9px;letter-spacing:.16em;color:#9e8b7e;text-transform:uppercase}
+.friday-greeting span{font-size:9px;letter-spacing:.16em;color:#9e8b7e;text-transform:uppercase;min-height:1.2em}
 .friday-statusbar{width:min(100%,390px);display:grid;grid-template-columns:1fr auto;gap:12px;align-items:center;padding:11px 14px;border:1px solid rgba(242,189,98,.18);background:rgba(13,6,5,.54)}
 .friday-statusbar span{font-size:8px;letter-spacing:.17em;color:#b28d55;text-align:left}.friday-statusbar strong{font-size:8px;letter-spacing:.16em;color:#79d56b;font-weight:600}.friday-statusbar i{display:inline-block;width:6px;height:6px;border-radius:50%;background:#ff4434;box-shadow:0 0 10px #ff4434;margin-right:7px}
-.splash .initiate{min-width:210px;border-radius:999px;padding:14px 28px;background:linear-gradient(180deg,rgba(83,19,13,.86),rgba(22,7,5,.95));box-shadow:inset 0 0 20px rgba(255,58,42,.16),0 0 24px rgba(255,58,42,.09)}
+.splash .initiate{min-width:210px;border-radius:999px;padding:14px 28px;background:linear-gradient(180deg,rgba(83,19,13,.86),rgba(22,7,5,.95));box-shadow:inset 0 0 20px rgba(255,58,42,.16),0 0 24px rgba(255,58,42,.09);transition:transform .18s ease,box-shadow .18s ease,border-color .18s ease}
+.splash .initiate:active{transform:scale(.98);box-shadow:inset 0 0 26px rgba(255,58,42,.24),0 0 34px rgba(255,58,42,.14)}
 .splash .start-hint{font-size:8px;letter-spacing:.2em;color:#806e60;text-transform:uppercase}
 @keyframes fridaySpin{to{transform:rotate(360deg)}}
 @keyframes fridayIdle{0%,100%{transform:scale(.96);opacity:.18}50%{transform:scale(1.04);opacity:.48}}
-@keyframes fridaySpeak{from{transform:scale(.96)}to{transform:scale(1.06)}}
-@keyframes fridayVoice{0%{transform:scale(.78);opacity:.72}100%{transform:scale(1.18);opacity:0}}
+@keyframes fridayBoot{from{transform:scale(.97)}to{transform:scale(1.035)}}
+@keyframes fridayBootWave{0%{transform:scale(.74);opacity:.64}100%{transform:scale(1.12);opacity:0}}
+@keyframes fridaySpeak{from{transform:scale(.96)}to{transform:scale(1.07)}}
+@keyframes fridayVoice{0%{transform:scale(.76);opacity:.78}100%{transform:scale(1.22);opacity:0}}
 @media(max-width:620px){
   .splash{padding:max(10px,env(safe-area-inset-top)) 10px max(10px,env(safe-area-inset-bottom))}
   .splash-frame{width:100%;min-height:calc(100dvh - max(20px,env(safe-area-inset-top)) - max(20px,env(safe-area-inset-bottom)));padding:24px 16px 22px}
