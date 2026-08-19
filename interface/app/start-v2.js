@@ -28,9 +28,9 @@
 
   function getGreeting(){
     const hour=new Date().getHours();
-    if(hour<11)return'Guten Morgen, Mr. Stark. ORBIT ist online. Alle Systeme sind bereit.';
-    if(hour<18)return'Guten Tag, Mr. Stark. ORBIT ist online. Alle Systeme sind bereit.';
-    return'Guten Abend, Mr. Stark. ORBIT ist online. Alle Systeme sind bereit.';
+    if(hour<11)return'Guten Morgen. Mister Stark. ORBIT ist online. Alle Systeme sind bereit.';
+    if(hour<18)return'Guten Tag. Mister Stark. ORBIT ist online. Alle Systeme sind bereit.';
+    return'Guten Abend. Mister Stark. ORBIT ist online. Alle Systeme sind bereit.';
   }
 
   function cleanupAudio(){
@@ -118,8 +118,8 @@
     utterance.lang='de-DE';
     const voice=pickGermanVoice();
     if(voice)utterance.voice=voice;
-    utterance.rate=.92;
-    utterance.pitch=1.04;
+    utterance.rate=.86;
+    utterance.pitch=.98;
     utterance.volume=1;
 
     let finished=false;
@@ -141,7 +141,7 @@
     synth.resume?.();
     synth.speak(utterance);
     setSpeaking(true);
-    launchTimer=setTimeout(finish,8000);
+    launchTimer=setTimeout(finish,9000);
     return true;
   }
 
