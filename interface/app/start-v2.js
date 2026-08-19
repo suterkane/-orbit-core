@@ -12,19 +12,25 @@
   let activeAudio=null;
   let activeAudioUrl='';
 
+  function setOrbState(state='idle'){
+    const el=orb();
+    if(!el)return;
+    el.dataset.state=state;
+    el.classList.toggle('speaking',state==='speaking');
+    el.setAttribute('aria-busy',state==='speaking'?'true':'false');
+  }
+
   function setSpeaking(active=true,duration=0){
-    const el=orb();if(!el)return;
-    el.classList.toggle('speaking',!!active);
-    el.setAttribute('aria-busy',active?'true':'false');
+    setOrbState(active?'speaking':'idle');
     clearTimeout(speakTimer);
     if(active&&duration>0)speakTimer=setTimeout(()=>setSpeaking(false),duration);
   }
 
   function getGreeting(){
     const hour=new Date().getHours();
-    if(hour<11)return'Guten Morgen, Rene. Friday ist bereit.';
-    if(hour<18)return'Guten Tag, Rene. Friday ist bereit.';
-    return'Guten Abend, Rene. Friday ist bereit.';
+    if(hour<11)return'Guten Morgen, Mr. Stark. ORBIT ist online. Alle Systeme sind bereit.';
+    if(hour<18)return'Guten Tag, Mr. Stark. ORBIT ist online. Alle Systeme sind bereit.';
+    return'Guten Abend, Mr. Stark. ORBIT ist online. Alle Systeme sind bereit.';
   }
 
   function cleanupAudio(){
@@ -70,7 +76,7 @@
       activeAudio.onended=finish;
       activeAudio.onerror=finish;
       await activeAudio.play();
-      launchTimer=setTimeout(finish,9000);
+      launchTimer=setTimeout(finish,11000);
       return true;
     }catch{
       cleanupAudio();
@@ -112,8 +118,8 @@
     utterance.lang='de-DE';
     const voice=pickGermanVoice();
     if(voice)utterance.voice=voice;
-    utterance.rate=.94;
-    utterance.pitch=1.05;
+    utterance.rate=.92;
+    utterance.pitch=1.04;
     utterance.volume=1;
 
     let finished=false;
@@ -135,13 +141,14 @@
     synth.resume?.();
     synth.speak(utterance);
     setSpeaking(true);
-    launchTimer=setTimeout(finish,6000);
+    launchTimer=setTimeout(finish,8000);
     return true;
   }
 
   async function speak(text,{onend}={}){
     const status=statusText();
-    if(status)status.textContent='SERAPHINA HD wird geladen …';
+    setOrbState('booting');
+    if(status)status.textContent='FRIDAY initialisiert Sprachkern …';
     const played=await speakSeraphina(text,{onend});
     if(played)return true;
     if(status)status.textContent='FRIDAY startet mit Ersatzstimme …';
@@ -150,6 +157,7 @@
 
   function launchApp(){
     const status=statusText();
+    setOrbState('online');
     if(status)status.textContent='ORBIT ist bereit.';
     if(typeof window.showApp==='function')window.showApp();
   }
@@ -160,15 +168,17 @@
     event.preventDefault();
     event.stopImmediatePropagation();
     const status=statusText();
-    if(status)status.textContent='FRIDAY initialisiert …';
+    setOrbState('booting');
+    if(status)status.textContent='FRIDAY fährt Systeme hoch …';
     speak(getGreeting(),{onend:launchApp});
   }
 
-  window.ORBITFriday={setSpeaking,speak,getGreeting,pickGermanVoice,speakSeraphina};
+  window.ORBITFriday={setSpeaking,setOrbState,speak,getGreeting,pickGermanVoice,speakSeraphina};
 
   document.addEventListener('DOMContentLoaded',()=>{
     const btn=document.querySelector('#initiateBtn');
     if(btn)btn.addEventListener('click',launchWithVoice,{capture:true});
+    setOrbState('idle');
     warmVoices();
     if('speechSynthesis'in window)window.speechSynthesis.addEventListener?.('voiceschanged',warmVoices,{once:true});
   });
