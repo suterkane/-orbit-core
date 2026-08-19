@@ -9,7 +9,7 @@
   <title>ORBIT · FRIDAY</title>
   <link rel="manifest" href="manifest.webmanifest" />
   <link rel="stylesheet" href="styles.css?v=4" />
-  <link rel="stylesheet" href="start-v2.css?v=1" />
+  <link rel="stylesheet" href="start-v2.css?v=2" />
 </head>
 <body>
   <section id="splash" class="splash" aria-label="FRIDAY Start">
@@ -22,7 +22,7 @@
       </div>
 
       <div class="friday-core-wrap" aria-hidden="true">
-        <div id="fridayVoiceOrb" class="friday-orb">
+        <div id="fridayVoiceOrb" class="friday-orb" data-state="idle">
           <span class="voice-wave"></span>
           <span class="voice-wave"></span>
         </div>
@@ -83,7 +83,7 @@
     <nav class="bottom-nav"><button data-view="dashboard" class="active">Zentrale</button><button data-view="inbox">Eingang</button><button data-view="missions">Missionen</button><button data-view="system">System</button></nav>
   </div>
 
-  <dialog id="entryDialog"><form method="dialog" id="entryForm"><div class="dialog-head"><h3 id="dialogTitle">Eintrag</h3><button value="cancel" class="icon-btn">×</button></div><input id="editText" required placeholder="Inhalt" /><div class="form-row"><select id="editCategory"><option value="thought">Gedanke</option><option value="task">Aufgabe</option><option value="idea">Ideen</option></select><input id="editDue" type="date" /></div><label class="check"><input id="editImportant" type="checkbox" /> Wichtig</label><div class="dialog-actions"><button type="button" id="deleteBtn" class="danger-btn">Löschen</button><button value="save" id="saveBtn" class="primary-btn">Speichern</button></div></form></dialog>
+  <dialog id="entryDialog"><form method="dialog" id="entryForm"><div class="dialog-head"><h3 id="dialogTitle">Eintrag</h3><button value="cancel" class="icon-btn">×</button></div><input id="editText" required placeholder="Inhalt" /><div class="form-row"><select id="editCategory"><option value="thought">Gedanke</option><option value="task">Aufgabe</option><option value="idea">Idee</option></select><input id="editDue" type="date" /></div><label class="check"><input id="editImportant" type="checkbox" /> Wichtig</label><div class="dialog-actions"><button type="button" id="deleteBtn" class="danger-btn">Löschen</button><button value="save" id="saveBtn" class="primary-btn">Speichern</button></div></form></dialog>
   <dialog id="settingsDialog"><form method="dialog"><div class="dialog-head"><h3>FRIDAY Einstellungen</h3><button value="close" class="icon-btn">×</button></div><p>ORBIT synchronisiert Einträge geschützt über ORBIT Sync. PC und iPhone verwenden denselben Sync-Code und damit denselben Datenstand.</p><button value="close" class="primary-btn full">Fertig</button></form></dialog>
 
   <script src="start-v2.js?v=5"></script>
