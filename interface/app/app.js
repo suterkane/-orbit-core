@@ -41,12 +41,7 @@ async function pullCloud(){
   }catch{setStorageStatus('CLOUD · FEHLER')}finally{syncBusy=false}
 }
 async function connectSync(){
-  if(!syncKey){
-    const entered=prompt('ORBIT Sync-Code eingeben. Derselbe Code verbindet PC und iPhone.');
-    if(!entered){setStorageStatus('LOKAL');return}
-    syncKey=entered.trim();
-    localStorage.setItem(SYNC_KEY_STORAGE,syncKey);
-  }
+  if(!syncKey){setStorageStatus('LOKAL · SYNC NICHT VERBUNDEN');return}
   setStorageStatus('CLOUD · VERBINDEN');
   try{
     const state=await syncRequest('GET');
@@ -59,10 +54,16 @@ async function connectSync(){
   }catch(err){
     syncReady=false;
     if(err.message==='SYNC_KEY'){
-      localStorage.removeItem(SYNC_KEY_STORAGE);syncKey='';setStorageStatus('SYNC-CODE FALSCH');
-      alert('Der ORBIT Sync-Code ist nicht korrekt. Bitte Seite neu laden und erneut eingeben.');
+      localStorage.removeItem(SYNC_KEY_STORAGE);syncKey='';setStorageStatus('LOKAL · SYNC NICHT VERBUNDEN');
     }else setStorageStatus('CLOUD · FEHLER');
   }
+}
+async function setupSync(){
+  const entered=prompt('ORBIT Sync-Code eingeben. Derselbe Code verbindet PC und iPhone.');
+  if(!entered)return;
+  syncKey=entered.trim();
+  localStorage.setItem(SYNC_KEY_STORAGE,syncKey);
+  await connectSync();
 }
 
 function save(){persistLocal();renderAll();scheduleCloudPush()}
@@ -94,6 +95,9 @@ function openDialog(id=null){editingId=id;const e=id?entries.find(x=>x.id===id):
 $('#entryForm').addEventListener('submit',e=>{if(e.submitter?.value==='cancel')return;const text=$('#editText').value.trim();if(!text){e.preventDefault();return}if(editingId){const item=entries.find(x=>x.id===editingId);Object.assign(item,{text,category:$('#editCategory').value,due:$('#editDue').value,important:$('#editImportant').checked})}else{entries.unshift({id:crypto.randomUUID(),text,category:$('#editCategory').value,due:$('#editDue').value,important:$('#editImportant').checked,completed:false,createdAt:new Date().toISOString()})}editingId=null;save()});
 $('#deleteBtn').onclick=()=>{if(!editingId)return;if(confirm('Diesen Eintrag wirklich dauerhaft löschen?')&&confirm('Letzte Sicherheitsabfrage: Löschen bestätigen?')){entries=entries.filter(e=>e.id!==editingId);editingId=null;$('#entryDialog').close();save()}};
 $('#settingsBtn').onclick=()=>$('#settingsDialog').showModal();
+const storageStatus=$('#storageStatus');
+if(storageStatus){storageStatus.title='Antippen, um ORBIT Sync einzurichten';storageStatus.onclick=()=>setupSync()}
+window.ORBITSync={connect:setupSync};
 
 function label(cat){return cat==='task'?'Aufgabe':cat==='idea'?'Idee':'Gedanke'}
 function formatDue(due){if(!due)return'Ohne Termin';const n=diffDays(due);if(n===0)return'Heute';if(n===1)return'Morgen';if(n<0)return`${Math.abs(n)} Tag${Math.abs(n)===1?'':'e'} überfällig`;return new Intl.DateTimeFormat('de-DE',{day:'2-digit',month:'2-digit',year:'numeric'}).format(dateOnly(due))}
