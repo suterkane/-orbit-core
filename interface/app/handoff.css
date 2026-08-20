@@ -1,0 +1,36 @@
+/* ORBIT · FRIDAY CINEMATIC HANDOFF */
+:root{--handoff-red:#ff4a37;--handoff-gold:#f2bd62}
+
+.splash{position:relative;overflow:hidden;transition:opacity .42s ease,filter .42s ease,transform .42s cubic-bezier(.22,.8,.22,1)}
+.splash-frame{transition:transform .72s cubic-bezier(.18,.82,.2,1),opacity .48s ease,filter .48s ease}
+.splash.handoff-out{pointer-events:none;filter:brightness(1.22) saturate(1.12)}
+.splash.handoff-out .splash-frame{animation:fridayFrameDepart .82s cubic-bezier(.2,.82,.18,1) forwards}
+.splash.handoff-out .brand-top,.splash.handoff-out .friday-kicker,.splash.handoff-out .friday-title,.splash.handoff-out .friday-subtitle{animation:fridayHeaderLift .62s cubic-bezier(.2,.8,.2,1) forwards}
+.splash.handoff-out .friday-greeting,.splash.handoff-out .friday-statusbar,.splash.handoff-out .initiate,.splash.handoff-out .start-hint{animation:fridayFooterDrop .58s cubic-bezier(.2,.8,.2,1) forwards}
+.splash.handoff-out .friday-core-wrap{animation:fridayCoreCollapse .78s cubic-bezier(.18,.9,.2,1) forwards}
+.splash.handoff-out:after{content:"";position:absolute;inset:0;pointer-events:none;background:radial-gradient(circle at 50% 50%,rgba(255,244,209,.56) 0 1%,rgba(255,76,46,.23) 9%,transparent 34%);opacity:0;animation:fridayHandoffFlash .72s ease-out forwards}
+
+.app.orbit-arriving{display:block!important;opacity:0;transform:translateY(24px) scale(.985);filter:blur(8px) brightness(.72)}
+.app.orbit-arriving.orbit-ready{animation:orbitShellArrive .72s cubic-bezier(.18,.82,.2,1) forwards}
+.app.orbit-arriving .topbar,.app.orbit-arriving .hero-card,.app.orbit-arriving .metric-grid,.app.orbit-arriving .integration-grid,.app.orbit-arriving .focus-card,.app.orbit-arriving .capture-card,.app.orbit-arriving .bottom-nav{opacity:0;transform:translateY(24px);filter:blur(5px)}
+.app.orbit-arriving.orbit-ready .topbar{animation:orbitPanelIn .48s cubic-bezier(.2,.85,.2,1) .08s forwards}
+.app.orbit-arriving.orbit-ready .hero-card{animation:orbitPanelIn .56s cubic-bezier(.2,.85,.2,1) .16s forwards}
+.app.orbit-arriving.orbit-ready .metric-grid{animation:orbitPanelIn .52s cubic-bezier(.2,.85,.2,1) .26s forwards}
+.app.orbit-arriving.orbit-ready .integration-grid{animation:orbitPanelIn .52s cubic-bezier(.2,.85,.2,1) .34s forwards}
+.app.orbit-arriving.orbit-ready .focus-card{animation:orbitPanelIn .48s cubic-bezier(.2,.85,.2,1) .42s forwards}
+.app.orbit-arriving.orbit-ready .capture-card{animation:orbitPanelIn .48s cubic-bezier(.2,.85,.2,1) .48s forwards}
+.app.orbit-arriving.orbit-ready .bottom-nav{animation:orbitPanelIn .46s cubic-bezier(.2,.85,.2,1) .54s forwards}
+.app.orbit-ready .hud-core{animation:orbitCoreWake .9s cubic-bezier(.15,.8,.2,1) .18s both}
+
+@keyframes fridayHeaderLift{to{opacity:0;transform:translateY(-44px);filter:blur(7px)}}
+@keyframes fridayFooterDrop{to{opacity:0;transform:translateY(48px);filter:blur(7px)}}
+@keyframes fridayCoreCollapse{0%{opacity:1;transform:scale(1)}58%{opacity:1;transform:scale(1.08);filter:brightness(1.65)}100%{opacity:0;transform:scale(.28);filter:brightness(2.3) blur(8px)}}
+@keyframes fridayFrameDepart{0%{opacity:1;transform:scale(1)}72%{opacity:.95;transform:scale(1.02)}100%{opacity:0;transform:scale(1.055);filter:blur(10px)}}
+@keyframes fridayHandoffFlash{0%{opacity:0;transform:scale(.3)}42%{opacity:1}100%{opacity:0;transform:scale(2)}}
+@keyframes orbitShellArrive{to{opacity:1;transform:translateY(0) scale(1);filter:blur(0) brightness(1)}}
+@keyframes orbitPanelIn{0%{opacity:0;transform:translateY(24px);filter:blur(5px)}100%{opacity:1;transform:translateY(0);filter:blur(0)}}
+@keyframes orbitCoreWake{0%{opacity:0;transform:scale(.72) rotate(-8deg);filter:blur(8px) brightness(2)}55%{opacity:1;transform:scale(1.06) rotate(2deg);filter:blur(0) brightness(1.4)}100%{opacity:1;transform:scale(1) rotate(0);filter:brightness(1)}}
+
+@media (prefers-reduced-motion:reduce){
+  .splash.handoff-out,.splash.handoff-out *,.app.orbit-arriving,.app.orbit-arriving *{animation-duration:.01ms!important;animation-delay:0ms!important;transition-duration:.01ms!important}
+}
