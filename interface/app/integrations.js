@@ -105,6 +105,13 @@
   }
 
   document.addEventListener('DOMContentLoaded',()=>{
+    if(!window.ORBITCommandInput){
+      const commandScript=document.createElement('script');
+      commandScript.src='command-input.js?v=1';
+      commandScript.defer=true;
+      document.body.appendChild(commandScript);
+    }
+
     qs('#taskQuickBtn')?.addEventListener('click',openTaskDialog);
     qs('#mailConnectBtn')?.addEventListener('click',async()=>{
       const status=qs('#mailStatus')?.textContent||'';
