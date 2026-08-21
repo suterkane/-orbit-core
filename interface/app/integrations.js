@@ -1,6 +1,8 @@
 (()=>{
   const GOOGLE_GATEWAY='https://vhmokhunkvoctavmrjwl.supabase.co/functions/v1/google-oauth';
   const SYNC_KEY_STORAGE='orbit.sync.key.v1';
+  let calendarRows=[];
+  let dashboardOverlay={today:0,week:0,expectedToday:null,expectedWeek:null};
 
   function qs(s){return document.querySelector(s)}
   function esc(v=''){return String(v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
@@ -52,6 +54,57 @@
     return new Intl.DateTimeFormat('de-DE',{weekday:'short',day:'2-digit',month:'2-digit',hour:v.length===10?undefined:'2-digit',minute:v.length===10?undefined:'2-digit'}).format(d);
   }
 
+  function eventDate(v){
+    if(!v)return null;
+    const d=new Date(v.length===10?`${v}T12:00:00`:v);
+    return Number.isNaN(d.getTime())?null:d;
+  }
+
+  function dayKey(d){
+    return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+  }
+
+  function applyCalendarToDashboard(){
+    const todayEl=qs('#todayCount'),weekEl=qs('#weekCount'),hero=qs('#heroText'),focus=qs('#nextFocus');
+    if(!todayEl||!weekEl)return;
+
+    const now=new Date(),todayKey=dayKey(now),weekEnd=new Date(now);
+    weekEnd.setDate(weekEnd.getDate()+7);
+
+    const dated=calendarRows.map(e=>({event:e,date:eventDate(e.start)})).filter(x=>x.date);
+    const calendarToday=dated.filter(x=>dayKey(x.date)===todayKey).length;
+    const calendarWeek=dated.filter(x=>x.date>now&&x.date<=weekEnd&&dayKey(x.date)!==todayKey).length;
+
+    const shownToday=Number(todayEl.textContent)||0;
+    const shownWeek=Number(weekEl.textContent)||0;
+    const taskToday=dashboardOverlay.expectedToday!==null&&shownToday===dashboardOverlay.expectedToday?Math.max(0,shownToday-dashboardOverlay.today):shownToday;
+    const taskWeek=dashboardOverlay.expectedWeek!==null&&shownWeek===dashboardOverlay.expectedWeek?Math.max(0,shownWeek-dashboardOverlay.week):shownWeek;
+
+    const combinedToday=taskToday+calendarToday;
+    const combinedWeek=taskWeek+calendarWeek;
+    todayEl.textContent=combinedToday;
+    weekEl.textContent=combinedWeek;
+    dashboardOverlay={today:calendarToday,week:calendarWeek,expectedToday:combinedToday,expectedWeek:combinedWeek};
+
+    const overdue=Number(qs('#overdueCount')?.textContent)||0;
+    if(overdue===0){
+      if(combinedToday>0&&hero)hero.textContent=`${combinedToday} Termin${combinedToday===1?' oder Aufgabe':'e oder Aufgaben'} heute im Fokus.`;
+      else if(combinedWeek>0&&hero)hero.textContent=`${combinedWeek} Termin${combinedWeek===1?' oder Aufgabe':'e oder Aufgaben'} in den nächsten sieben Tagen.`;
+    }
+
+    const upcoming=dated.filter(x=>x.date>=now).sort((a,b)=>a.date-b.date)[0];
+    if(upcoming&&focus){
+      const strong=focus.querySelector('strong'),small=focus.querySelector('small');
+      const current=strong?.textContent||'';
+      if(!current||current==='Keine geplante Aufgabe'||current===focus.dataset.calendarTitle){
+        if(strong)strong.textContent=upcoming.event.summary||'Kalendertermin';
+        if(small)small.textContent=`${formatEventStart(upcoming.event.start)} · Google Kalender`;
+        focus.dataset.calendarTitle=upcoming.event.summary||'Kalendertermin';
+        focus.onclick=null;
+      }
+    }
+  }
+
   function renderMail(data){
     const rows=Array.isArray(data?.messages)?data.messages:[];
     const preview=qs('#mailPreview');
@@ -64,12 +117,15 @@
 
   function renderCalendar(data){
     const rows=Array.isArray(data?.events)?data.events:[];
+    calendarRows=rows;
     const preview=qs('#calendarPreview');
     if(qs('#calendarHeadline'))qs('#calendarHeadline').textContent=rows.length?'Nächste Termine':'Kalender';
     if(qs('#calendarStatus'))qs('#calendarStatus').textContent='Google Kalender · verbunden';
-    if(!preview)return;
-    if(!rows.length){preview.innerHTML='<span>Keine kommenden Termine gefunden.</span>';return}
-    preview.innerHTML=rows.slice(0,3).map(e=>`<div class="integration-row"><b>${esc(e.summary||'(Ohne Titel)')}</b><small>${esc(formatEventStart(e.start))}</small></div>`).join('');
+    if(preview){
+      if(!rows.length)preview.innerHTML='<span>Keine kommenden Termine gefunden.</span>';
+      else preview.innerHTML=rows.slice(0,3).map(e=>`<div class="integration-row"><b>${esc(e.summary||'(Ohne Titel)')}</b><small>${esc(formatEventStart(e.start))}</small></div>`).join('');
+    }
+    applyCalendarToDashboard();
   }
 
   async function loadGoogleData(){
@@ -114,6 +170,8 @@
       const status=qs('#calendarStatus')?.textContent||'';
       if(status.includes('verbunden'))await loadGoogleData();else await connectGoogle();
     });
+    ['#captureBtn','#entryForm','#deleteBtn'].forEach(s=>qs(s)?.addEventListener('click',()=>setTimeout(applyCalendarToDashboard,50)));
+    document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible'&&calendarRows.length)setTimeout(applyCalendarToDashboard,100)});
 
     const params=new URLSearchParams(location.search);
     if(params.get('google')==='connected'){
@@ -126,5 +184,5 @@
     }else loadGoogleData();
   });
 
-  window.ORBITIntegrations={openTaskDialog,connectGoogle,loadGoogleData};
+  window.ORBITIntegrations={openTaskDialog,connectGoogle,loadGoogleData,applyCalendarToDashboard};
 })();
