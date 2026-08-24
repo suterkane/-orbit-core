@@ -29,9 +29,9 @@ Eine Mission nach der anderen. Eine Mission wird erst abgeschlossen, bevor die n
 
 ## Aktive Mission
 
-Mission 19 — **FRIDAY Stimme V1**.
+Mission 19 — **FRIDAY Stimme V1 / Startsequenz-Abnahme**.
 
-FRIDAY erhält eine echte deutsche Sprachausgabe mit dynamischem Lagebericht, persönlicher Ansprache, synchronem Voice-Core und robuster Fallback-Kette. Beim Start werden – sofern verbunden – Live-Daten aus Gmail, Kalender und ORBIT-Aufgaben in die Ansage eingebaut. Die private Hintergrundmusik bleibt außerhalb des öffentlichen Repositories.
+FRIDAY erhält eine echte deutsche Sprachausgabe mit dynamischem Lagebericht, persönlicher Ansprache, synchronem Voice-Core und robuster Fallback-Kette. Beim Start werden – sofern verbunden – Live-Daten aus Gmail, Kalender und ORBIT-Aufgaben in die Ansage eingebaut. Die private Hintergrundmusik bleibt außerhalb des öffentlichen Repositories. Der Startscreen wird gegen die vereinbarte 3D-/Motion-Referenz abgenommen und nicht mehr nur kosmetisch verändert.
 
 ## Abgeschlossene Missionen
 
@@ -54,53 +54,12 @@ FRIDAY erhält eine echte deutsche Sprachausgabe mit dynamischem Lagebericht, pe
 17. **Wochenblick V1** — offene Aufgaben der kommenden sieben Tage auf der Zentrale anzeigen, direkt filtern und über einen gemeinsamen Cloud-Stand auf Desktop und iPhone synchron halten
 18. **FRIDAY Startscreen V2** — hochwertiger Rot-Gold-Startscreen mit Voice-Core/Orb, Idle- und Sprechzustand sowie Desktop-/iPhone-Abnahme
 
-## Rekonstruktions-Checkpoint — 18. August 2026
-
-Der zuvor laufende App-Quellstand war weder im alten Interface-Ordner noch im verbundenen Vercel-Team vollständig greifbar. Deshalb wurde der ORBIT-App-Master kontrolliert rekonstruiert und wieder im GitHub-Repository gesichert.
-
-Neuer App-Master:
-
-`interface/app/`
-
-Enthalten sind die Funktionen der Missionen 3 bis 18, darunter Schnellerfassung, Eingang, Suche, Kategorien, Wichtig-Markierung, Bearbeitung, zweistufiges Löschen, Aufgaben-Fälligkeiten, Terminfilter, Tageslage, nächster Fokus, Wochenblick, geräteübergreifender ORBIT Sync sowie FRIDAY Startscreen V2.
-
-Der visuelle Masterstil ist **FRIDAY Rot/Gold** auf dunkler Oberfläche. Die App ist responsive, besitzt eine installierbare PWA-/Offline-Grundlage und synchronisiert den ORBIT-Datenstand über ORBIT Sync zwischen PC und iPhone.
-
-## Mission 17 — Abschlussstand
-
-Der Wochenblick ist umgesetzt und am 18. August 2026 abgenommen:
-
-- gezählt werden offene Aufgaben mit Fälligkeit von Tag +1 bis Tag +7
-- heutige und überfällige Aufgaben werden nicht doppelt gezählt
-- erledigte Aufgaben werden ausgeschlossen
-- Antippen führt in den Wochenfilter
-- ein leerer Wochenblick bleibt ruhig und eindeutig
-- Desktop und iPhone verwenden denselben Cloud-Datenstand
-- Endtest mit einer für den Folgetag geplanten Testaufgabe auf beiden Geräten bestanden
-
-Mission 17 ist **abgeschlossen**.
-
-## Mission 18 — Abschlussstand
-
-FRIDAY Startscreen V2 wurde am 18. August 2026 abgeschlossen und abgenommen:
-
-- hochwertiger Startscreen im dunklen Rot-/Schwarz-Look mit Goldakzenten
-- zentraler FRIDAY Voice-Core / Orb
-- ruhiger Idle-Zustand
-- sichtbarer Sprech-/Verbindungszustand beim Start
-- technischer Hook `ORBITFriday.setSpeaking(...)` für spätere echte Sprachausgabe
-- Desktop-Produktion erfolgreich ausgerollt und Cache-Problem bereinigt
-- iPhone-Darstellung ohne horizontales Verschieben geprüft
-- INITIATE funktioniert zuverlässig
-- bestehender ORBIT Sync und App-Kern bleiben stabil
-
-Mission 18 ist **abgeschlossen**.
-
 ## Mission 19 — Implementierungsstand
 
 FRIDAY Stimme V1 ist im App-Master weitgehend umgesetzt:
 
 - Seraphina HD über das sichere Voice-Gateway als bevorzugte Stimme
+- Voice-Gateway am 25. August 2026 auf klarere Artikulation angepasst: weniger künstliche Tiefe, neutralere Geschwindigkeit, größerer natürlicher Stimmumfang
 - deutsche Browserstimme als Fallback
 - wechselnde Ansprache nach Tageszeit und Situation
 - „Boss“ und „Mister Stark“ werden passend und nicht schematisch eingesetzt
@@ -110,11 +69,12 @@ FRIDAY Stimme V1 ist im App-Master weitgehend umgesetzt:
 - heutige Kalendertermine werden in den Lagebericht übernommen
 - offene und überfällige ORBIT-Aufgaben fließen in den Lagebericht ein
 - Voice-Orb reagiert während der tatsächlichen Sprachausgabe
-- private Hintergrundmusik wird bevorzugt aus `interface/app/private-assets/friday-theme.m4a` geladen
-- Musik wird während der Sprachausgabe automatisch abgesenkt
+- private Hintergrundmusik bleibt außerhalb des öffentlichen Repositories
+- Musik-Ducking während der Sprachausgabe ist vorgesehen
 - synthetische Boot-Ambience bleibt als Fallback erhalten
 - private Assets und lokale Geheimnisse sind über `.gitignore` geschützt
 - private Asset-Struktur ist in `interface/app/PRIVATE_ASSETS.md` dokumentiert
+- Startscreen wurde zuletzt auf einen perspektivischen 3D-Mehrschicht-Aufbau umgestellt und Cache-Version auf V16 erhöht
 
 Mission 19 bleibt bis zur finalen Desktop-/iPhone-Abnahme **aktiv**.
 
@@ -122,22 +82,43 @@ Mission 19 bleibt bis zur finalen Desktop-/iPhone-Abnahme **aktiv**.
 
 1. Mission klar definieren.
 2. Genau diese Mission bearbeiten.
-3. Ergebnis prüfen.
-4. Mission abschließen.
-5. Erst danach die nächste Mission starten.
+3. Ergebnis selbst prüfen, soweit technisch möglich.
+4. Nichts als fertig bezeichnen, bevor es sichtbar funktioniert.
+5. Nutzer nicht nach Dingen suchen oder prüfen lassen, die selbst über Tools geprüft werden können.
+6. Ergebnis prüfen.
+7. Mission abschließen.
+8. Erst danach die nächste Mission starten.
 
 ## Backlog
 
 - Gmail-Funktionen weiter vertiefen: wichtige Nachrichten erkennen, priorisieren und später gezielt zusammenfassen.
 - Neue Ideen und Nebenaufgaben werden gesammelt und nicht während einer aktiven Mission begonnen.
 
-## Checkpoint — 24. August 2026
+## Checkpoint — 25. August 2026, 00:05 Uhr
 
-FRIDAY Voice/Personality wurde konsolidiert und im Repository gesichert. Code, private Asset-Regeln, Live-Briefing und Persönlichkeit sind dokumentiert. Der öffentliche Quellstand enthält keine private Musikdatei.
+Der aktuelle produktive ORBIT-Stand läuft über Vercel aus `main`. Der vorher verwendete alte Deployment-Link war verwaist; der aktuelle Produktionsstand wurde anschließend korrekt geladen.
+
+Der Nutzer hat den aktuellen Startscreen per Video geprüft. Ergebnis: Der neue Screen ist zwar perspektivischer, erfüllt die vereinbarte 3D-/Motion-Referenz aber noch **nicht**. Er wirkt noch zu sehr wie eine gekippte HUD-Platte. Für die nächste Sitzung gilt daher ausdrücklich:
+
+- keine kosmetischen Mini-Änderungen
+- echte räumliche Tiefenwirkung mit Vorder-/Hintergrundebenen
+- schwebende HUD-Elemente und Core im Raum
+- stärkere Licht-/Energiebewegung
+- räumliche Parallaxe statt bloßer Rotation
+- Ergebnis selbst gegen die Referenz prüfen, bevor es als passend bezeichnet wird
+
+Stimme: grundsätzlich funktionsfähig, längere Statusansagen klangen zuletzt etwas verwaschen; das Voice-Gateway wurde daraufhin auf klarere Artikulation angepasst und ist in Version 8 aktiv.
+
+Musik: gewünschter privater Track ist vorbereitet, aber im produktiven Web-Start noch nicht hörbar. Der öffentliche GitHub-/Vercel-Stand enthält die private Audiodatei bewusst nicht. Die private Musik-Einbindung bleibt daher offen und wird erst zusammen mit der finalen Startsequenz sauber abgeschlossen.
 
 ## Nächster Kontrollpunkt
 
-Private Musik lokal als `interface/app/private-assets/friday-theme.m4a` einsetzen, aktuellen App-Stand laden und auf Desktop sowie iPhone prüfen: Musik, Seraphina-HD-Stimme, dynamischer Lagebericht, Voice-Core und Übergang in die Zentrale.
+**Nur eine Mission:** FRIDAY-Startsequenz nach der 3D-Referenz fertigstellen. Reihenfolge beim nächsten Weiterarbeiten:
+
+1. 3D-Startscreen gegen Referenz sichtbar auf Zielniveau bringen.
+2. Danach privaten Musik-Track zuverlässig in der persönlichen ORBIT-Nutzung aktivieren.
+3. Danach klare deutsche FRIDAY-Ansage mit Live-Lagebericht abnehmen.
+4. Erst wenn alle drei Punkte gemeinsam funktionieren, Mission 19 abschließen und den finalen Checkpoint setzen.
 
 ## Nächste Mission
 
