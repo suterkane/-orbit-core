@@ -78,3 +78,40 @@ radial-gradient(circle at 50% 46%,rgba(255,248,218,.98) 0 4%,#ffc666 5% 10%,#ff4
   .friday-statusbar{width:100%}
 }
 @media(prefers-reduced-motion:reduce){.friday-core-wrap:before,.friday-core-wrap:after,.friday-orb,.friday-orb .voice-wave{animation:none!important}}
+
+/* FRIDAY STARTSCREEN V3 · CINEMATIC HUD OVERRIDE */
+.splash{background:
+radial-gradient(circle at 50% 42%,rgba(255,78,42,.24),transparent 18%),
+radial-gradient(circle at 50% 42%,rgba(255,190,87,.10),transparent 34%),
+linear-gradient(145deg,#050101 0%,#160402 38%,#030101 70%,#090201 100%)}
+.splash:after{content:"";position:absolute;inset:-10%;pointer-events:none;background:
+repeating-linear-gradient(0deg,rgba(255,255,255,.018) 0 1px,transparent 1px 5px),
+radial-gradient(ellipse at center,transparent 0 48%,rgba(0,0,0,.72) 84%);mix-blend-mode:screen;animation:fridayScan 7s linear infinite}
+.splash-frame{width:min(96vw,1180px);min-height:min(900px,calc(100dvh - 30px));padding:42px 54px 34px;border:1px solid rgba(241,179,77,.48);clip-path:polygon(3% 0,97% 0,100% 4%,100% 96%,97% 100%,3% 100%,0 96%,0 4%);background:
+linear-gradient(90deg,rgba(255,67,34,.035) 1px,transparent 1px),
+linear-gradient(rgba(255,189,83,.025) 1px,transparent 1px),
+linear-gradient(180deg,rgba(24,5,3,.72),rgba(4,2,2,.48));background-size:54px 54px,54px 54px,auto;box-shadow:inset 0 0 120px rgba(255,57,25,.08),0 0 90px rgba(0,0,0,.72)}
+.splash-frame:before{top:19%;bottom:19%;left:18px;right:auto;width:2px;height:auto;background:linear-gradient(transparent,#ff4b32,#f2bd62,#ff4b32,transparent);box-shadow:0 0 14px rgba(255,74,48,.6)}
+.splash-frame:after{top:19%;bottom:19%;right:18px;left:auto;width:2px;height:auto;background:linear-gradient(transparent,#f2bd62,#ff4b32,#f2bd62,transparent);box-shadow:0 0 14px rgba(242,189,98,.52)}
+.friday-kicker{font-size:10px;letter-spacing:.6em;color:#f2bd62}.splash .friday-title h1{font-size:clamp(58px,8vw,104px);letter-spacing:.22em;font-weight:380;text-shadow:0 0 18px rgba(255,70,45,.48),0 0 42px rgba(255,47,24,.22)}
+.friday-subtitle{font-size:10px;letter-spacing:.34em;color:#d7b77e}
+.friday-core-wrap{width:min(48vw,500px);margin:8px auto 14px;filter:drop-shadow(0 0 24px rgba(255,75,42,.2))}
+.friday-core-wrap:before{inset:-3%;border-color:rgba(242,189,98,.54);background:
+repeating-conic-gradient(from 0deg,rgba(242,189,98,.9) 0 .6deg,transparent .6deg 4deg),
+repeating-conic-gradient(from 18deg,rgba(255,71,48,.35) 0 .8deg,transparent .8deg 13deg);mask:radial-gradient(circle,transparent 0 79%,#000 80% 85%,transparent 86%);animation-duration:24s}
+.friday-core-wrap:after{inset:7%;border:1px solid rgba(255,78,55,.48);background:repeating-conic-gradient(from 20deg,rgba(255,74,49,.46) 0 1.2deg,transparent 1.2deg 11deg);mask:radial-gradient(circle,transparent 0 86%,#000 87% 90%,transparent 91%);animation-duration:13s}
+.friday-orb{width:42%;background:
+radial-gradient(circle at 50% 48%,#fff8d9 0 3%,#ffd777 4% 8%,#ff8a3e 9% 15%,#ff432f 16% 24%,#81140d 25% 36%,rgba(255,56,35,.2) 37% 53%,transparent 54%);box-shadow:0 0 26px rgba(255,217,117,.88),0 0 54px rgba(255,75,43,.78),0 0 110px rgba(255,49,28,.38),0 0 180px rgba(242,189,98,.12)}
+.friday-orb:before{inset:-34%;border:1px dashed rgba(242,189,98,.72);box-shadow:0 0 26px rgba(242,189,98,.16)}
+.friday-orb:after{inset:-14%;border:1px solid rgba(255,78,55,.5);box-shadow:inset 0 0 32px rgba(255,66,39,.17)}
+.friday-orb .voice-wave{inset:-56%;border-color:rgba(255,88,53,.26)}.friday-orb .voice-wave:nth-child(2){inset:-76%;border-color:rgba(242,189,98,.2)}
+.friday-core-label{bottom:3%;padding:6px 12px;border:1px solid rgba(242,189,98,.2);background:rgba(5,2,2,.72);letter-spacing:.42em;color:#e7bd73}
+.friday-greeting{margin-top:-4px;gap:7px}.friday-greeting strong{font-size:18px;letter-spacing:.14em}.friday-greeting span{font-size:10px;letter-spacing:.28em;color:#c89b65}
+.friday-statusbar{width:min(100%,560px);padding:12px 18px;border-color:rgba(242,189,98,.3);background:linear-gradient(90deg,rgba(255,61,35,.08),rgba(5,2,2,.8),rgba(242,189,98,.05));box-shadow:inset 0 0 24px rgba(255,57,35,.05)}
+.friday-statusbar span,.friday-statusbar strong{font-size:9px;letter-spacing:.25em}.splash .initiate{min-width:260px;padding:15px 38px;border:1px solid rgba(242,189,98,.42);letter-spacing:.34em;background:linear-gradient(180deg,rgba(103,23,14,.95),rgba(20,4,3,.98));box-shadow:inset 0 0 28px rgba(255,75,45,.24),0 0 34px rgba(255,63,36,.18)}
+.splash .initiate:hover{border-color:rgba(255,215,133,.78);box-shadow:inset 0 0 34px rgba(255,85,50,.3),0 0 48px rgba(255,65,39,.25)}
+.splash .start-hint{letter-spacing:.3em;color:#9a7654}
+@keyframes fridayScan{0%{transform:translateY(-2%)}50%{transform:translateY(2%)}100%{transform:translateY(-2%)}}
+@media(min-width:900px){.splash-frame>div:first-child{position:relative}.splash-frame>div:first-child:before,.splash-frame>div:first-child:after{content:"SYS 01 // ORBIT CORE\A NEURAL LINK // STABLE\A VOICE MATRIX // READY";white-space:pre;position:absolute;top:90px;width:190px;padding:12px 14px;border-top:1px solid rgba(242,189,98,.3);border-bottom:1px solid rgba(255,75,48,.2);font:8px/1.85 ui-monospace,SFMono-Regular,Consolas,monospace;letter-spacing:.18em;color:#b88a55;text-align:left;opacity:.84}.splash-frame>div:first-child:before{left:-10px}.splash-frame>div:first-child:after{content:"SECURE CHANNEL // ACTIVE\A AUDIO CORE // ARMED\A FRIDAY // STANDBY";right:-10px;text-align:right}.friday-core-wrap{margin-top:0}}
+@media(max-width:899px){.splash-frame{width:min(100%,620px);padding:30px 24px}.friday-core-wrap{width:min(72vw,360px)}.splash .friday-title h1{font-size:clamp(48px,13vw,74px)}}
+@media(max-width:620px){.splash-frame{padding:24px 14px 22px}.friday-core-wrap{width:min(76vw,320px)}.friday-greeting strong{font-size:15px}.friday-statusbar{width:96%}.splash .initiate{min-width:220px}}
