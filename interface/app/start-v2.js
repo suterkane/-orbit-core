@@ -9,6 +9,7 @@
   const statusText=()=>document.querySelector('.friday-greeting span');
   const isiOS=()=>/iPad|iPhone|iPod/.test(navigator.userAgent)||(/Mac/.test(navigator.userAgent)&&navigator.maxTouchPoints>1);
   let speakTimer=null,launchTimer=null,launching=false,activeAudio=null,activeAudioUrl='';
+  let musicCtx=null,musicMaster=null,musicNodes=[];
 
   function setOrbState(state='idle'){
     const el=orb();if(!el)return;
@@ -18,6 +19,11 @@
   }
   function setSpeaking(active=true,duration=0){
     setOrbState(active?'speaking':'idle');clearTimeout(speakTimer);
+    if(musicMaster&&musicCtx){
+      const now=musicCtx.currentTime;
+      musicMaster.gain.cancelScheduledValues(now);
+      musicMaster.gain.linearRampToValueAtTime(active?0.025:0.055,now+.18);
+    }
     if(active&&duration>0)speakTimer=setTimeout(()=>setSpeaking(false),duration);
   }
   function getGreeting(){
@@ -25,6 +31,32 @@
     if(hour<11)return'Guten Morgen, Mister Stark. ORBIT ist online.';
     if(hour<18)return'Guten Tag, Mister Stark. ORBIT ist online.';
     return'Guten Abend, Mister Stark. ORBIT ist online.';
+  }
+  function startBootMusic(){
+    if(musicCtx)return;
+    const AudioCtx=window.AudioContext||window.webkitAudioContext;if(!AudioCtx)return;
+    try{
+      musicCtx=new AudioCtx();musicMaster=musicCtx.createGain();musicMaster.gain.value=0.0001;musicMaster.connect(musicCtx.destination);
+      const now=musicCtx.currentTime;
+      const tones=[110,164.81,220];
+      tones.forEach((freq,i)=>{
+        const osc=musicCtx.createOscillator(),gain=musicCtx.createGain();
+        osc.type=i===1?'triangle':'sine';osc.frequency.value=freq;gain.gain.value=i===0?.22:.11;
+        osc.connect(gain);gain.connect(musicMaster);osc.start();musicNodes.push(osc,gain);
+      });
+      const lfo=musicCtx.createOscillator(),lfoGain=musicCtx.createGain();lfo.frequency.value=.42;lfoGain.gain.value=.018;lfo.connect(lfoGain);lfoGain.connect(musicMaster.gain);lfo.start();musicNodes.push(lfo,lfoGain);
+      musicMaster.gain.exponentialRampToValueAtTime(.055,now+.8);
+      musicCtx.resume?.();
+    }catch{stopBootMusic(true)}
+  }
+  function stopBootMusic(immediate=false){
+    if(!musicCtx)return;
+    try{
+      const ctx=musicCtx,master=musicMaster,now=ctx.currentTime;
+      if(master){master.gain.cancelScheduledValues(now);master.gain.setValueAtTime(Math.max(master.gain.value,.0001),now);master.gain.exponentialRampToValueAtTime(.0001,now+(immediate?.05:.65))}
+      setTimeout(()=>{musicNodes.forEach(n=>{try{n.stop?.()}catch{}});musicNodes=[];try{ctx.close()}catch{}},immediate?80:760);
+    }catch{}
+    musicCtx=null;musicMaster=null;
   }
   function cleanupAudio(){
     try{activeAudio?.pause()}catch{}
@@ -87,10 +119,12 @@
   }
   function launchApp(){
     const status=statusText();setOrbState('online');if(status)status.textContent='FRIDAY · ONLINE';
+    stopBootMusic();
     if(typeof window.showApp==='function')window.showApp();
   }
   async function launchWithVoice(event){
     if(launching)return;launching=true;event.preventDefault();event.stopImmediatePropagation();
+    startBootMusic();
     const status=statusText();setOrbState('booting');if(status)status.textContent='FRIDAY fährt Systeme hoch …';
     const greeting=getGreeting();
 
@@ -115,7 +149,7 @@
     setTimeout(()=>{if(!voiceDone){voiceDone=true;maybeLaunch()}},1800);
   }
 
-  window.ORBITFriday={setSpeaking,setOrbState,speak,getGreeting,pickGermanVoice,speakSeraphina,voiceProfile:FRIDAY_VOICE_PROFILE};
+  window.ORBITFriday={setSpeaking,setOrbState,speak,getGreeting,pickGermanVoice,speakSeraphina,startBootMusic,stopBootMusic,voiceProfile:FRIDAY_VOICE_PROFILE};
   document.addEventListener('DOMContentLoaded',()=>{
     const btn=document.querySelector('#initiateBtn');if(btn)btn.addEventListener('click',launchWithVoice,{capture:true});
     setOrbState('idle');warmVoices();
