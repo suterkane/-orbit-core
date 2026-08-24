@@ -1,0 +1,14 @@
+# ORBIT private/local assets
+interface/app/private-assets/
+private-assets/
+*.local
+*.local.*
+
+# Secrets and environment files
+.env
+.env.*
+!.env.example
+
+# Local caches / OS files
+.DS_Store
+Thumbs.db
