@@ -2,7 +2,7 @@
   localStorage.removeItem('orbit.started');
   const VOICE_URL='https://vhmokhunkvoctavmrjwl.supabase.co/functions/v1/friday-voice';
   const SYNC_KEY_STORAGE='orbit.sync.key.v1';
-  const FRIDAY_VOICE_PROFILE={lang:'de-DE',rate:1.0,pitch:1.0,volume:1};
+  const FRIDAY_VOICE_PROFILE={lang:'de-DE',rate:.94,pitch:1.0,volume:1};
   const orb=()=>document.querySelector('#fridayVoiceOrb');
   const statusText=()=>document.querySelector('.friday-greeting span');
   let speakTimer=null,launchTimer=null,launching=false,activeAudio=null,activeAudioUrl='',activeSource=null;
@@ -11,7 +11,19 @@
   function setOrbState(state='idle'){const el=orb();if(!el)return;el.dataset.state=state;el.classList.toggle('speaking',state==='speaking');el.setAttribute('aria-busy',state==='speaking'?'true':'false')}
   function setMusicLevel(level=.18,time=.35){if(!musicMaster||!musicCtx)return;const now=musicCtx.currentTime;musicMaster.gain.cancelScheduledValues(now);musicMaster.gain.setValueAtTime(Math.max(musicMaster.gain.value,.0001),now);musicMaster.gain.linearRampToValueAtTime(level,now+time)}
   function setSpeaking(active=true,duration=0){setOrbState(active?'speaking':'idle');clearTimeout(speakTimer);setMusicLevel(active?.09:.22,.18);if(active&&duration>0)speakTimer=setTimeout(()=>setSpeaking(false),duration)}
-  function getGreeting(){const h=new Date().getHours();if(h<11)return'Guten Morgen, Mister Stark. ORBIT ist online.';if(h<18)return'Guten Tag, Mister Stark. ORBIT ist online.';return'Guten Abend, Mister Stark. ORBIT ist online.'}
+  function getGreeting(){const h=new Date().getHours();if(h<11)return'Guten Morgen, Mister Stark.';if(h<18)return'Guten Tag, Mister Stark.';return'Guten Abend, Mister Stark.'}
+  function getBootNarration(){
+    return [
+      getGreeting(),
+      'FRIDAY wird initialisiert.',
+      'ORBIT Core ist online.',
+      'Sprachsystem und persönliches Profil sind geladen.',
+      'ORBIT Sync ist verbunden und der aktuelle Systemstand wurde übernommen.',
+      'Aktive Mission: FRIDAY Stimme V1.',
+      'Aufgaben, Missionen und Systeme stehen bereit.',
+      'Alle Systeme sind stabil. Ich bin bereit.'
+    ].join(' ');
+  }
 
   function startBootMusic(){
     if(musicCtx){musicCtx.resume?.();setMusicLevel(.24,.25);return}
@@ -42,19 +54,19 @@
       const blob=await response.blob();if(!blob.size)return false;cleanupAudio();let finished=false;
       const finish=()=>{if(finished)return;finished=true;clearTimeout(launchTimer);setSpeaking(false);cleanupAudio();onend?.()};
       if(musicCtx&&musicCtx.state!=='closed'){
-        await musicCtx.resume?.();const buffer=await musicCtx.decodeAudioData(await blob.arrayBuffer());const source=musicCtx.createBufferSource(),gain=musicCtx.createGain();gain.gain.value=1;source.buffer=buffer;source.connect(gain);gain.connect(musicCtx.destination);activeSource=source;source.onended=finish;setSpeaking(true);const status=statusText();if(status)status.textContent='FRIDAY spricht · SERAPHINA HD';source.start();launchTimer=setTimeout(finish,10000);return true;
+        await musicCtx.resume?.();const buffer=await musicCtx.decodeAudioData(await blob.arrayBuffer());const source=musicCtx.createBufferSource(),gain=musicCtx.createGain();gain.gain.value=1;source.buffer=buffer;source.connect(gain);gain.connect(musicCtx.destination);activeSource=source;source.onended=finish;setSpeaking(true);const status=statusText();if(status)status.textContent='FRIDAY spricht · SERAPHINA HD';source.start();launchTimer=setTimeout(finish,30000);return true;
       }
-      activeAudioUrl=URL.createObjectURL(blob);activeAudio=new Audio(activeAudioUrl);activeAudio.preload='auto';activeAudio.onplay=()=>{setSpeaking(true);const status=statusText();if(status)status.textContent='FRIDAY spricht · SERAPHINA HD'};activeAudio.onended=finish;activeAudio.onerror=finish;await activeAudio.play();launchTimer=setTimeout(finish,10000);return true;
+      activeAudioUrl=URL.createObjectURL(blob);activeAudio=new Audio(activeAudioUrl);activeAudio.preload='auto';activeAudio.onplay=()=>{setSpeaking(true);const status=statusText();if(status)status.textContent='FRIDAY spricht · SERAPHINA HD'};activeAudio.onended=finish;activeAudio.onerror=finish;await activeAudio.play();launchTimer=setTimeout(finish,30000);return true;
     }catch{cleanupAudio();setSpeaking(false);return false}
   }
   function getGermanVoices(){if(!('speechSynthesis'in window))return[];return window.speechSynthesis.getVoices().filter(v=>(v.lang||'').toLowerCase().startsWith('de'))}
   function pickGermanVoice(){const german=getGermanVoices();if(!german.length)return null;const scored=german.map(v=>{const n=(v.name||'').toLowerCase();let score=0;if(n.includes('premium')||n.includes('enhanced'))score+=120;if(n.includes('anna'))score+=100;if(n.includes('petra'))score+=80;if(n.includes('online')&&n.includes('natural'))score+=75;if(n.includes('katja'))score+=70;if(n.includes('microsoft'))score+=45;if(n.includes('google deutsch'))score+=35;if((v.lang||'').toLowerCase()==='de-de')score+=15;return{v,score}}).sort((a,b)=>b.score-a.score);return scored[0]?.v||german[0]}
   function warmVoices(){if('speechSynthesis'in window)window.speechSynthesis.getVoices()}
-  function speakBrowser(text,{onend}={}){if(!('speechSynthesis'in window)||typeof SpeechSynthesisUtterance==='undefined')return false;const synth=window.speechSynthesis;synth.cancel();const utterance=new SpeechSynthesisUtterance(text);utterance.lang=FRIDAY_VOICE_PROFILE.lang;const voice=pickGermanVoice();if(voice)utterance.voice=voice;utterance.rate=FRIDAY_VOICE_PROFILE.rate;utterance.pitch=FRIDAY_VOICE_PROFILE.pitch;utterance.volume=FRIDAY_VOICE_PROFILE.volume;let finished=false;const finish=()=>{if(finished)return;finished=true;clearTimeout(launchTimer);setSpeaking(false);onend?.()};utterance.onstart=()=>{setSpeaking(true);const status=statusText();if(status)status.textContent=`FRIDAY spricht · FALLBACK ${voice?.name||'BROWSER'}`};utterance.onend=finish;utterance.onerror=finish;synth.resume?.();synth.speak(utterance);setSpeaking(true);launchTimer=setTimeout(finish,7500);return true}
+  function speakBrowser(text,{onend}={}){if(!('speechSynthesis'in window)||typeof SpeechSynthesisUtterance==='undefined')return false;const synth=window.speechSynthesis;synth.cancel();const utterance=new SpeechSynthesisUtterance(text);utterance.lang=FRIDAY_VOICE_PROFILE.lang;const voice=pickGermanVoice();if(voice)utterance.voice=voice;utterance.rate=FRIDAY_VOICE_PROFILE.rate;utterance.pitch=FRIDAY_VOICE_PROFILE.pitch;utterance.volume=FRIDAY_VOICE_PROFILE.volume;let finished=false;const finish=()=>{if(finished)return;finished=true;clearTimeout(launchTimer);setSpeaking(false);onend?.()};utterance.onstart=()=>{setSpeaking(true);const status=statusText();if(status)status.textContent=`FRIDAY spricht · FALLBACK ${voice?.name||'BROWSER'}`};utterance.onend=finish;utterance.onerror=finish;synth.resume?.();synth.speak(utterance);setSpeaking(true);launchTimer=setTimeout(finish,30000);return true}
   async function speak(text,{onend}={}){const status=statusText();if(status)status.textContent='FRIDAY initialisiert Seraphina HD …';const played=await speakSeraphina(text,{onend});if(played)return true;if(status)status.textContent='FRIDAY startet lokale Notfallstimme …';return speakBrowser(text,{onend})}
   function launchApp(){const status=statusText();setOrbState('online');if(status)status.textContent='FRIDAY · ONLINE';setMusicLevel(.16,.8);if(typeof window.showApp==='function')window.showApp()}
-  async function launchWithVoice(event){if(launching)return;launching=true;event.preventDefault();event.stopImmediatePropagation();startBootMusic();const status=statusText();setOrbState('booting');if(status)status.textContent='FRIDAY fährt Systeme hoch …';let voiceDone=false,bootDone=false;const maybeLaunch=()=>{if(voiceDone&&bootDone)launchApp()},voiceEnd=()=>{voiceDone=true;maybeLaunch()};speak(getGreeting(),{onend:voiceEnd}).then(started=>{if(!started){voiceDone=true;maybeLaunch()}});try{if(window.ORBITBoot?.play)await window.ORBITBoot.play()}catch{}bootDone=true;maybeLaunch();setTimeout(()=>{if(!voiceDone){voiceDone=true;maybeLaunch()}},6000)}
+  async function launchWithVoice(event){if(launching)return;launching=true;event.preventDefault();event.stopImmediatePropagation();startBootMusic();const status=statusText();setOrbState('booting');if(status)status.textContent='FRIDAY fährt Systeme hoch …';let voiceDone=false,bootDone=false;const maybeLaunch=()=>{if(voiceDone&&bootDone)launchApp()},voiceEnd=()=>{voiceDone=true;maybeLaunch()};speak(getBootNarration(),{onend:voiceEnd}).then(started=>{if(!started){voiceDone=true;maybeLaunch()}});try{if(window.ORBITBoot?.play)await window.ORBITBoot.play()}catch{}bootDone=true;maybeLaunch();setTimeout(()=>{if(!voiceDone){voiceDone=true;maybeLaunch()}},30000)}
 
-  window.ORBITFriday={setSpeaking,setOrbState,setMusicLevel,speak,getGreeting,pickGermanVoice,speakSeraphina,startBootMusic,stopBootMusic,voiceProfile:FRIDAY_VOICE_PROFILE};
+  window.ORBITFriday={setSpeaking,setOrbState,setMusicLevel,speak,getGreeting,getBootNarration,pickGermanVoice,speakSeraphina,startBootMusic,stopBootMusic,voiceProfile:FRIDAY_VOICE_PROFILE};
   document.addEventListener('DOMContentLoaded',()=>{const btn=document.querySelector('#initiateBtn');if(btn)btn.addEventListener('click',launchWithVoice,{capture:true});setOrbState('idle');warmVoices();if('speechSynthesis'in window)window.speechSynthesis.addEventListener?.('voiceschanged',warmVoices,{once:true})});
 })();
