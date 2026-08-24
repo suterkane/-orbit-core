@@ -20,7 +20,8 @@ FRIDAY verhält sich wie eine verlässliche operative Assistentin:
 - handelt pragmatisch und bevorzugt robuste, einfache Lösungen
 - bleibt loyal zum Ziel und zur vereinbarten Arbeitsweise
 - darf bei passender Gelegenheit mit trockenem, schlagfertigem Humor reagieren
-- spricht Mr. Stark respektvoll, aber nicht steif an
+- wechselt situationsgerecht zwischen „Boss“, „Mister Stark“ und neutralen Formulierungen
+- wird bei überfälligen oder kritischen Punkten automatisch ernster und direkter
 
 ## Grundregel
 
@@ -30,7 +31,7 @@ Eine Mission nach der anderen. Eine Mission wird erst abgeschlossen, bevor die n
 
 Mission 19 — **FRIDAY Stimme V1**.
 
-FRIDAY erhält eine erste echte deutsche Sprachausgabe. Beim Start spricht FRIDAY eine kurze Begrüßung, während der Voice-Orb synchron sichtbar reagiert. Die Umsetzung bleibt bewusst klein: Begrüßung, Sprechsteuerung, robuster Fallback und Desktop-/iPhone-Abnahme. Bestehende Kernfunktionen und ORBIT Sync bleiben unangetastet.
+FRIDAY erhält eine echte deutsche Sprachausgabe mit dynamischem Lagebericht, persönlicher Ansprache, synchronem Voice-Core und robuster Fallback-Kette. Beim Start werden – sofern verbunden – Live-Daten aus Gmail, Kalender und ORBIT-Aufgaben in die Ansage eingebaut. Die private Hintergrundmusik bleibt außerhalb des öffentlichen Repositories.
 
 ## Abgeschlossene Missionen
 
@@ -97,17 +98,25 @@ Mission 18 ist **abgeschlossen**.
 
 ## Mission 19 — Implementierungsstand
 
-FRIDAY Stimme V1 ist im App-Master begonnen:
+FRIDAY Stimme V1 ist im App-Master weitgehend umgesetzt:
 
-- Speech-Synthesis-Ausgabe beim Start implementiert
-- deutsche Stimme wird bevorzugt
-- Begrüßung wird nach Tageszeit gewählt
-- Voice-Orb wird während der tatsächlichen Sprachausgabe aktiviert
-- nach Ende der Begrüßung öffnet sich die Zentrale
-- Fallback für Geräte ohne Speech-Synthesis-Unterstützung vorhanden
-- Service Worker auf Voice-V1-Assets aktualisiert
+- Seraphina HD über das sichere Voice-Gateway als bevorzugte Stimme
+- deutsche Browserstimme als Fallback
+- wechselnde Ansprache nach Tageszeit und Situation
+- „Boss“ und „Mister Stark“ werden passend und nicht schematisch eingesetzt
+- ernster Modus bei überfälligen Aufgaben
+- dynamischer Start-/Lagebericht
+- Gmail-Anzahl wird aus Live-Daten übernommen, wenn Google verbunden ist
+- heutige Kalendertermine werden in den Lagebericht übernommen
+- offene und überfällige ORBIT-Aufgaben fließen in den Lagebericht ein
+- Voice-Orb reagiert während der tatsächlichen Sprachausgabe
+- private Hintergrundmusik wird bevorzugt aus `interface/app/private-assets/friday-theme.m4a` geladen
+- Musik wird während der Sprachausgabe automatisch abgesenkt
+- synthetische Boot-Ambience bleibt als Fallback erhalten
+- private Assets und lokale Geheimnisse sind über `.gitignore` geschützt
+- private Asset-Struktur ist in `interface/app/PRIVATE_ASSETS.md` dokumentiert
 
-Mission 19 bleibt bis zur Desktop-/iPhone-Endkontrolle **aktiv**.
+Mission 19 bleibt bis zur finalen Desktop-/iPhone-Abnahme **aktiv**.
 
 ## Arbeitsprinzip
 
@@ -119,12 +128,16 @@ Mission 19 bleibt bis zur Desktop-/iPhone-Endkontrolle **aktiv**.
 
 ## Backlog
 
-- Gmail in Friday einbinden, sobald die Gmail-Verbindung echte Postfachdaten liefert.
+- Gmail-Funktionen weiter vertiefen: wichtige Nachrichten erkennen, priorisieren und später gezielt zusammenfassen.
 - Neue Ideen und Nebenaufgaben werden gesammelt und nicht während einer aktiven Mission begonnen.
+
+## Checkpoint — 24. August 2026
+
+FRIDAY Voice/Personality wurde konsolidiert und im Repository gesichert. Code, private Asset-Regeln, Live-Briefing und Persönlichkeit sind dokumentiert. Der öffentliche Quellstand enthält keine private Musikdatei.
 
 ## Nächster Kontrollpunkt
 
-FRIDAY Stimme V1 über Vercel ausrollen und auf Desktop und iPhone prüfen: hörbare Begrüßung, synchroner Voice-Orb und zuverlässiger Übergang in die Zentrale.
+Private Musik lokal als `interface/app/private-assets/friday-theme.m4a` einsetzen, aktuellen App-Stand laden und auf Desktop sowie iPhone prüfen: Musik, Seraphina-HD-Stimme, dynamischer Lagebericht, Voice-Core und Übergang in die Zentrale.
 
 ## Nächste Mission
 
