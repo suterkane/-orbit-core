@@ -12,17 +12,19 @@
   function setMusicLevel(level=.18,time=.35){if(!musicMaster||!musicCtx)return;const now=musicCtx.currentTime;musicMaster.gain.cancelScheduledValues(now);musicMaster.gain.setValueAtTime(Math.max(musicMaster.gain.value,.0001),now);musicMaster.gain.linearRampToValueAtTime(level,now+time)}
   function setSpeaking(active=true,duration=0){setOrbState(active?'speaking':'idle');clearTimeout(speakTimer);setMusicLevel(active?.09:.22,.18);if(active&&duration>0)speakTimer=setTimeout(()=>setSpeaking(false),duration)}
   function getGreeting(){const h=new Date().getHours();if(h<11)return'Guten Morgen, Mister Stark.';if(h<18)return'Guten Tag, Mister Stark.';return'Guten Abend, Mister Stark.'}
-  function getBootNarration(){
+  async function getBootNarration(){
+    let briefing='';
+    try{if(window.ORBITIntegrations?.getBriefingSummary)briefing=await window.ORBITIntegrations.getBriefingSummary()}catch{}
     return [
       getGreeting(),
       'FRIDAY wird initialisiert.',
       'ORBIT Core ist online.',
       'Sprachsystem und persönliches Profil sind geladen.',
-      'ORBIT Sync ist verbunden und der aktuelle Systemstand wurde übernommen.',
+      briefing,
       'Aktive Mission: FRIDAY Stimme V1.',
-      'Aufgaben, Missionen und Systeme stehen bereit.',
+      'ORBIT Sync und Systemstatus wurden übernommen.',
       'Alle Systeme sind stabil. Ich bin bereit.'
-    ].join(' ');
+    ].filter(Boolean).join(' ');
   }
 
   function startBootMusic(){
@@ -65,7 +67,7 @@
   function speakBrowser(text,{onend}={}){if(!('speechSynthesis'in window)||typeof SpeechSynthesisUtterance==='undefined')return false;const synth=window.speechSynthesis;synth.cancel();const utterance=new SpeechSynthesisUtterance(text);utterance.lang=FRIDAY_VOICE_PROFILE.lang;const voice=pickGermanVoice();if(voice)utterance.voice=voice;utterance.rate=FRIDAY_VOICE_PROFILE.rate;utterance.pitch=FRIDAY_VOICE_PROFILE.pitch;utterance.volume=FRIDAY_VOICE_PROFILE.volume;let finished=false;const finish=()=>{if(finished)return;finished=true;clearTimeout(launchTimer);setSpeaking(false);onend?.()};utterance.onstart=()=>{setSpeaking(true);const status=statusText();if(status)status.textContent=`FRIDAY spricht · FALLBACK ${voice?.name||'BROWSER'}`};utterance.onend=finish;utterance.onerror=finish;synth.resume?.();synth.speak(utterance);setSpeaking(true);launchTimer=setTimeout(finish,30000);return true}
   async function speak(text,{onend}={}){const status=statusText();if(status)status.textContent='FRIDAY initialisiert Seraphina HD …';const played=await speakSeraphina(text,{onend});if(played)return true;if(status)status.textContent='FRIDAY startet lokale Notfallstimme …';return speakBrowser(text,{onend})}
   function launchApp(){const status=statusText();setOrbState('online');if(status)status.textContent='FRIDAY · ONLINE';setMusicLevel(.16,.8);if(typeof window.showApp==='function')window.showApp()}
-  async function launchWithVoice(event){if(launching)return;launching=true;event.preventDefault();event.stopImmediatePropagation();startBootMusic();const status=statusText();setOrbState('booting');if(status)status.textContent='FRIDAY fährt Systeme hoch …';let voiceDone=false,bootDone=false;const maybeLaunch=()=>{if(voiceDone&&bootDone)launchApp()},voiceEnd=()=>{voiceDone=true;maybeLaunch()};speak(getBootNarration(),{onend:voiceEnd}).then(started=>{if(!started){voiceDone=true;maybeLaunch()}});try{if(window.ORBITBoot?.play)await window.ORBITBoot.play()}catch{}bootDone=true;maybeLaunch();setTimeout(()=>{if(!voiceDone){voiceDone=true;maybeLaunch()}},30000)}
+  async function launchWithVoice(event){if(launching)return;launching=true;event.preventDefault();event.stopImmediatePropagation();startBootMusic();const status=statusText();setOrbState('booting');if(status)status.textContent='FRIDAY erstellt Lagebericht …';let voiceDone=false,bootDone=false;const maybeLaunch=()=>{if(voiceDone&&bootDone)launchApp()},voiceEnd=()=>{voiceDone=true;maybeLaunch()};const narration=await getBootNarration();speak(narration,{onend:voiceEnd}).then(started=>{if(!started){voiceDone=true;maybeLaunch()}});try{if(window.ORBITBoot?.play)await window.ORBITBoot.play()}catch{}bootDone=true;maybeLaunch();setTimeout(()=>{if(!voiceDone){voiceDone=true;maybeLaunch()}},30000)}
 
   window.ORBITFriday={setSpeaking,setOrbState,setMusicLevel,speak,getGreeting,getBootNarration,pickGermanVoice,speakSeraphina,startBootMusic,stopBootMusic,voiceProfile:FRIDAY_VOICE_PROFILE};
   document.addEventListener('DOMContentLoaded',()=>{const btn=document.querySelector('#initiateBtn');if(btn)btn.addEventListener('click',launchWithVoice,{capture:true});setOrbState('idle');warmVoices();if('speechSynthesis'in window)window.speechSynthesis.addEventListener?.('voiceschanged',warmVoices,{once:true})});
