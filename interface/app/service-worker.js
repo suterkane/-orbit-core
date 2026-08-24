@@ -1,6 +1,6 @@
-const CACHE='orbit-friday-v10-cinematic-boot';
+const CACHE='orbit-friday-v11-live-fix';
 const FALLBACK='index.html';
-const CORE=['./','index.html','styles.css?v=4','start-v2.css?v=2','boot-sequence.css?v=1','boot-sequence.js?v=1','start-v2.js?v=5','app.js?v=4','manifest.webmanifest'];
+const CORE=['./','index.html','styles.css?v=4','start-v2.css?v=2','boot-sequence.css?v=3','boot-sequence.js?v=3','start-v2.js?v=10','app.js?v=7','handoff.js?v=1','integrations.js?v=4','integrations.css?v=1','manifest.webmanifest'];
 
 self.addEventListener('install',event=>{
   event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(CORE)).then(()=>self.skipWaiting()));
