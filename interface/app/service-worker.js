@@ -1,4 +1,4 @@
-const CACHE='orbit-friday-v11-live-fix';
+const CACHE='orbit-friday-v12-gmail-reader';
 const FALLBACK='index.html';
 const CORE=['./','index.html','styles.css?v=4','start-v2.css?v=2','boot-sequence.css?v=3','boot-sequence.js?v=3','start-v2.js?v=10','app.js?v=7','handoff.js?v=1','integrations.js?v=4','integrations.css?v=1','manifest.webmanifest'];
 
