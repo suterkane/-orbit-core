@@ -47,6 +47,27 @@
     const upcoming=dated.filter(x=>x.date>=now).sort((a,b)=>a.date-b.date)[0];if(upcoming&&focus){const strong=focus.querySelector('strong'),small=focus.querySelector('small'),current=strong?.textContent||'';if(!current||current==='Keine geplante Aufgabe'||current===focus.dataset.calendarTitle){if(strong)strong.textContent=upcoming.event.summary||'Kalendertermin';if(small)small.textContent=`${formatEventStart(upcoming.event.start)} · Google Kalender`;focus.dataset.calendarTitle=upcoming.event.summary||'Kalendertermin';focus.onclick=null}}
   }
 
+  function buildBriefingSummary(){
+    const now=new Date(),today=dayKey(now),weekEnd=new Date(now);weekEnd.setDate(weekEnd.getDate()+7);
+    const dated=calendarRows.map(e=>eventDate(e.start)).filter(Boolean);
+    const todayEvents=dated.filter(d=>dayKey(d)===today).length;
+    const weekEvents=dated.filter(d=>d>now&&d<=weekEnd).length;
+    const overdue=Number(qs('#overdueCount')?.textContent)||0;
+    const open=Number(qs('#openCount')?.textContent)||0;
+    const parts=[];
+    parts.push(`Im Posteingang liegen ${mailRows.length} aktuelle E-Mail${mailRows.length===1?'':'s'}.`);
+    if(todayEvents>0)parts.push(`Für heute stehen ${todayEvents} Kalendereintrag${todayEvents===1?'':'e'} an.`);
+    else if(weekEvents>0)parts.push(`In den nächsten sieben Tagen stehen ${weekEvents} Termine an.`);
+    else parts.push('Im Kalender liegt aktuell kein dringender Termin an.');
+    if(overdue>0)parts.push(`${overdue} Aufgabe${overdue===1?' ist':'n sind'} überfällig.`);
+    else if(open>0)parts.push(`${open} offene Aufgabe${open===1?' wartet':'n warten'} in ORBIT.`);
+    return parts.join(' ');
+  }
+
+  async function getBriefingSummary(){
+    try{await loadGoogleData();return buildBriefingSummary()}catch{return buildBriefingSummary()}
+  }
+
   function ensureMailReader(){
     let overlay=qs('#mailReaderOverlay');if(overlay)return overlay;
     overlay=document.createElement('div');overlay.id='mailReaderOverlay';overlay.hidden=true;
@@ -72,17 +93,7 @@
     if(needsGmailModify){const ok=confirm('ORBIT braucht einmal die Gmail-Berechtigung zum Verschieben in den Papierkorb. Jetzt freischalten?');if(ok)connectGoogle();return}
     const mail=mailRows.find(m=>m.id===currentMailId);if(!confirm(`Diese E-Mail in den Gmail-Papierkorb verschieben?\n\n${mail?.subject||'E-Mail'}`))return;
     const btn=qs('#mailReaderTrash');if(btn){btn.disabled=true;btn.textContent='Wird verschoben …'}
-    try{
-      await gateway('/trash',{method:'POST',body:{id:currentMailId}});
-      mailRows=mailRows.filter(m=>m.id!==currentMailId);const overlay=qs('#mailReaderOverlay');if(overlay)overlay.hidden=true;currentMailId='';
-      if(qs('#mailStatus'))qs('#mailStatus').textContent='E-Mail in Papierkorb verschoben';
-      await loadGoogleData();
-    }catch(err){
-      if(btn){btn.disabled=false;btn.textContent='In Papierkorb'}
-      const msg=String(err?.message||'');
-      if(err?.status===403||msg.includes('insufficient')||msg.includes('permission')){needsGmailModify=true;if(qs('#mailStatus'))qs('#mailStatus').textContent='Papierkorb-Freigabe erforderlich';if(confirm('Google muss die Papierkorb-Funktion einmal freigeben. Jetzt Berechtigung erweitern?'))connectGoogle();return}
-      alert(`Papierkorb konnte nicht ausgeführt werden: ${msg||'Unbekannter Fehler'}`);
-    }
+    try{await gateway('/trash',{method:'POST',body:{id:currentMailId}});mailRows=mailRows.filter(m=>m.id!==currentMailId);const overlay=qs('#mailReaderOverlay');if(overlay)overlay.hidden=true;currentMailId='';if(qs('#mailStatus'))qs('#mailStatus').textContent='E-Mail in Papierkorb verschoben';await loadGoogleData()}catch(err){if(btn){btn.disabled=false;btn.textContent='In Papierkorb'}const msg=String(err?.message||'');if(err?.status===403||msg.includes('insufficient')||msg.includes('permission')){needsGmailModify=true;if(qs('#mailStatus'))qs('#mailStatus').textContent='Papierkorb-Freigabe erforderlich';if(confirm('Google muss die Papierkorb-Funktion einmal freigeben. Jetzt Berechtigung erweitern?'))connectGoogle();return}alert(`Papierkorb konnte nicht ausgeführt werden: ${msg||'Unbekannter Fehler'}`)}
   }
 
   function renderMail(data){
@@ -97,20 +108,10 @@
 
   async function loadGoogleData(){
     const key=getSyncKey(false);if(!key){setGoogleStatus('Google-Verbindung noch nicht eingerichtet');return}
-    try{
-      const status=await gateway('/status');if(!status.configured){setGoogleStatus('Google OAuth wartet auf Einrichtung');return}if(!status.connected){setGoogleStatus('Google-Verbindung erforderlich');return}
-      needsGmailModify=!!status.needs_modify;setGoogleStatus('Live-Daten werden geladen …');
-      const [mail,calendar]=await Promise.all([gateway('/data?resource=gmail'),gateway('/data?resource=calendar')]);renderMail(mail);renderCalendar(calendar);
-      const mb=qs('#mailConnectBtn'),cb=qs('#calendarConnectBtn');if(mb)mb.textContent=needsGmailModify?'Papierkorb freischalten':'Gmail aktualisieren';if(cb)cb.textContent='Kalender aktualisieren';
-    }catch(err){if(err.message==='NO_KEY')setGoogleStatus('Google-Verbindung noch nicht eingerichtet');else if(err.status===401){localStorage.removeItem(SYNC_KEY_STORAGE);setGoogleStatus('Sync-Code ungültig · bitte erneut verbinden')}else setGoogleStatus(`Google-Verbindung prüfen · ${err.message||'Fehler'}`)}
+    try{const status=await gateway('/status');if(!status.configured){setGoogleStatus('Google OAuth wartet auf Einrichtung');return}if(!status.connected){setGoogleStatus('Google-Verbindung erforderlich');return}needsGmailModify=!!status.needs_modify;setGoogleStatus('Live-Daten werden geladen …');const [mail,calendar]=await Promise.all([gateway('/data?resource=gmail'),gateway('/data?resource=calendar')]);renderMail(mail);renderCalendar(calendar);const mb=qs('#mailConnectBtn'),cb=qs('#calendarConnectBtn');if(mb)mb.textContent=needsGmailModify?'Papierkorb freischalten':'Gmail aktualisieren';if(cb)cb.textContent='Kalender aktualisieren'}catch(err){if(err.message==='NO_KEY')setGoogleStatus('Google-Verbindung noch nicht eingerichtet');else if(err.status===401){localStorage.removeItem(SYNC_KEY_STORAGE);setGoogleStatus('Sync-Code ungültig · bitte erneut verbinden')}else setGoogleStatus(`Google-Verbindung prüfen · ${err.message||'Fehler'}`)}
   }
 
-  async function connectGoogle(){
-    setGoogleStatus('Google-Freigabe wird vorbereitet …');let url='';
-    try{const data=await gateway('/start',{interactive:true});url=typeof data?.url==='string'?data.url.trim():'';if(!url)throw new Error('START_NO_URL')}
-    catch(err){if(err.message==='NO_KEY')setGoogleStatus('ORBIT Sync-Code für sichere Verbindung erforderlich');else if(err.status===401){localStorage.removeItem(SYNC_KEY_STORAGE);setGoogleStatus('Sync-Code ungültig · bitte erneut auf Gmail verbinden klicken')}else if(err.message==='google_not_configured')setGoogleStatus('Google OAuth wartet auf Client-Freigabe');else setGoogleStatus(`Google-Freigabe Fehler · ${err.message||'unbekannt'}`);return}
-    setGoogleStatus('Google wird geöffnet …');window.location.href=url;
-  }
+  async function connectGoogle(){setGoogleStatus('Google-Freigabe wird vorbereitet …');let url='';try{const data=await gateway('/start',{interactive:true});url=typeof data?.url==='string'?data.url.trim():'';if(!url)throw new Error('START_NO_URL')}catch(err){if(err.message==='NO_KEY')setGoogleStatus('ORBIT Sync-Code für sichere Verbindung erforderlich');else if(err.status===401){localStorage.removeItem(SYNC_KEY_STORAGE);setGoogleStatus('Sync-Code ungültig · bitte erneut auf Gmail verbinden klicken')}else if(err.message==='google_not_configured')setGoogleStatus('Google OAuth wartet auf Client-Freigabe');else setGoogleStatus(`Google-Freigabe Fehler · ${err.message||'unbekannt'}`);return}setGoogleStatus('Google wird geöffnet …');window.location.href=url}
 
   document.addEventListener('DOMContentLoaded',()=>{
     qs('#taskQuickBtn')?.addEventListener('click',openTaskDialog);
@@ -122,5 +123,5 @@
     const params=new URLSearchParams(location.search);if(params.get('google')==='connected'){history.replaceState({},'',location.pathname);setGoogleStatus('Google verbunden · Live-Daten werden geladen …');loadGoogleData()}else if(params.get('google')==='error'){history.replaceState({},'',location.pathname);setGoogleStatus('Google-Freigabe abgebrochen')}else loadGoogleData();
   });
 
-  window.ORBITIntegrations={openTaskDialog,connectGoogle,loadGoogleData,applyCalendarToDashboard,openMail,trashCurrentMail};
+  window.ORBITIntegrations={openTaskDialog,connectGoogle,loadGoogleData,applyCalendarToDashboard,openMail,trashCurrentMail,getBriefingSummary,buildBriefingSummary};
 })();
