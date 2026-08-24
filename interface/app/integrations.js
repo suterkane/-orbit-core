@@ -2,6 +2,7 @@
   const GOOGLE_GATEWAY='https://vhmokhunkvoctavmrjwl.supabase.co/functions/v1/google-oauth';
   const SYNC_KEY_STORAGE='orbit.sync.key.v1';
   let calendarRows=[];
+  let mailRows=[];
   let dashboardOverlay={today:0,week:0,expectedToday:null,expectedWeek:null};
 
   function qs(s){return document.querySelector(s)}
@@ -101,14 +102,42 @@
     }
   }
 
+  function ensureMailDialog(){
+    let dialog=qs('#mailReaderDialog');
+    if(dialog)return dialog;
+    dialog=document.createElement('dialog');
+    dialog.id='mailReaderDialog';
+    dialog.innerHTML='<div class="dialog-head"><div><span class="eyebrow">GMAIL / ORBIT</span><h3 id="mailReaderSubject">E-Mail</h3></div><button id="mailReaderClose" class="icon-btn" type="button">×</button></div><p id="mailReaderMeta"></p><div id="mailReaderBody"></div>';
+    document.body.appendChild(dialog);
+    const body=dialog.querySelector('#mailReaderBody');
+    body.style.whiteSpace='pre-wrap';body.style.lineHeight='1.55';body.style.maxHeight='58vh';body.style.overflow='auto';body.style.padding='14px 0';body.style.color='#e8ddd4';body.style.fontSize='13px';
+    const meta=dialog.querySelector('#mailReaderMeta');meta.style.color='#b9a99f';meta.style.fontSize='11px';meta.style.lineHeight='1.5';
+    dialog.querySelector('#mailReaderClose').onclick=()=>dialog.close();
+    return dialog;
+  }
+
+  function openMail(id){
+    const mail=mailRows.find(m=>m.id===id);if(!mail)return;
+    const dialog=ensureMailDialog();
+    dialog.querySelector('#mailReaderSubject').textContent=mail.subject||'(Ohne Betreff)';
+    dialog.querySelector('#mailReaderMeta').textContent=`Von: ${mail.from||'Unbekannt'}${mail.to?`\nAn: ${mail.to}`:''}${mail.date?`\n${mail.date}`:''}`;
+    dialog.querySelector('#mailReaderBody').textContent=mail.body||mail.snippet||'Für diese Nachricht ist kein Textinhalt verfügbar.';
+    dialog.showModal();
+  }
+
   function renderMail(data){
     const rows=Array.isArray(data?.messages)?data.messages:[];
+    mailRows=rows;
     const preview=qs('#mailPreview');
     if(qs('#mailHeadline'))qs('#mailHeadline').textContent=rows.length?`${rows.length} aktuelle E-Mails`:'E-Mail';
     if(qs('#mailStatus'))qs('#mailStatus').textContent='Gmail · verbunden';
     if(!preview)return;
     if(!rows.length){preview.innerHTML='<span>Keine aktuellen Nachrichten im Posteingang.</span>';return}
-    preview.innerHTML=rows.slice(0,3).map(m=>`<div class="integration-row"><b>${esc(m.subject||'(Ohne Betreff)')}</b><small>${esc(m.from||'')}</small></div>`).join('');
+    preview.innerHTML=rows.slice(0,3).map(m=>`<div class="integration-row" data-mail-id="${esc(m.id)}" role="button" tabindex="0" title="In ORBIT öffnen" style="cursor:pointer;padding:7px 0;border-bottom:1px solid rgba(242,189,98,.09)"><b>${esc(m.subject||'(Ohne Betreff)')}</b><small>${esc(m.from||'')}</small></div>`).join('');
+    preview.querySelectorAll('[data-mail-id]').forEach(row=>{
+      row.addEventListener('click',()=>openMail(row.dataset.mailId));
+      row.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();openMail(row.dataset.mailId)}});
+    });
   }
 
   function renderCalendar(data){
@@ -185,5 +214,5 @@
     }else loadGoogleData();
   });
 
-  window.ORBITIntegrations={openTaskDialog,connectGoogle,loadGoogleData,applyCalendarToDashboard};
+  window.ORBITIntegrations={openTaskDialog,connectGoogle,loadGoogleData,applyCalendarToDashboard,openMail};
 })();
