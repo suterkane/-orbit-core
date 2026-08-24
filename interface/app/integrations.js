@@ -19,8 +19,10 @@
   async function gateway(path,{interactive=false}={}){
     const key=getSyncKey(interactive);
     if(!key)throw new Error('NO_KEY');
-    const r=await fetch(`${GOOGLE_GATEWAY}${path}`,{headers:{'x-orbit-sync-key':key,'Accept':'application/json'}});
-    let data={};try{data=await r.json()}catch{}
+    const r=await fetch(`${GOOGLE_GATEWAY}${path}`,{headers:{'x-orbit-sync-key':key,'Accept':'application/json'},cache:'no-store'});
+    const raw=await r.text();
+    let data={};
+    try{data=raw?JSON.parse(raw):{}}catch{throw new Error('INVALID_RESPONSE')}
     if(!r.ok){const err=new Error(data?.error||`HTTP_${r.status}`);err.status=r.status;err.data=data;throw err}
     return data;
   }
@@ -67,31 +69,25 @@
   function applyCalendarToDashboard(){
     const todayEl=qs('#todayCount'),weekEl=qs('#weekCount'),hero=qs('#heroText'),focus=qs('#nextFocus');
     if(!todayEl||!weekEl)return;
-
     const now=new Date(),todayKey=dayKey(now),weekEnd=new Date(now);
     weekEnd.setDate(weekEnd.getDate()+7);
-
     const dated=calendarRows.map(e=>({event:e,date:eventDate(e.start)})).filter(x=>x.date);
     const calendarToday=dated.filter(x=>dayKey(x.date)===todayKey).length;
     const calendarWeek=dated.filter(x=>x.date>now&&x.date<=weekEnd&&dayKey(x.date)!==todayKey).length;
-
     const shownToday=Number(todayEl.textContent)||0;
     const shownWeek=Number(weekEl.textContent)||0;
     const taskToday=dashboardOverlay.expectedToday!==null&&shownToday===dashboardOverlay.expectedToday?Math.max(0,shownToday-dashboardOverlay.today):shownToday;
     const taskWeek=dashboardOverlay.expectedWeek!==null&&shownWeek===dashboardOverlay.expectedWeek?Math.max(0,shownWeek-dashboardOverlay.week):shownWeek;
-
     const combinedToday=taskToday+calendarToday;
     const combinedWeek=taskWeek+calendarWeek;
     todayEl.textContent=combinedToday;
     weekEl.textContent=combinedWeek;
     dashboardOverlay={today:calendarToday,week:calendarWeek,expectedToday:combinedToday,expectedWeek:combinedWeek};
-
     const overdue=Number(qs('#overdueCount')?.textContent)||0;
     if(overdue===0){
       if(combinedToday>0&&hero)hero.textContent=`${combinedToday} Termin${combinedToday===1?' oder Aufgabe':'e oder Aufgaben'} heute im Fokus.`;
       else if(combinedWeek>0&&hero)hero.textContent=`${combinedWeek} Termin${combinedWeek===1?' oder Aufgabe':'e oder Aufgaben'} in den nächsten sieben Tagen.`;
     }
-
     const upcoming=dated.filter(x=>x.date>=now).sort((a,b)=>a.date-b.date)[0];
     if(upcoming&&focus){
       const strong=focus.querySelector('strong'),small=focus.querySelector('small');
@@ -143,21 +139,27 @@
       if(cb)cb.textContent='Kalender aktualisieren';
     }catch(err){
       if(err.message==='NO_KEY')setGoogleStatus('Google-Verbindung noch nicht eingerichtet');
-      else setGoogleStatus('Google-Verbindung prüfen');
+      else if(err.status===401){localStorage.removeItem(SYNC_KEY_STORAGE);setGoogleStatus('Sync-Code ungültig · bitte erneut verbinden');}
+      else setGoogleStatus(`Google-Verbindung prüfen · ${err.message||'Fehler'}`);
     }
   }
 
   async function connectGoogle(){
     setGoogleStatus('Google-Freigabe wird vorbereitet …');
+    let url='';
     try{
       const data=await gateway('/start',{interactive:true});
-      if(data?.url){window.location.assign(data.url);return}
-      setGoogleStatus('Google-Freigabe konnte nicht gestartet werden');
+      url=typeof data?.url==='string'?data.url.trim():'';
+      if(!url)throw new Error('START_NO_URL');
     }catch(err){
       if(err.message==='NO_KEY')setGoogleStatus('ORBIT Sync-Code für sichere Verbindung erforderlich');
+      else if(err.status===401){localStorage.removeItem(SYNC_KEY_STORAGE);setGoogleStatus('Sync-Code ungültig · bitte erneut auf Gmail verbinden klicken');}
       else if(err.message==='google_not_configured')setGoogleStatus('Google OAuth wartet auf Client-Freigabe');
-      else setGoogleStatus('Google-Freigabe konnte nicht gestartet werden');
+      else setGoogleStatus(`Google-Freigabe Fehler · ${err.message||'unbekannt'}`);
+      return;
     }
+    setGoogleStatus('Google wird geöffnet …');
+    window.location.href=url;
   }
 
   document.addEventListener('DOMContentLoaded',()=>{
@@ -172,7 +174,6 @@
     });
     ['#captureBtn','#entryForm','#deleteBtn'].forEach(s=>qs(s)?.addEventListener('click',()=>setTimeout(applyCalendarToDashboard,50)));
     document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible'&&calendarRows.length)setTimeout(applyCalendarToDashboard,100)});
-
     const params=new URLSearchParams(location.search);
     if(params.get('google')==='connected'){
       history.replaceState({},'',location.pathname);
