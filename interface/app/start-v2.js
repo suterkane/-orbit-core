@@ -11,10 +11,27 @@
   function setOrbState(state='idle'){const el=orb();if(!el)return;el.dataset.state=state;el.classList.toggle('speaking',state==='speaking');el.setAttribute('aria-busy',state==='speaking'?'true':'false')}
   function setMusicLevel(level=.18,time=.35){if(!musicMaster||!musicCtx)return;const now=musicCtx.currentTime;musicMaster.gain.cancelScheduledValues(now);musicMaster.gain.setValueAtTime(Math.max(musicMaster.gain.value,.0001),now);musicMaster.gain.linearRampToValueAtTime(level,now+time)}
   function setSpeaking(active=true,duration=0){setOrbState(active?'speaking':'idle');clearTimeout(speakTimer);setMusicLevel(active?.09:.22,.18);if(active&&duration>0)speakTimer=setTimeout(()=>setSpeaking(false),duration)}
-  function getGreeting(){const h=new Date().getHours();if(h<11)return'Guten Morgen, Mister Stark.';if(h<18)return'Guten Tag, Mister Stark.';return'Guten Abend, Mister Stark.'}
+  function pick(list){return list[Math.floor(Math.random()*list.length)]}
+  function getSituation(){
+    const overdue=Number(document.querySelector('#overdueCount')?.textContent)||0;
+    const today=Number(document.querySelector('#todayCount')?.textContent)||0;
+    return overdue>0?'serious':today===0?'light':'normal';
+  }
+  function getGreeting(){
+    const h=new Date().getHours(),situation=getSituation();
+    if(situation==='serious')return h<11?'Guten Morgen, Mister Stark. Wir haben etwas zu tun.':h<18?'Guten Tag, Mister Stark. Ich habe Prioritäten für Sie.':'Guten Abend, Mister Stark. Es gibt noch offene Punkte.';
+    const pool=h<11?
+      ['Guten Morgen, Boss.','Guten Morgen, Mister Stark.','Morgen, Boss. Ich bin schon wach.','Guten Morgen. Kaffee kann ich nicht machen, den Rest schon.']:
+      h<18?
+      ['Guten Tag, Boss.','Guten Tag, Mister Stark.','Da sind Sie ja, Boss.','Willkommen zurück, Mister Stark.']:
+      ['Guten Abend, Boss.','Guten Abend, Mister Stark.','Da sind Sie ja, Boss. Der Tag war offenbar noch nicht teuer genug.','Guten Abend. Ich hatte schon befürchtet, Sie machen heute pünktlich Schluss.'];
+    return pick(pool);
+  }
   async function getBootNarration(){
     let briefing='';
     try{if(window.ORBITIntegrations?.getBriefingSummary)briefing=await window.ORBITIntegrations.getBriefingSummary()}catch{}
+    const situation=getSituation();
+    const closing=situation==='serious'?'Ich habe die kritischen Punkte priorisiert. Wir können anfangen.':pick(['Alle Systeme sind stabil. Ich bin bereit.','Systeme bereit, Boss. Sagen Sie nur wohin.','ORBIT steht. Ich auch.','Alles bereit, Mister Stark.']);
     return [
       getGreeting(),
       'FRIDAY wird initialisiert.',
@@ -23,7 +40,7 @@
       briefing,
       'Aktive Mission: FRIDAY Stimme V1.',
       'ORBIT Sync und Systemstatus wurden übernommen.',
-      'Alle Systeme sind stabil. Ich bin bereit.'
+      closing
     ].filter(Boolean).join(' ');
   }
 
