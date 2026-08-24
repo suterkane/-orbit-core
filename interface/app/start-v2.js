@@ -4,11 +4,10 @@
 
   const VOICE_URL='https://vhmokhunkvoctavmrjwl.supabase.co/functions/v1/friday-voice';
   const SYNC_KEY_STORAGE='orbit.sync.key.v1';
-  const FRIDAY_VOICE_PROFILE={lang:'de-DE',rate:1.08,pitch:1.02,volume:1};
+  const FRIDAY_VOICE_PROFILE={lang:'de-DE',rate:1.02,pitch:1.0,volume:1};
   const orb=()=>document.querySelector('#fridayVoiceOrb');
   const statusText=()=>document.querySelector('.friday-greeting span');
-  const isiOS=()=>/iPad|iPhone|iPod/.test(navigator.userAgent)||(/Mac/.test(navigator.userAgent)&&navigator.maxTouchPoints>1);
-  let speakTimer=null,launchTimer=null,launching=false,activeAudio=null,activeAudioUrl='';
+  let speakTimer=null,launchTimer=null,launching=false,activeAudio=null,activeAudioUrl='',activeSource=null;
   let musicCtx=null,musicMaster=null,musicNodes=[];
 
   function setOrbState(state='idle'){
@@ -22,7 +21,7 @@
     if(musicMaster&&musicCtx){
       const now=musicCtx.currentTime;
       musicMaster.gain.cancelScheduledValues(now);
-      musicMaster.gain.linearRampToValueAtTime(active?0.025:0.055,now+.18);
+      musicMaster.gain.linearRampToValueAtTime(active?0.035:0.095,now+.18);
     }
     if(active&&duration>0)speakTimer=setTimeout(()=>setSpeaking(false),duration);
   }
@@ -38,14 +37,14 @@
     try{
       musicCtx=new AudioCtx();musicMaster=musicCtx.createGain();musicMaster.gain.value=0.0001;musicMaster.connect(musicCtx.destination);
       const now=musicCtx.currentTime;
-      const tones=[110,164.81,220];
+      const tones=[98,146.83,196,293.66];
       tones.forEach((freq,i)=>{
         const osc=musicCtx.createOscillator(),gain=musicCtx.createGain();
-        osc.type=i===1?'triangle':'sine';osc.frequency.value=freq;gain.gain.value=i===0?.22:.11;
+        osc.type=i===1?'triangle':'sine';osc.frequency.value=freq;gain.gain.value=i===0?.24:i===3?.035:.10;
         osc.connect(gain);gain.connect(musicMaster);osc.start();musicNodes.push(osc,gain);
       });
-      const lfo=musicCtx.createOscillator(),lfoGain=musicCtx.createGain();lfo.frequency.value=.42;lfoGain.gain.value=.018;lfo.connect(lfoGain);lfoGain.connect(musicMaster.gain);lfo.start();musicNodes.push(lfo,lfoGain);
-      musicMaster.gain.exponentialRampToValueAtTime(.055,now+.8);
+      const lfo=musicCtx.createOscillator(),lfoGain=musicCtx.createGain();lfo.frequency.value=.38;lfoGain.gain.value=.012;lfo.connect(lfoGain);lfoGain.connect(musicMaster.gain);lfo.start();musicNodes.push(lfo,lfoGain);
+      musicMaster.gain.exponentialRampToValueAtTime(.095,now+.7);
       musicCtx.resume?.();
     }catch{stopBootMusic(true)}
   }
@@ -60,22 +59,37 @@
   }
   function cleanupAudio(){
     try{activeAudio?.pause()}catch{}
-    activeAudio=null;
+    try{activeSource?.stop()}catch{}
+    activeAudio=null;activeSource=null;
     if(activeAudioUrl){URL.revokeObjectURL(activeAudioUrl);activeAudioUrl=''}
   }
   async function speakSeraphina(text,{onend}={}){
     const syncKey=(localStorage.getItem(SYNC_KEY_STORAGE)||'').trim();
     if(!syncKey)return false;
     try{
-      const response=await fetch(VOICE_URL,{method:'POST',headers:{'Content-Type':'application/json','x-orbit-sync-key':syncKey},body:JSON.stringify({text})});
+      const response=await fetch(VOICE_URL,{method:'POST',headers:{'Content-Type':'application/json','x-orbit-sync-key':syncKey},body:JSON.stringify({text}),cache:'no-store'});
       if(!response.ok)return false;
       const blob=await response.blob();if(!blob.size)return false;
-      cleanupAudio();activeAudioUrl=URL.createObjectURL(blob);activeAudio=new Audio(activeAudioUrl);activeAudio.preload='auto';
+      cleanupAudio();
       let finished=false;
       const finish=()=>{if(finished)return;finished=true;clearTimeout(launchTimer);setSpeaking(false);cleanupAudio();onend?.()};
-      activeAudio.onplay=()=>{setSpeaking(true);const status=statusText();if(status)status.textContent='FRIDAY spricht · CLOUD'};
+
+      // Web Audio is already unlocked by the INITIATE tap. This keeps Seraphina smooth on iPhone
+      // instead of falling back to the metallic system speech voice.
+      if(musicCtx&&musicCtx.state!=='closed'){
+        await musicCtx.resume?.();
+        const buffer=await musicCtx.decodeAudioData(await blob.arrayBuffer());
+        const source=musicCtx.createBufferSource(),gain=musicCtx.createGain();
+        gain.gain.value=1;source.buffer=buffer;source.connect(gain);gain.connect(musicCtx.destination);
+        activeSource=source;source.onended=finish;
+        setSpeaking(true);const status=statusText();if(status)status.textContent='FRIDAY spricht · SERAPHINA HD';
+        source.start();launchTimer=setTimeout(finish,10000);return true;
+      }
+
+      activeAudioUrl=URL.createObjectURL(blob);activeAudio=new Audio(activeAudioUrl);activeAudio.preload='auto';
+      activeAudio.onplay=()=>{setSpeaking(true);const status=statusText();if(status)status.textContent='FRIDAY spricht · SERAPHINA HD'};
       activeAudio.onended=finish;activeAudio.onerror=finish;
-      await activeAudio.play();launchTimer=setTimeout(finish,9000);return true;
+      await activeAudio.play();launchTimer=setTimeout(finish,10000);return true;
     }catch{cleanupAudio();setSpeaking(false);return false}
   }
   function getGermanVoices(){
@@ -112,9 +126,9 @@
     synth.resume?.();synth.speak(utterance);setSpeaking(true);launchTimer=setTimeout(finish,7500);return true;
   }
   async function speak(text,{onend}={}){
-    const status=statusText();if(status)status.textContent='FRIDAY initialisiert Sprachkern …';
+    const status=statusText();if(status)status.textContent='FRIDAY initialisiert Seraphina …';
     const played=await speakSeraphina(text,{onend});if(played)return true;
-    if(status)status.textContent='FRIDAY startet mit lokaler Stimme …';
+    if(status)status.textContent='FRIDAY startet lokale Ersatzstimme …';
     return speakBrowser(text,{onend});
   }
   function launchApp(){
@@ -127,26 +141,16 @@
     startBootMusic();
     const status=statusText();setOrbState('booting');if(status)status.textContent='FRIDAY fährt Systeme hoch …';
     const greeting=getGreeting();
-
-    // iOS loses transient media permission while a long animation is awaited.
-    // Start speech immediately from the INITIATE tap and run the boot in parallel.
     let voiceDone=false,bootDone=false;
     const maybeLaunch=()=>{if(voiceDone&&bootDone)launchApp()};
     const voiceEnd=()=>{voiceDone=true;maybeLaunch()};
 
-    let voiceStarted=false;
-    if(isiOS()){
-      voiceStarted=speakBrowser(greeting,{onend:voiceEnd});
-    }else{
-      speak(greeting,{onend:voiceEnd}).then(started=>{voiceStarted=started;if(!started){voiceDone=true;maybeLaunch()}});
-    }
-    if(!voiceStarted&&isiOS()){voiceDone=true}
-
+    speak(greeting,{onend:voiceEnd}).then(started=>{if(!started){voiceDone=true;maybeLaunch()}});
     try{if(window.ORBITBoot?.play)await window.ORBITBoot.play()}catch{}
     bootDone=true;maybeLaunch();
 
-    // Safety net: never leave the launch screen hanging if a voice engine stalls.
-    setTimeout(()=>{if(!voiceDone){voiceDone=true;maybeLaunch()}},1800);
+    // Never strand the launch screen, but give the cloud voice enough time to arrive.
+    setTimeout(()=>{if(!voiceDone){voiceDone=true;maybeLaunch()}},6000);
   }
 
   window.ORBITFriday={setSpeaking,setOrbState,speak,getGreeting,pickGermanVoice,speakSeraphina,startBootMusic,stopBootMusic,voiceProfile:FRIDAY_VOICE_PROFILE};
