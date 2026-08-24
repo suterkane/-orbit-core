@@ -10,7 +10,7 @@
   <title>ORBIT · FRIDAY</title>
   <link rel="manifest" href="manifest.webmanifest" />
   <link rel="stylesheet" href="styles.css?v=4" />
-  <link rel="stylesheet" href="start-v2.css?v=3" />
+  <link rel="stylesheet" href="start-v2.css?v=4" />
   <link rel="stylesheet" href="boot-sequence.css?v=3" />
   <link rel="stylesheet" href="integrations.css?v=1" />
   <link rel="stylesheet" href="handoff.css?v=1" />
@@ -24,99 +24,38 @@
         <div class="friday-title"><h1>FRIDAY</h1><em>V2</em></div>
         <p class="friday-subtitle">Intelligence · Precision · Presence</p>
       </div>
-
       <div class="friday-core-wrap" aria-hidden="true">
-        <div id="fridayVoiceOrb" class="friday-orb" data-state="idle">
-          <span class="voice-wave"></span>
-          <span class="voice-wave"></span>
-        </div>
+        <div id="fridayVoiceOrb" class="friday-orb" data-state="idle"><span class="voice-wave"></span><span class="voice-wave"></span></div>
         <div class="friday-core-label">FRIDAY · VOICE CORE</div>
       </div>
-
-      <div class="friday-greeting">
-        <strong>Guten Tag, Mr. Stark.</strong>
-        <span>ORBIT ist bereit.</span>
-      </div>
-
-      <div class="friday-statusbar">
-        <span><i></i>CORE LINK · ORBIT SYNC</span>
-        <strong>ONLINE</strong>
-      </div>
-
+      <div class="friday-greeting"><strong>Guten Tag, Mr. Stark.</strong><span>ORBIT ist bereit.</span></div>
+      <div class="friday-statusbar"><span><i></i>CORE LINK · ORBIT SYNC</span><strong>ONLINE</strong></div>
       <button id="initiateBtn" class="initiate">INITIATE</button>
       <small class="start-hint">Tippen, um FRIDAY zu öffnen</small>
     </div>
   </section>
-
   <div id="app" class="app hidden">
-    <header class="topbar">
-      <div><span class="eyebrow">ORBIT CONTROL CENTER</span><h2>Guten Tag, Mr. Stark.</h2></div>
-      <button id="settingsBtn" class="icon-btn" aria-label="Einstellungen">⚙</button>
-    </header>
-
+    <header class="topbar"><div><span class="eyebrow">ORBIT CONTROL CENTER</span><h2>Guten Tag, Mr. Stark.</h2></div><button id="settingsBtn" class="icon-btn" aria-label="Einstellungen">⚙</button></header>
     <main>
       <section id="dashboard" class="view active">
-        <div class="hero-card hud-hero">
-          <div class="hud-copy">
-            <span>FRIDAY / ORBIT CORE</span>
-            <h3>System online.</h3>
-            <p id="heroText">Bereit für die nächste präzise Aktion.</p>
-            <div class="hud-statusline"><i></i> CORE LINK <strong>STABIL</strong></div>
-          </div>
-          <div class="hud-core" aria-hidden="true">
-            <div class="hud-ring ring-a"></div><div class="hud-ring ring-b"></div><div class="hud-ring ring-c"></div><div class="hud-ticks"></div><div class="hud-crosshair"></div><div class="hud-energy"><span></span></div><div class="hud-core-label"><b>ORBIT</b><small>FRIDAY</small></div>
-          </div>
-        </div>
-        <div class="metric-grid">
-          <button class="metric" data-route="today"><span>Heute</span><strong id="todayCount">0</strong><small>AKTIV</small></button>
-          <button class="metric danger" data-route="overdue"><span>Überfällig</span><strong id="overdueCount">0</strong><small>PRIORITÄT</small></button>
-          <button class="metric gold" data-route="week"><span>Nächste 7 Tage</span><strong id="weekCount">0</strong><small>VORAUSSCHAU</small></button>
-          <button class="metric" data-route="open"><span>Offen</span><strong id="openCount">0</strong><small>QUEUE</small></button>
-        </div>
-
+        <div class="hero-card hud-hero"><div class="hud-copy"><span>FRIDAY / ORBIT CORE</span><h3>System online.</h3><p id="heroText">Bereit für die nächste präzise Aktion.</p><div class="hud-statusline"><i></i> CORE LINK <strong>STABIL</strong></div></div><div class="hud-core" aria-hidden="true"><div class="hud-ring ring-a"></div><div class="hud-ring ring-b"></div><div class="hud-ring ring-c"></div><div class="hud-ticks"></div><div class="hud-crosshair"></div><div class="hud-energy"><span></span></div><div class="hud-core-label"><b>ORBIT</b><small>FRIDAY</small></div></div></div>
+        <div class="metric-grid"><button class="metric" data-route="today"><span>Heute</span><strong id="todayCount">0</strong><small>AKTIV</small></button><button class="metric danger" data-route="overdue"><span>Überfällig</span><strong id="overdueCount">0</strong><small>PRIORITÄT</small></button><button class="metric gold" data-route="week"><span>Nächste 7 Tage</span><strong id="weekCount">0</strong><small>VORAUSSCHAU</small></button><button class="metric" data-route="open"><span>Offen</span><strong id="openCount">0</strong><small>QUEUE</small></button></div>
         <section class="integration-grid" aria-label="Kommunikation und Planung">
-          <article class="integration-card mail-card">
-            <div class="integration-head"><span>✉</span><small>GMAIL</small></div>
-            <strong id="mailHeadline">E-Mail</strong>
-            <p id="mailStatus">Google-Verbindung erforderlich</p>
-            <div id="mailPreview" class="integration-preview"><span>Neue Nachrichten erscheinen hier.</span></div>
-            <button id="mailConnectBtn" class="integration-action">Gmail verbinden</button>
-          </article>
-
-          <article class="integration-card calendar-card">
-            <div class="integration-head"><span>◫</span><small>KALENDER</small></div>
-            <strong id="calendarHeadline">Nächste Termine</strong>
-            <p id="calendarStatus">Google-Verbindung erforderlich</p>
-            <div id="calendarPreview" class="integration-preview"><span>Deine nächsten Termine erscheinen hier.</span></div>
-            <button id="calendarConnectBtn" class="integration-action">Kalender verbinden</button>
-          </article>
-
-          <article class="integration-card task-card">
-            <div class="integration-head"><span>＋</span><small>AUFGABEN</small></div>
-            <strong>Neue Aufgabe</strong>
-            <p>Direkt in ORBIT erfassen.</p>
-            <div class="integration-preview"><span id="taskQuickStatus">Bereit für einen neuen Auftrag.</span></div>
-            <button id="taskQuickBtn" class="integration-action">Aufgabe anlegen</button>
-          </article>
+          <article class="integration-card mail-card"><div class="integration-head"><span>✉</span><small>GMAIL</small></div><strong id="mailHeadline">E-Mail</strong><p id="mailStatus">Google-Verbindung erforderlich</p><div id="mailPreview" class="integration-preview"><span>Neue Nachrichten erscheinen hier.</span></div><button id="mailConnectBtn" class="integration-action">Gmail verbinden</button></article>
+          <article class="integration-card calendar-card"><div class="integration-head"><span>◫</span><small>KALENDER</small></div><strong id="calendarHeadline">Nächste Termine</strong><p id="calendarStatus">Google-Verbindung erforderlich</p><div id="calendarPreview" class="integration-preview"><span>Deine nächsten Termine erscheinen hier.</span></div><button id="calendarConnectBtn" class="integration-action">Kalender verbinden</button></article>
+          <article class="integration-card task-card"><div class="integration-head"><span>＋</span><small>AUFGABEN</small></div><strong>Neue Aufgabe</strong><p>Direkt in ORBIT erfassen.</p><div class="integration-preview"><span id="taskQuickStatus">Bereit für einen neuen Auftrag.</span></div><button id="taskQuickBtn" class="integration-action">Aufgabe anlegen</button></article>
         </section>
-
         <button id="nextFocus" class="focus-card"><span>NÄCHSTER FOKUS</span><strong>Keine geplante Aufgabe</strong><small>Friday hält den Kurs frei.</small></button>
         <section class="capture-card"><label for="quickInput">SCHNELLERFASSUNG / COMMAND INPUT</label><div class="capture-row"><input id="quickInput" placeholder="Gedanke, Aufgabe oder Idee …" autocomplete="off" /><button id="captureBtn">Erfassen</button></div></section>
       </section>
-
       <section id="inbox" class="view"><div class="section-head"><div><span class="eyebrow">EINGANG</span><h3>Alles an einem Ort.</h3></div><button id="newEntryBtn" class="small-btn">+ Neu</button></div><div class="toolbar"><input id="searchInput" type="search" placeholder="Suchen …" /><select id="categoryFilter"><option value="all">Alle Kategorien</option><option value="thought">Gedanken</option><option value="task">Aufgaben</option><option value="idea">Idee</option></select><select id="dateFilter"><option value="all">Alle Termine</option><option value="today">Heute</option><option value="overdue">Überfällig</option><option value="planned">Geplant</option><option value="week">Nächste 7 Tage</option></select></div><div id="entryList" class="entry-list"></div></section>
-
       <section id="missions" class="view"><div class="section-head"><div><span class="eyebrow">MISSIONEN</span><h3>Mission 19 · FRIDAY Stimme V1</h3></div></div><article class="mission-card"><span class="live-dot"></span><strong>AKTIV</strong><p>FRIDAY erhält eine natürliche deutsche Sprachausgabe mit Seraphina HD und Browser-Fallback.</p><ul><li>Seraphina HD über sicheres Voice-Gateway</li><li>Dynamischer deutscher Lagebericht</li><li>Situationsabhängige FRIDAY-Persönlichkeit</li><li>Gmail-, Kalender- und Aufgabenlage</li><li>Voice-Orb synchron zur Ausgabe</li><li>Private Musik mit sicherem Fallback</li><li>Desktop- und iPhone-Abnahme</li></ul></article></section>
-
       <section id="system" class="view"><div class="section-head"><div><span class="eyebrow">SYSTEM</span><h3>ORBIT Core</h3></div></div><div class="system-grid"><div><span>Status</span><strong>ONLINE</strong></div><div><span>Speicher</span><strong id="storageStatus">LOKAL</strong></div><div><span>Mission</span><strong>19</strong></div><div><span>Theme</span><strong>FRIDAY VOICE / PERSONALITY</strong></div></div></section>
     </main>
-
     <nav class="bottom-nav"><button data-view="dashboard" class="active">Zentrale</button><button data-view="inbox">Eingang</button><button data-view="missions">Missionen</button><button data-view="system">System</button></nav>
   </div>
-
   <dialog id="entryDialog"><form method="dialog" id="entryForm"><div class="dialog-head"><h3 id="dialogTitle">Eintrag</h3><button value="cancel" class="icon-btn">×</button></div><input id="editText" required placeholder="Inhalt" /><div class="form-row"><select id="editCategory"><option value="thought">Gedanke</option><option value="task">Aufgabe</option><option value="idea">Idee</option></select><input id="editDue" type="date" /></div><label class="check"><input id="editImportant" type="checkbox" /> Wichtig</label><div class="dialog-actions"><button type="button" id="deleteBtn" class="danger-btn">Löschen</button><button value="save" id="saveBtn" class="primary-btn">Speichern</button></div></form></dialog>
   <dialog id="settingsDialog"><form method="dialog"><div class="dialog-head"><h3>FRIDAY Einstellungen</h3><button value="close" class="icon-btn">×</button></div><p>ORBIT synchronisiert Einträge geschützt über ORBIT Sync. PC und iPhone verwenden denselben Sync-Code und damit denselben Datenstand.</p><p>Gmail und Google Kalender werden separat über Google OAuth verbunden. Private Inhalte und private Musik werden nicht im GitHub-Repository gespeichert.</p><button value="close" class="primary-btn full">Fertig</button></form></dialog>
-
   <script src="boot-sequence.js?v=3"></script>
   <script src="start-v2.js?v=11"></script>
   <script src="app.js?v=7"></script>
