@@ -23,4 +23,4 @@ FRIDAY versteht einfache Folgeäußerungen im Kontext der unmittelbar vorherigen
 
 ## Status
 
-**Aktiv.** Implementierung von Dialogkontext V1 begonnen.
+**Abgeschlossen und von Rene am 25. August 2026 abgenommen.** Dialogkontext V1, prioritätsbezogene Folgeäußerung, Neuralbestätigungen und verstärkter cineastischer Audio-Mix bleiben in diesem Stand unverändert.
