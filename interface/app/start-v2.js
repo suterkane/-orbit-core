@@ -3,7 +3,7 @@
   const VOICE_URL='https://vhmokhunkvoctavmrjwl.supabase.co/functions/v1/friday-voice';
   const SYNC_KEY_STORAGE='orbit.sync.key.v1';
   const PRIVATE_MUSIC_URL='./private-assets/friday-theme.m4a';
-  const BUNDLED_MUSIC_URL='./assets/orbit-cinematic-boot.ogg';
+  const BUNDLED_MUSIC_URL='./assets/orbit-cinematic-boot.m4a';
   const LOCAL_NEURAL_VOICE_URL='./assets/friday-neural-de.ogg';
   const FRIDAY_VOICE_PROFILE={lang:'de-DE',rate:.94,pitch:1.0,volume:1};
   const AUDIO_MIX=window.ORBITAudioMix||{private:.42,synthetic:.31,ducked:.14,handoff:.29};

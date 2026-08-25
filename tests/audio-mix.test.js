@@ -11,8 +11,11 @@ assert.ok(AUDIO_MIX.private <= 0.45, 'music must not overpower speech');
 
 const appDir = path.join(__dirname, '..', 'interface', 'app');
 const bootSource = fs.readFileSync(path.join(appDir, 'start-v2.js'), 'utf8');
-assert.match(bootSource, /assets\/orbit-cinematic-boot\.ogg/, 'boot must prefer bundled music');
-const score = path.join(appDir, 'assets', 'orbit-cinematic-boot.ogg');
-assert.ok(fs.existsSync(score), 'bundled cinematic score must exist');
+assert.match(bootSource, /assets\/orbit-cinematic-boot\.m4a/, 'iPhone Safari must receive bundled AAC/M4A music');
+assert.doesNotMatch(bootSource, /orbit-cinematic-boot\.ogg/, 'Safari music path must not use OGG/Opus');
+const score = path.join(appDir, 'assets', 'orbit-cinematic-boot.m4a');
+assert.ok(fs.existsSync(score), 'bundled Safari-compatible score must exist');
 assert.ok(fs.statSync(score).size > 100000, 'bundled score must contain real audio');
-console.log('8 cinematic audio tests passed');
+const worker = fs.readFileSync(path.join(appDir, 'service-worker.js'), 'utf8');
+assert.match(worker, /assets\/orbit-cinematic-boot\.m4a/, 'service worker must cache Safari-compatible music');
+console.log('10 cinematic audio tests passed');
