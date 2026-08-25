@@ -179,7 +179,7 @@ const css = fs.readFileSync(path.join(app, 'start-v2.css'), 'utf8');
 const styles = fs.readFileSync(path.join(app, 'styles.css'), 'utf8');
 assert.doesNotMatch(sw, /orbit-cinematic-boot|boot-sequence/, 'inactive score and reactor must not be precached');
 assert.doesNotMatch(sw, /handoff\.(?:js|css)/, 'disconnected legacy handoff assets must not remain in the offline package');
-assert.match(sw, /CACHE\s*=\s*['"]orbit-neural-core-v2-presence-r5['"]/, 'cinematic release must invalidate the previous service-worker cache');
+assert.match(sw, /CACHE\s*=\s*['"]orbit-neural-core-v2-presence-r6['"]/, 'companion release must invalidate the previous service-worker cache');
 for(const ref of ['styles.css?v=6','start-v2.css?v=21','neural-core-v2.js?v=7','start-v2.js?v=19'])assert.ok(html.includes(`"${ref}"`), `canonical entry must use fresh cinematic asset ${ref}`);
 for(const ref of [...html.matchAll(/(?:src|href)="([^"]+\?v=\d+)"/g)].map(match=>match[1]))assert.ok(sw.includes(`'${ref}'`), `service worker must precache versioned HTML dependency ${ref}`);
 assert.match(css, /\.friday-orb\s*\{[^}]*display\s*:\s*none/s, 'legacy CSS orb must not compete with the GPU core');

@@ -40,10 +40,10 @@
   const context={lastEntryId:''};
   const replyFiles={dashboard:'voice-zentrale.ogg',inbox:'voice-aufgaben.ogg',captured:'voice-erfasst.ogg',important:'voice-prioritaet.ogg',missingContext:'voice-bezug-fehlt.ogg',status:'voice-status.ogg',unknown:'voice-unklar.ogg'};
 
-  function setState(next,label){if(state)state.textContent=label;if(button){button.dataset.state=next;button.setAttribute('aria-pressed',next==='listening'?'true':'false')}panel?.classList.toggle('active',next!=='idle')}
+  function setState(next,label){const sharedState=next==='replying'?'speaking':next;if(state)state.textContent=label;if(button){button.dataset.state=next;button.setAttribute('aria-pressed',next==='listening'?'true':'false')}panel?.classList.toggle('active',next!=='idle');root.ORBITCompanion?.updateShared({voice:{state:sharedState}})}
   function stopReply(){try{replyAudio?.pause()}catch{}replyAudio=null;root.ORBITFriday?.stopSpeaking?.()}
   function playReply(key){const file=replyFiles[key];if(!file)return;stopReply();replyAudio=new Audio(`assets/${file}`);replyAudio.volume=.92;replyAudio.play().catch(()=>{})}
-  function reply(text,key){if(response)response.textContent=text;setState('replying','FRIDAY antwortet');playReply(key);setTimeout(()=>{if(!listening)setState('idle','Bereit')},2200)}
+  function reply(text,key){if(response)response.textContent=text;root.ORBITCompanion?.updateShared({conversation:{turnId:root.crypto?.randomUUID?.()||`turn-${Date.now()}`,userText:transcript?.textContent||'',replyText:text}});setState('replying','FRIDAY antwortet');playReply(key);setTimeout(()=>{if(!listening)setState('idle','Bereit')},2200)}
   function systemSummary(){const overdue=Number(document.querySelector('#overdueCount')?.textContent)||0,today=Number(document.querySelector('#todayCount')?.textContent)||0;return overdue?`${overdue} überfällige Aufgabe${overdue===1?'':'n'}. Priorität empfohlen.`:today?`${today} Aufgabe${today===1?' ist':'n sind'} heute aktiv.`:'Alle Systeme sind stabil. Keine akute Terminlage.'}
   function execute(intent){
     if(intent.type==='stop'){stopReply();setState('idle','Unterbrochen');if(response)response.textContent='Ausgabe gestoppt.';return}

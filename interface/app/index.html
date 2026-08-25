@@ -46,8 +46,8 @@
         <section class="capture-card"><label for="quickInput">SCHNELLERFASSUNG / COMMAND INPUT</label><div class="capture-row"><input id="quickInput" placeholder="Gedanke, Aufgabe oder Idee …" autocomplete="off" /><button id="captureBtn">Erfassen</button></div></section>
       </section>
       <section id="inbox" class="view"><div class="section-head"><div><span class="eyebrow">EINGANG</span><h3>Alles an einem Ort.</h3></div><button id="newEntryBtn" class="small-btn">+ Neu</button></div><div class="toolbar"><input id="searchInput" type="search" placeholder="Suchen …" /><select id="categoryFilter"><option value="all">Alle Kategorien</option><option value="thought">Gedanken</option><option value="task">Aufgaben</option><option value="idea">Idee</option></select><select id="dateFilter"><option value="all">Alle Termine</option><option value="today">Heute</option><option value="overdue">Überfällig</option><option value="planned">Geplant</option><option value="week">Nächste 7 Tage</option></select></div><div id="entryList" class="entry-list"></div></section>
-      <section id="missions" class="view"><div class="section-head"><div><span class="eyebrow">MISSIONEN</span><h3>Mission 20 · FRIDAY Dialogkontext V1</h3></div></div><article class="mission-card"><span class="live-dot"></span><strong>AKTIV</strong><p>FRIDAY versteht Folgeäußerungen im Kontext der unmittelbar vorherigen Aktion.</p><ul><li>letzten Spracheintrag im Sitzungskontext halten</li><li>Folgebefehl „Mach sie wichtig“ verstehen</li><li>gezielt den vorherigen Eintrag priorisieren</li><li>fehlenden Bezug verständlich melden</li><li>lokale Neuralbestätigungen</li><li>Desktop- und iPhone-Abnahme</li></ul></article></section>
-      <section id="system" class="view"><div class="section-head"><div><span class="eyebrow">SYSTEM</span><h3>ORBIT Core</h3></div></div><div class="system-grid"><div><span>Status</span><strong>ONLINE</strong></div><div><span>Speicher</span><strong id="storageStatus">LOKAL</strong></div><div><span>Mission</span><strong>20</strong></div><div><span>Theme</span><strong>FRIDAY DIALOG CONTEXT</strong></div></div></section>
+      <section id="missions" class="view"><div class="section-head"><div><span class="eyebrow">MISSIONEN</span><h3>Mission 21 · ORBIT Companion V1</h3></div></div><article class="mission-card"><span class="live-dot"></span><strong>AKTIV</strong><p>PC und iPhone teilen einen sicheren ORBIT-Zustand statt zwei getrennte Assistenten zu bilden.</p><ul><li>gemeinsamer Aufgabenstand über ORBIT Sync</li><li>Geräte-Presence mit Ablaufzeit</li><li>Ansicht, Voice-Zustand und Dialogturn synchronisieren</li><li>gezielter Session-Handoff mit Quittierung</li><li>Offline-first und konfliktfest</li><li>keine zusätzlichen Laufzeitdienste</li></ul></article></section>
+      <section id="system" class="view"><div class="section-head"><div><span class="eyebrow">SYSTEM</span><h3>ORBIT Core</h3></div></div><div class="system-grid"><div><span>Status</span><strong>ONLINE</strong></div><div><span>Speicher</span><strong id="storageStatus">LOKAL</strong></div><div><span>Companion</span><strong id="deviceStatus">LOKAL · 1 GERÄT</strong></div><div><span>Mission</span><strong>21</strong></div><div><span>Theme</span><strong>ORBIT COMPANION</strong></div></div><button id="handoffBtn" class="primary-btn full" type="button" disabled>KEIN COMPANION ONLINE</button></section>
     </main>
     <nav class="bottom-nav"><button data-view="dashboard" class="active">Zentrale</button><button data-view="inbox">Eingang</button><button data-view="missions">Missionen</button><button data-view="system">System</button></nav>
   </div>
@@ -58,8 +58,11 @@
   <script src="audio-mix.js?v=1"></script>
 
   <script src="start-v2.js?v=19"></script>
-  <script src="app.js?v=10"></script>
-  <script src="voice-core.js?v=3"></script>
+  <script src="companion-state.js?v=1"></script>
+  <script src="companion-runtime.js?v=1"></script>
+  <script src="companion-sync.js?v=1"></script>
+  <script src="app.js?v=11"></script>
+  <script src="voice-core.js?v=4"></script>
   <script src="integrations.js?v=5"></script>
 </body>
 </html>

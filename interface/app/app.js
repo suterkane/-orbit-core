@@ -9,6 +9,18 @@ let syncReady=false;
 let syncBusy=false;
 let syncTimer=null;
 let pollTimer=null;
+let activeView='dashboard';
+let companionRuntime=null;
+let companionSync=null;
+try{
+  const runtimeFactory=window.ORBITCompanionRuntimeFactory,syncFactory=window.ORBITCompanionSyncFactory;
+  const deviceId=runtimeFactory.getOrCreateDeviceId(localStorage);
+  const deviceType=runtimeFactory.resolveDeviceType(navigator);
+  companionRuntime=runtimeFactory.createCompanionRuntime({deviceId,deviceType});
+  companionSync=syncFactory.createCompanionSyncAdapter({runtime:companionRuntime});
+  window.ORBITCompanion=companionRuntime;
+  if(companionRuntime.snapshot().shared.mission.value.id!=='companion')companionRuntime.updateShared({mission:{id:'companion',label:'PC und iPhone verbinden'}});
+}catch(error){console.warn('ORBIT Companion lokal nicht verfügbar',error?.message||error)}
 
 function setStorageStatus(text){const el=$('#storageStatus');if(el)el.textContent=text}
 function persistLocal(){localStorage.setItem(KEY,JSON.stringify(entries))}
@@ -21,7 +33,7 @@ async function syncRequest(method,body){
 async function pushCloud(){
   if(!syncReady||syncBusy)return;
   syncBusy=true;
-  try{await syncRequest('POST',{entries});setStorageStatus('CLOUD · SYNCHRON')}catch{setStorageStatus('CLOUD · FEHLER')}finally{syncBusy=false}
+  try{await syncRequest('POST',{entries:companionSync?companionSync.pack(entries):entries});setStorageStatus('CLOUD · SYNCHRON')}catch{setStorageStatus('CLOUD · FEHLER')}finally{syncBusy=false}
 }
 function scheduleCloudPush(){
   if(!syncReady)return;
@@ -33,9 +45,10 @@ async function pullCloud(){
   syncBusy=true;
   try{
     const state=await syncRequest('GET');
-    if(Array.isArray(state.entries)&&state.entries.length){
-      const remote=JSON.stringify(state.entries),local=JSON.stringify(entries);
-      if(remote!==local){entries=state.entries;persistLocal();renderAll()}
+    if(Array.isArray(state.entries)){
+      const incoming=companionSync?companionSync.ingest(state.entries):{entries:state.entries};
+      const remote=JSON.stringify(incoming.entries),local=JSON.stringify(entries);
+      if(remote!==local){entries=incoming.entries;persistLocal();renderAll()}
     }
     setStorageStatus('CLOUD · SYNCHRON');
   }catch{setStorageStatus('CLOUD · FEHLER')}finally{syncBusy=false}
@@ -45,8 +58,9 @@ async function connectSync(){
   setStorageStatus('CLOUD · VERBINDEN');
   try{
     const state=await syncRequest('GET');
-    if(Array.isArray(state.entries)&&state.entries.length){entries=state.entries;persistLocal()}
-    else if(entries.length){await syncRequest('POST',{entries})}
+    const incoming=Array.isArray(state.entries)?(companionSync?companionSync.ingest(state.entries):{entries:state.entries}):{entries:[]};
+    if(incoming.entries.length){entries=incoming.entries;persistLocal()}
+    else if(entries.length){await syncRequest('POST',{entries:companionSync?companionSync.pack(entries):entries})}
     syncReady=true;
     setStorageStatus('CLOUD · SYNCHRON');
     renderAll();
@@ -80,7 +94,7 @@ function plannedTasks(){return taskEntries().filter(e=>diffDays(e.due)>=1).sort(
 function showApp(){localStorage.setItem('orbit.started','1');$('#splash').classList.add('hidden');$('#app').classList.remove('hidden');renderAll();connectSync()}
 if(localStorage.getItem('orbit.started')==='1')showApp();
 
-function setView(id){$$('.view').forEach(v=>v.classList.toggle('active',v.id===id));$$('.bottom-nav button').forEach(b=>b.classList.toggle('active',b.dataset.view===id));window.scrollTo({top:0,behavior:'smooth'})}
+function setView(id,{share=true}={}){activeView=id;$$('.view').forEach(v=>v.classList.toggle('active',v.id===id));$$('.bottom-nav button').forEach(b=>b.classList.toggle('active',b.dataset.view===id));if(share&&companionRuntime)companionRuntime.updateShared({activeView:id});window.scrollTo({top:0,behavior:'smooth'})}
 $$('.bottom-nav button').forEach(b=>b.onclick=()=>setView(b.dataset.view));
 
 function routeFilter(route){setView('inbox');$('#categoryFilter').value=route==='open'?'all':'task';$('#dateFilter').value=route==='open'?'all':route;renderEntries()}
@@ -96,6 +110,23 @@ $('#deleteBtn').onclick=()=>{if(!editingId)return;if(confirm('Diesen Eintrag wir
 $('#settingsBtn').onclick=()=>$('#settingsDialog').showModal();
 const storageStatus=$('#storageStatus');
 if(storageStatus){storageStatus.title='Antippen, um ORBIT Sync einzurichten';storageStatus.onclick=()=>setupSync()}
+function renderCompanionStatus(){
+  if(!companionRuntime)return;
+  const state=companionRuntime.snapshot(),online=window.ORBITCompanionState.listOnlineDevices(state,Date.now(),45000),peers=online.filter(device=>device.id!==companionRuntime.deviceId),status=$('#deviceStatus'),button=$('#handoffBtn');
+  if(status)status.textContent=`${companionRuntime.deviceType==='iphone'?'IPHONE':'PC'} · ${online.length} GERÄT${online.length===1?'':'E'}`;
+  if(button){button.disabled=peers.length===0;button.textContent=peers.length?`AN ${peers[0].type==='iphone'?'IPHONE':'PC'} ÜBERGEBEN`:'KEIN COMPANION ONLINE'}
+}
+const handoffBtn=$('#handoffBtn');
+if(handoffBtn)handoffBtn.onclick=()=>{
+  if(!companionRuntime)return;
+  const peers=window.ORBITCompanionState.listOnlineDevices(companionRuntime.snapshot(),Date.now(),45000).filter(device=>device.id!==companionRuntime.deviceId);
+  if(!peers.length)return;
+  companionRuntime.requestHandoff(peers[0].id,activeView,crypto.randomUUID());scheduleCloudPush();
+};
+if(companionRuntime){
+  companionRuntime.subscribe(()=>{renderCompanionStatus();const pending=companionRuntime.pendingHandoff();if(pending){companionRuntime.acknowledgeHandoff(pending.id);setView(pending.route,{share:false})}scheduleCloudPush()});
+  renderCompanionStatus();setInterval(()=>companionRuntime.heartbeat(document.visibilityState==='hidden'?'offline':'online'),20000);
+}
 window.ORBITSync={connect:setupSync};
 
 function label(cat){return cat==='task'?'Aufgabe':cat==='idea'?'Idee':'Gedanke'}
@@ -111,6 +142,7 @@ function captureFromVoice(text,category='thought'){const clean=String(text||'').
 function markImportant(id){const entry=entries.find(item=>item.id===id);if(!entry)return false;entry.important=true;save();return true}
 window.ORBITApp={setView,capture:captureFromVoice,markImportant,render:renderAll};
 renderAll();
-document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible')pullCloud()});
-window.addEventListener('online',()=>pullCloud());
+document.addEventListener('visibilitychange',()=>{companionRuntime?.heartbeat(document.visibilityState==='hidden'?'offline':'online');if(document.visibilityState==='visible')pullCloud()});
+window.addEventListener('offline',()=>companionRuntime?.heartbeat('offline'));
+window.addEventListener('online',()=>{companionRuntime?.heartbeat('online');pullCloud()});
 if('serviceWorker'in navigator)window.addEventListener('load',()=>navigator.serviceWorker.register('service-worker.js').catch(()=>{}));
