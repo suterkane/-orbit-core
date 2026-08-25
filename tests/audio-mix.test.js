@@ -19,4 +19,8 @@ assert.ok(fs.statSync(score).size > 100000, 'bundled score must contain real aud
 const worker = fs.readFileSync(path.join(appDir, 'service-worker.js'), 'utf8');
 assert.doesNotMatch(worker, /assets\/orbit-cinematic-boot\.m4a/, 'inactive score must not create a startup request');
 assert.doesNotMatch(bootSource, /void startBootMusic\(\)/, 'score remains optional and outside the active initiate path');
-console.log('11 optional audio isolation tests passed');
+assert.match(bootSource, /LOCAL_VOICE_RATE=1\.12/, 'local FRIDAY voice must use the faster approved cadence');
+assert.match(bootSource, /activeAudio\.playbackRate=LOCAL_VOICE_RATE/, 'local neural playback must apply the faster cadence');
+assert.match(bootSource, /activeAudio\.preservesPitch=true/, 'speed-up must preserve FRIDAY pitch');
+assert.match(bootSource, /rate:1\.08/, 'browser fallback must not revert to the old slow cadence');
+console.log('15 optional audio isolation tests passed');
