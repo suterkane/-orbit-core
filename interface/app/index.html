@@ -9,7 +9,7 @@
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
   <title>ORBIT · FRIDAY</title>
   <link rel="manifest" href="manifest.webmanifest" />
-  <link rel="stylesheet" href="styles.css?v=4" />
+  <link rel="stylesheet" href="styles.css?v=5" />
   <link rel="stylesheet" href="start-v2.css?v=18" />
   <link rel="stylesheet" href="boot-sequence.css?v=3" />
   <link rel="stylesheet" href="integrations.css?v=1" />
@@ -36,9 +36,10 @@
     </div>
   </section>
   <div id="app" class="app hidden">
-    <header class="topbar"><div><span class="eyebrow">ORBIT CONTROL CENTER</span><h2>Guten Tag, Mr. Stark.</h2></div><button id="settingsBtn" class="icon-btn" aria-label="Einstellungen">⚙</button></header>
+    <header class="topbar"><div><span class="eyebrow">ORBIT CONTROL CENTER</span><h2>Guten Tag, Mr. Stark.</h2></div><div class="topbar-actions"><button id="voiceCoreBtn" class="icon-btn voice-core-btn" data-state="idle" aria-label="Mit FRIDAY sprechen" aria-pressed="false">◉</button><button id="settingsBtn" class="icon-btn" aria-label="Einstellungen">⚙</button></div></header>
     <main>
       <section id="dashboard" class="view active">
+        <section id="voiceDialogue" class="voice-dialogue" aria-live="polite"><div><span>VOICE CORE</span><strong id="voiceState">Bereit</strong></div><p id="voiceTranscript">Tippe auf den leuchtenden Voice-Core und sprich mit FRIDAY.</p><small id="voiceResponse">Unterstützt: Zentrale, Aufgaben, Status und neue Einträge.</small></section>
         <div class="hero-card hud-hero"><div class="hud-copy"><span>FRIDAY / ORBIT CORE</span><h3>System online.</h3><p id="heroText">Bereit für die nächste präzise Aktion.</p><div class="hud-statusline"><i></i> CORE LINK <strong>STABIL</strong></div></div><div class="hud-core" aria-hidden="true"><div class="hud-ring ring-a"></div><div class="hud-ring ring-b"></div><div class="hud-ring ring-c"></div><div class="hud-ticks"></div><div class="hud-crosshair"></div><div class="hud-energy"><span></span></div><div class="hud-core-label"><b>ORBIT</b><small>FRIDAY</small></div></div></div>
         <div class="metric-grid"><button class="metric" data-route="today"><span>Heute</span><strong id="todayCount">0</strong><small>AKTIV</small></button><button class="metric danger" data-route="overdue"><span>Überfällig</span><strong id="overdueCount">0</strong><small>PRIORITÄT</small></button><button class="metric gold" data-route="week"><span>Nächste 7 Tage</span><strong id="weekCount">0</strong><small>VORAUSSCHAU</small></button><button class="metric" data-route="open"><span>Offen</span><strong id="openCount">0</strong><small>QUEUE</small></button></div>
         <section class="integration-grid" aria-label="Kommunikation und Planung">
@@ -61,7 +62,8 @@
   <script src="friday-hologram.js?v=1"></script>
   <script src="boot-sequence.js?v=3"></script>
   <script src="start-v2.js?v=12"></script>
-  <script src="app.js?v=7"></script>
+  <script src="app.js?v=8"></script>
+  <script src="voice-core.js?v=2"></script>
   <script src="handoff.js?v=1"></script>
   <script src="integrations.js?v=5"></script>
 </body>

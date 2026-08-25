@@ -1,6 +1,6 @@
-const CACHE='orbit-friday-v18-neural-voice';
+const CACHE='orbit-friday-v19-voice-core';
 const FALLBACK='index.html';
-const CORE=['./','index.html','styles.css?v=4','start-v2.css?v=18','three.r128.min.js','friday-hologram.js?v=1','assets/friday-neural-de.ogg','boot-sequence.css?v=3','boot-sequence.js?v=3','start-v2.js?v=12','app.js?v=7','handoff.js?v=1','integrations.js?v=5','integrations.css?v=1','manifest.webmanifest'];
+const CORE=['./','index.html','styles.css?v=5','start-v2.css?v=18','three.r128.min.js','friday-hologram.js?v=1','assets/friday-neural-de.ogg','assets/voice-zentrale.ogg','assets/voice-aufgaben.ogg','assets/voice-erfasst.ogg','assets/voice-status.ogg','assets/voice-unklar.ogg','boot-sequence.css?v=3','boot-sequence.js?v=3','start-v2.js?v=12','app.js?v=8','voice-core.js?v=2','handoff.js?v=1','integrations.js?v=5','integrations.css?v=1','manifest.webmanifest'];
 
 self.addEventListener('install',event=>{
   event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(CORE)).then(()=>self.skipWaiting()));

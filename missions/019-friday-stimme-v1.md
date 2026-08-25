@@ -13,6 +13,10 @@ FRIDAY erhält eine erste echte Sprachausgabe. Beim Start spricht FRIDAY eine ku
 - Zentrale erst nach Ende der Begrüßung öffnen
 - sauberer Fallback auf Geräten ohne Sprachausgabe
 - bestehende ORBIT-Funktionen und Cloud-Sync nicht beeinträchtigen
+- Voice Core mit deutscher Spracheingabe über den Browser
+- laufende FRIDAY-Ausgabe vor dem Zuhören unterbrechen
+- erste Sprachbefehle für Navigation, Status und Erfassung
+- lokale Neural-Antworten ohne zusätzlichen kostenpflichtigen Dienst
 - Desktop- und iPhone-Endtest
 
 ## Abnahmekriterien
@@ -26,4 +30,4 @@ FRIDAY erhält eine erste echte Sprachausgabe. Beim Start spricht FRIDAY eine ku
 
 ## Status
 
-Aktiv. Implementierung im App-Master begonnen; Desktop-/iPhone-Endkontrolle steht aus.
+Aktiv. Voice Core V1 ist implementiert und auf Desktop bis zur Browser-Mikrofonfreigabe geprüft; iPhone-Endkontrolle steht aus.

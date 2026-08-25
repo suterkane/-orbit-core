@@ -69,6 +69,7 @@
     if(!musicCtx)return;clearInterval(pulseTimer);clearInterval(melodyTimer);pulseTimer=null;melodyTimer=null;try{const ctx=musicCtx,master=musicMaster,now=ctx.currentTime;if(master){master.gain.cancelScheduledValues(now);master.gain.setValueAtTime(Math.max(master.gain.value,.0001),now);master.gain.exponentialRampToValueAtTime(.0001,now+(immediate?.05:.7))}setTimeout(()=>{musicNodes.forEach(n=>{try{n.stop?.()}catch{}});musicNodes=[];try{ctx.close()}catch{}},immediate?80:800)}catch{}musicCtx=null;musicMaster=null
   }
   function cleanupAudio(){try{activeAudio?.pause()}catch{}try{activeSource?.stop()}catch{}activeAudio=null;activeSource=null;if(activeAudioUrl){URL.revokeObjectURL(activeAudioUrl);activeAudioUrl=''}}
+  function stopSpeaking(){try{window.speechSynthesis?.cancel()}catch{}cleanupAudio();clearTimeout(launchTimer);clearTimeout(speakTimer);setSpeaking(false)}
 
   async function speakSeraphina(text,{onend}={}){
     const syncKey=(localStorage.getItem(SYNC_KEY_STORAGE)||'').trim();if(!syncKey)return false;
@@ -88,6 +89,6 @@
   function launchApp(){const status=statusText();setOrbState('online');if(status)status.textContent='FRIDAY · ONLINE';setMusicLevel(.22,.8);if(typeof window.showApp==='function')window.showApp()}
   async function launchWithVoice(event){if(launching)return;launching=true;event.preventDefault();event.stopImmediatePropagation();await startBootMusic();const status=statusText();setOrbState('booting');if(status)status.textContent='FRIDAY erstellt Lagebericht …';let voiceDone=false,bootDone=false;const maybeLaunch=()=>{if(voiceDone&&bootDone)launchApp()},voiceEnd=()=>{voiceDone=true;maybeLaunch()};const narration=await getBootNarration();speak(narration,{onend:voiceEnd}).then(started=>{if(!started){voiceDone=true;maybeLaunch()}});try{if(window.ORBITBoot?.play)await window.ORBITBoot.play()}catch{}bootDone=true;maybeLaunch();setTimeout(()=>{if(!voiceDone){voiceDone=true;maybeLaunch()}},30000)}
 
-  window.ORBITFriday={setSpeaking,setOrbState,setMusicLevel,speak,getGreeting,getBootNarration,pickGermanVoice,speakSeraphina,speakLocalNeural,startBootMusic,stopBootMusic,voiceProfile:FRIDAY_VOICE_PROFILE,privateMusicUrl:PRIVATE_MUSIC_URL,localNeuralVoiceUrl:LOCAL_NEURAL_VOICE_URL};
+  window.ORBITFriday={setSpeaking,setOrbState,setMusicLevel,speak,stopSpeaking,getGreeting,getBootNarration,pickGermanVoice,speakSeraphina,speakLocalNeural,startBootMusic,stopBootMusic,voiceProfile:FRIDAY_VOICE_PROFILE,privateMusicUrl:PRIVATE_MUSIC_URL,localNeuralVoiceUrl:LOCAL_NEURAL_VOICE_URL};
   document.addEventListener('DOMContentLoaded',()=>{const btn=document.querySelector('#initiateBtn');if(btn)btn.addEventListener('click',launchWithVoice,{capture:true});setOrbState('idle');warmVoices();if('speechSynthesis'in window)window.speechSynthesis.addEventListener?.('voiceschanged',warmVoices,{once:true})});
 })();

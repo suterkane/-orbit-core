@@ -108,6 +108,8 @@ $('#searchInput').oninput=renderEntries;$('#categoryFilter').onchange=renderEntr
 
 function renderDashboard(){const today=todayTasks(),over=overdueTasks(),week=weekTasks(),open=openEntries(),next=plannedTasks()[0];$('#todayCount').textContent=today.length;$('#overdueCount').textContent=over.length;$('#weekCount').textContent=week.length;$('#openCount').textContent=open.length;$('#heroText').textContent=over.length?`${over.length} überfällige Aufgabe${over.length===1?' wartet':'n warten'}. Priorität empfohlen.`:today.length?`${today.length} Aufgabe${today.length===1?' ist':'n sind'} heute fällig.`:week.length?`${week.length} Aufgabe${week.length===1?' liegt':'n liegen'} in den nächsten sieben Tagen.`:'Keine akute Terminlage.';const f=$('#nextFocus');if(next){f.querySelector('strong').textContent=next.text;f.querySelector('small').textContent=`${formatDue(next.due)} · Antippen für geplante Aufgaben`;f.onclick=()=>routeFilter('planned')}else{f.querySelector('strong').textContent='Keine geplante Aufgabe';f.querySelector('small').textContent='Friday hält den Kurs frei.';f.onclick=null}}
 function renderAll(){renderDashboard();renderEntries()}
+function captureFromVoice(text,category='thought'){const clean=String(text||'').trim();if(!clean)return false;entries.unshift({id:crypto.randomUUID(),text:clean,category:['task','idea','thought'].includes(category)?category:'thought',due:'',important:false,completed:false,createdAt:new Date().toISOString()});save();return true}
+window.ORBITApp={setView,capture:captureFromVoice,render:renderAll};
 renderAll();
 document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible')pullCloud()});
 window.addEventListener('online',()=>pullCloud());
