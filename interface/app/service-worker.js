@@ -1,6 +1,6 @@
-const CACHE='orbit-neural-core-v2-panorama-r9';
+const CACHE='orbit-neural-core-v2-panorama-r10';
 const FALLBACK='index.html';
-const CORE=['./','index.html','styles.css?v=6','start-v2.css?v=21','three.r128.min.js','neural-core-v2.js?v=7','audio-mix.js?v=1','panorama.css?v=1','panorama.js?v=1','assets/friday-neural-de.ogg','assets/orbit-cinematic-boot.m4a','assets/voice-zentrale.ogg','assets/voice-aufgaben.ogg','assets/voice-erfasst.ogg','assets/voice-prioritaet.ogg','assets/voice-bezug-fehlt.ogg','assets/voice-status.ogg','assets/voice-unklar.ogg','start-v2.js?v=22','companion-state.js?v=1','companion-runtime.js?v=1','companion-sync.js?v=1','app.js?v=11','voice-core.js?v=5','integrations.js?v=6','integrations.css?v=1','manifest.webmanifest'];
+const CORE=['./','index.html','styles.css?v=6','start-v2.css?v=21','three.r128.min.js','neural-core-v2.js?v=7','audio-mix.js?v=1','panorama.css?v=1','panorama.js?v=1','assets/friday-neural-de.ogg','assets/orbit-cinematic-boot.m4a','assets/voice-zentrale.ogg','assets/voice-aufgaben.ogg','assets/voice-erfasst.ogg','assets/voice-prioritaet.ogg','assets/voice-bezug-fehlt.ogg','assets/voice-status.ogg','assets/voice-unklar.ogg','start-v2.js?v=22','companion-state.js?v=1','companion-runtime.js?v=1','companion-sync.js?v=1','app.js?v=12','voice-core.js?v=5','integrations.js?v=7','integrations.css?v=1','manifest.webmanifest'];
 
 self.addEventListener('install',event=>{
   event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(CORE)).then(()=>self.skipWaiting()));

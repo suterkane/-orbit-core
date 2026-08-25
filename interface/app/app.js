@@ -73,10 +73,7 @@ async function connectSync(){
   }
 }
 async function setupSync(){
-  const entered=prompt('ORBIT Sync-Code eingeben. Derselbe Code verbindet PC und iPhone.');
-  if(!entered)return;
-  syncKey=entered.trim();
-  localStorage.setItem(SYNC_KEY_STORAGE,syncKey);
+  // Sync läuft automatisch — kein manueller Code nötig
   await connectSync();
 }
 

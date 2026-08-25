@@ -8,7 +8,7 @@
 
   function getSyncKey(interactive=false){
     let key=(localStorage.getItem(SYNC_KEY_STORAGE)||'').trim();
-    if(!key&&interactive){const entered=prompt('Für die sichere Google-Verbindung einmal den ORBIT Sync-Code eingeben.');if(entered){key=entered.trim();localStorage.setItem(SYNC_KEY_STORAGE,key)}}
+    if(!key&&interactive){setGoogleStatus('Google-Verbindung nicht eingerichtet');return''}
     return key;
   }
 
