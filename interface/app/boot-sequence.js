@@ -77,7 +77,7 @@
   }
 
   function phaseFor(value){
-    if(value<12)return[1,'NEURAL LINK · HANDSHAKE'];
+    if(value<12)return[1,'CORE ASSEMBLY · ENERGIEAUFBAU'];
     if(value<30)return[2,'VOICE CORE · INITIALISIERUNG'];
     if(value<48)return[3,'ORBIT SYNC · SECURE LINK'];
     if(value<67)return[4,'SYSTEMMODULE · LADEN'];
@@ -93,7 +93,7 @@
     return'energy-stage-5';
   }
 
-  function animateProgress(duration=4300){
+  function animateProgress(duration=7200){
     return new Promise(resolve=>{
       const w=wrap();
       if(!w){resolve();return;}
@@ -152,7 +152,7 @@
     const n=w.querySelector('.boot-progress strong');
     if(n)n.textContent='00';
     w.querySelectorAll('.boot-panel').forEach(p=>{p.classList.remove('online');const b=p.querySelector('b');if(b)b.textContent='STANDBY'});
-    await animateProgress();
+    await animateProgress(7200);
     running=false;
   }
 

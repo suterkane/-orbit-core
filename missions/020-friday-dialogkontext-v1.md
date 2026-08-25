@@ -23,4 +23,4 @@ FRIDAY versteht einfache Folgeäußerungen im Kontext der unmittelbar vorherigen
 
 ## Status
 
-**Abgeschlossen und von Rene am 25. August 2026 abgenommen.** Dialogkontext V1, prioritätsbezogene Folgeäußerung, Neuralbestätigungen und verstärkter cineastischer Audio-Mix bleiben in diesem Stand unverändert.
+**Dialogkontext V1 abgeschlossen; cineastische Musik- und Aufbaukorrektur technisch geprüft und zur erneuten iPhone-Abnahme vorgesehen.** Die Mission gilt erst nach sichtbarer und hörbarer Prüfung auf Renes iPhone als vollständig abgenommen.

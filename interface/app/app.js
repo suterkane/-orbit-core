@@ -78,7 +78,6 @@ function weekTasks(){return taskEntries().filter(e=>{const n=diffDays(e.due);ret
 function plannedTasks(){return taskEntries().filter(e=>diffDays(e.due)>=1).sort((a,b)=>a.due.localeCompare(b.due))}
 
 function showApp(){localStorage.setItem('orbit.started','1');$('#splash').classList.add('hidden');$('#app').classList.remove('hidden');renderAll();connectSync()}
-$('#initiateBtn').onclick=showApp;
 if(localStorage.getItem('orbit.started')==='1')showApp();
 
 function setView(id){$$('.view').forEach(v=>v.classList.toggle('active',v.id===id));$$('.bottom-nav button').forEach(b=>b.classList.toggle('active',b.dataset.view===id));window.scrollTo({top:0,behavior:'smooth'})}

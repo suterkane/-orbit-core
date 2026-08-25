@@ -1,7 +1,10 @@
 /* ORBIT · FRIDAY CINEMATIC BOOT HUD */
 .friday-core-wrap{isolation:isolate;--boot-progress:0;--boot-progress01:0;--energy-speed:1.35s}
-.friday-boot-hud{position:absolute;inset:-28%;z-index:-1;pointer-events:none;opacity:0;transform:scale(.82);filter:blur(9px) brightness(.45);transition:opacity .45s ease,filter .45s ease,transform .45s ease}
-.friday-core-wrap.boot-running .friday-boot-hud{opacity:1;transform:scale(1);filter:blur(0) brightness(1)}
+.friday-boot-hud{position:absolute;inset:-28%;z-index:0;pointer-events:none;opacity:0;transform:scale(.18) rotate(-24deg);filter:blur(14px) brightness(.25);transition:opacity .65s ease,filter .65s ease,transform .8s cubic-bezier(.16,.9,.24,1.15)}
+.friday-core-wrap.boot-running .friday-boot-hud{z-index:4;opacity:1;transform:scale(1) rotate(0);filter:blur(0) brightness(1)}
+.friday-core-wrap.boot-running .friday-orb{opacity:.08;transform:scale(.18);filter:blur(8px)}
+.friday-core-wrap.boot-running .friday-core-label{opacity:.15;transform:translateY(10px)}
+.friday-core-wrap .friday-orb,.friday-core-wrap .friday-core-label{transition:opacity .5s ease,transform .65s ease,filter .5s ease}
 .boot-grid,.boot-vignette,.boot-scanline,.boot-reactor,.boot-panel,.boot-curtain,.boot-flare{position:absolute}
 .boot-vignette{inset:-6%;background:radial-gradient(circle at center,transparent 0 44%,rgba(25,3,2,.16) 58%,rgba(4,0,0,.72) 91%);mix-blend-mode:multiply;z-index:1;pointer-events:none}
 .boot-grid{inset:0;background:linear-gradient(rgba(255,111,77,.045) 1px,transparent 1px),linear-gradient(90deg,rgba(232,184,99,.035) 1px,transparent 1px);background-size:34px 34px;mask:radial-gradient(circle at center,#000 0 58%,transparent 82%);opacity:.34;transform:perspective(600px) rotateX(62deg) scale(1.6);animation:gridDrift 12s linear infinite}

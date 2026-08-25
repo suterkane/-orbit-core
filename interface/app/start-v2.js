@@ -3,6 +3,7 @@
   const VOICE_URL='https://vhmokhunkvoctavmrjwl.supabase.co/functions/v1/friday-voice';
   const SYNC_KEY_STORAGE='orbit.sync.key.v1';
   const PRIVATE_MUSIC_URL='./private-assets/friday-theme.m4a';
+  const BUNDLED_MUSIC_URL='./assets/orbit-cinematic-boot.ogg';
   const LOCAL_NEURAL_VOICE_URL='./assets/friday-neural-de.ogg';
   const FRIDAY_VOICE_PROFILE={lang:'de-DE',rate:.94,pitch:1.0,volume:1};
   const AUDIO_MIX=window.ORBITAudioMix||{private:.42,synthetic:.31,ducked:.14,handoff:.29};
@@ -42,6 +43,12 @@
     return [getGreeting(),'FRIDAY wird initialisiert.','ORBIT Core ist online.','Sprachsystem und persönliches Profil sind geladen.',briefing,'Aktive Mission: FRIDAY Stimme V1.','ORBIT Sync und Systemstatus wurden übernommen.',closing].filter(Boolean).join(' ');
   }
 
+  async function tryBundledMusic(){
+    try{
+      const audio=new Audio(BUNDLED_MUSIC_URL);audio.loop=true;audio.preload='auto';audio.volume=AUDIO_MIX.private;
+      await audio.play();privateMusic=audio;usingPrivateMusic=true;return true;
+    }catch{try{privateMusic?.pause()}catch{}privateMusic=null;usingPrivateMusic=false;return false}
+  }
   async function tryPrivateMusic(){
     if(privateMusic&&usingPrivateMusic){try{await privateMusic.play();return true}catch{return false}}
     try{
@@ -64,7 +71,7 @@
       const notes=[293.66,329.63,440,392,329.63,293.66,246.94,293.66];let noteIndex=0;const melody=()=>{if(!musicCtx||musicCtx.state==='closed')return;const t=musicCtx.currentTime,o=musicCtx.createOscillator(),g=musicCtx.createGain();o.type='triangle';o.frequency.value=notes[noteIndex++%notes.length];g.gain.setValueAtTime(.0001,t);g.gain.exponentialRampToValueAtTime(.055,t+.06);g.gain.exponentialRampToValueAtTime(.0001,t+1.05);o.connect(g);g.connect(filter);o.start(t);o.stop(t+1.1)};melodyTimer=setInterval(melody,1380);
     }catch{stopBootMusic(true)}
   }
-  async function startBootMusic(){if(await tryPrivateMusic())return true;startSyntheticMusic();return false}
+  async function startBootMusic(){if(await tryBundledMusic())return true;if(await tryPrivateMusic())return true;startSyntheticMusic();return false}
   function stopBootMusic(immediate=false){
     if(privateMusic){try{privateMusic.pause();privateMusic.currentTime=0}catch{}privateMusic=null;usingPrivateMusic=false}
     if(!musicCtx)return;clearInterval(pulseTimer);clearInterval(melodyTimer);pulseTimer=null;melodyTimer=null;try{const ctx=musicCtx,master=musicMaster,now=ctx.currentTime;if(master){master.gain.cancelScheduledValues(now);master.gain.setValueAtTime(Math.max(master.gain.value,.0001),now);master.gain.exponentialRampToValueAtTime(.0001,now+(immediate?.05:.7))}setTimeout(()=>{musicNodes.forEach(n=>{try{n.stop?.()}catch{}});musicNodes=[];try{ctx.close()}catch{}},immediate?80:800)}catch{}musicCtx=null;musicMaster=null
@@ -88,8 +95,8 @@
   async function speakLocalNeural({onend}={}){try{cleanupAudio();let finished=false;const finish=()=>{if(finished)return;finished=true;clearTimeout(launchTimer);setSpeaking(false);cleanupAudio();onend?.()};activeAudio=new Audio(LOCAL_NEURAL_VOICE_URL);activeAudio.preload='auto';activeAudio.onplay=()=>{setSpeaking(true);const status=statusText();if(status)status.textContent='FRIDAY spricht · NEURAL LOCAL'};activeAudio.onended=finish;activeAudio.onerror=finish;await activeAudio.play();launchTimer=setTimeout(finish,30000);return true}catch{cleanupAudio();setSpeaking(false);return false}}
   async function speak(text,{onend}={}){const status=statusText();if(status)status.textContent='FRIDAY initialisiert Seraphina HD …';const played=await speakSeraphina(text,{onend});if(played)return true;if(status)status.textContent='FRIDAY startet lokale Neuralstimme …';const localPlayed=await speakLocalNeural({onend});if(localPlayed)return true;if(status)status.textContent='FRIDAY startet Browser-Notfallstimme …';return speakBrowser(text,{onend})}
   function launchApp(){const status=statusText();setOrbState('online');if(status)status.textContent='FRIDAY · ONLINE';setMusicLevel(AUDIO_MIX.handoff,.8);if(typeof window.showApp==='function')window.showApp()}
-  async function launchWithVoice(event){if(launching)return;launching=true;event.preventDefault();event.stopImmediatePropagation();await startBootMusic();const status=statusText();setOrbState('booting');if(status)status.textContent='FRIDAY erstellt Lagebericht …';let voiceDone=false,bootDone=false;const maybeLaunch=()=>{if(voiceDone&&bootDone)launchApp()},voiceEnd=()=>{voiceDone=true;maybeLaunch()};const narration=await getBootNarration();speak(narration,{onend:voiceEnd}).then(started=>{if(!started){voiceDone=true;maybeLaunch()}});try{if(window.ORBITBoot?.play)await window.ORBITBoot.play()}catch{}bootDone=true;maybeLaunch();setTimeout(()=>{if(!voiceDone){voiceDone=true;maybeLaunch()}},30000)}
+  async function launchWithVoice(event){if(launching)return;launching=true;event.preventDefault();event.stopImmediatePropagation();void startBootMusic();const status=statusText();setOrbState('booting');if(status)status.textContent='FRIDAY erstellt Lagebericht …';let voiceDone=false,bootDone=false;const maybeLaunch=()=>{if(voiceDone&&bootDone)launchApp()},voiceEnd=()=>{voiceDone=true;maybeLaunch()};const narration=await getBootNarration();speak(narration,{onend:voiceEnd}).then(started=>{if(!started){voiceDone=true;maybeLaunch()}});try{if(window.ORBITBoot?.play)await window.ORBITBoot.play()}catch{}bootDone=true;maybeLaunch();setTimeout(()=>{if(!voiceDone){voiceDone=true;maybeLaunch()}},30000)}
 
-  window.ORBITFriday={setSpeaking,setOrbState,setMusicLevel,speak,stopSpeaking,getGreeting,getBootNarration,pickGermanVoice,speakSeraphina,speakLocalNeural,startBootMusic,stopBootMusic,voiceProfile:FRIDAY_VOICE_PROFILE,privateMusicUrl:PRIVATE_MUSIC_URL,localNeuralVoiceUrl:LOCAL_NEURAL_VOICE_URL};
+  window.ORBITFriday={setSpeaking,setOrbState,setMusicLevel,speak,stopSpeaking,getGreeting,getBootNarration,pickGermanVoice,speakSeraphina,speakLocalNeural,startBootMusic,stopBootMusic,voiceProfile:FRIDAY_VOICE_PROFILE,bundledMusicUrl:BUNDLED_MUSIC_URL,privateMusicUrl:PRIVATE_MUSIC_URL,localNeuralVoiceUrl:LOCAL_NEURAL_VOICE_URL};
   document.addEventListener('DOMContentLoaded',()=>{const btn=document.querySelector('#initiateBtn');if(btn)btn.addEventListener('click',launchWithVoice,{capture:true});setOrbState('idle');warmVoices();if('speechSynthesis'in window)window.speechSynthesis.addEventListener?.('voiceschanged',warmVoices,{once:true})});
 })();
