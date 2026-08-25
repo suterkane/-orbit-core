@@ -30,4 +30,4 @@ FRIDAY erhält eine erste echte Sprachausgabe. Beim Start spricht FRIDAY eine ku
 
 ## Status
 
-Aktiv. Voice Core V1 ist implementiert und auf Desktop bis zur Browser-Mikrofonfreigabe geprüft; iPhone-Endkontrolle steht aus.
+**Abgeschlossen und von Rene am 25. August 2026 auf dem iPhone abgenommen.** Begrüßung, Neuralstimme, Voice Core, Mikrofonfluss und Sprachtempo funktionieren im produktiven PWA-Stand.

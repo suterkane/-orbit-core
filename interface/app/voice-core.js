@@ -14,10 +14,20 @@
     if(match)return{type:'capture',category:'idea',text:match[1].trim()};
     match=text.match(/^(?:merke\s+dir|notiere)\s+(.+)$/i);
     if(match)return{type:'capture',category:'thought',text:match[1].trim()};
+    if(/^(mach\s+(sie|ihn|das)\s+wichtig|setze\s+(die\s+)?priorität|priorisiere\s+(sie|ihn|das))$/i.test(text))return{type:'context',action:'mark-important'};
     return{type:'unknown',text};
   }
 
-  if(typeof module!=='undefined'&&module.exports)module.exports={parseVoiceIntent};
+  function runContextAction(intent,context,app){
+    if(intent.action!=='mark-important')return{ok:false,reply:'Dafür fehlt mir noch die Dialogverbindung.',replyKey:'unknown'};
+    if(!context.lastEntryId)return{ok:false,reply:'Mir fehlt der vorherige Bezug.',replyKey:'missingContext'};
+    const changed=app?.markImportant?.(context.lastEntryId);
+    return changed
+      ?{ok:true,reply:'Priorität gesetzt.',replyKey:'important'}
+      :{ok:false,reply:'Der vorherige Eintrag ist nicht mehr verfügbar.',replyKey:'missingContext'};
+  }
+
+  if(typeof module!=='undefined'&&module.exports)module.exports={parseVoiceIntent,runContextAction};
   if(typeof document==='undefined')return;
 
   const Recognition=root.SpeechRecognition||root.webkitSpeechRecognition;
@@ -27,7 +37,8 @@
   const response=document.querySelector('#voiceResponse');
   const state=document.querySelector('#voiceState');
   let recognition=null,listening=false,replyAudio=null;
-  const replyFiles={dashboard:'voice-zentrale.ogg',inbox:'voice-aufgaben.ogg',captured:'voice-erfasst.ogg',status:'voice-status.ogg',unknown:'voice-unklar.ogg'};
+  const context={lastEntryId:''};
+  const replyFiles={dashboard:'voice-zentrale.ogg',inbox:'voice-aufgaben.ogg',captured:'voice-erfasst.ogg',important:'voice-prioritaet.ogg',missingContext:'voice-bezug-fehlt.ogg',status:'voice-status.ogg',unknown:'voice-unklar.ogg'};
 
   function setState(next,label){if(state)state.textContent=label;if(button){button.dataset.state=next;button.setAttribute('aria-pressed',next==='listening'?'true':'false')}panel?.classList.toggle('active',next!=='idle')}
   function stopReply(){try{replyAudio?.pause()}catch{}replyAudio=null;root.ORBITFriday?.stopSpeaking?.()}
@@ -37,7 +48,8 @@
   function execute(intent){
     if(intent.type==='stop'){stopReply();setState('idle','Unterbrochen');if(response)response.textContent='Ausgabe gestoppt.';return}
     if(intent.type==='view'){root.ORBITApp?.setView?.(intent.target);reply(intent.target==='dashboard'?'Zentrale geöffnet.':'Aufgaben geöffnet.',intent.target);return}
-    if(intent.type==='capture'){root.ORBITApp?.capture?.(intent.text,intent.category);reply('Erfasst.','captured');return}
+    if(intent.type==='capture'){const captured=root.ORBITApp?.capture?.(intent.text,intent.category);context.lastEntryId=captured?.id||'';reply('Erfasst.','captured');return}
+    if(intent.type==='context'){const result=runContextAction(intent,context,root.ORBITApp);reply(result.reply,result.replyKey);return}
     if(intent.type==='status'){reply(systemSummary(),'status');return}
     reply('Dafür fehlt mir noch die Dialogverbindung. Ich habe die Anfrage angezeigt.','unknown')
   }
