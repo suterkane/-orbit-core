@@ -1,7 +1,7 @@
 {
   "date": "Dienstag, 25. August 2026",
-  "generated": "2026-08-25T20:30:03.898008",
-  "summary": "Aktive Projekte: Spinalkanalstenose HWS,BWS,LWS - Medizinische Chronik, Spinalkanalstenose HWS, Trading mit Krypto, Spieleranalyse Eisbären Berlin. Sabrina: **Neurologisch**\n- V.a. Epilepsie, vermutlich fokal mit mesiotemporalem Ursprung rechts (Erstverdacht 10/2025, seither m",
+  "generated": "2026-08-25T21:12:31.195002",
+  "summary": "Aktive Bereiche: Spinalkanalstenose, Spinalkanalstenose, Trading mit Krypto. Bitcoin steht bei 67.714 Euro. Solana bei 84,35 Euro.",
   "projects": [
     "Spinalkanalstenose HWS,BWS,LWS - Medizinische Chronik",
     "Spinalkanalstenose HWS",
@@ -10,5 +10,10 @@
     "07 Technologie Tools",
     "KI und Claude Code"
   ],
-  "hasDaily": false
+  "hasDaily": false,
+  "crypto": {
+    "btc_eur": 67714,
+    "sol_eur": 84.35,
+    "text": "Bitcoin steht bei 67.714 Euro. Solana bei 84,35 Euro."
+  }
 }

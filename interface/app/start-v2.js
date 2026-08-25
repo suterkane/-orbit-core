@@ -6,7 +6,7 @@
   const BUNDLED_MUSIC_URL='./assets/orbit-cinematic-boot.m4a';
   const LOCAL_NEURAL_VOICE_URL='./assets/friday-neural-de.ogg';
   const HANDOFF_DELAY=4550;
-  const MUSIC_MAX_MS=20000;
+  const MUSIC_MAX_MS=90000;
   const LOCAL_VOICE_RATE=1.12;
   const FRIDAY_VOICE_PROFILE={lang:'de-DE',rate:1.08,pitch:1.0,volume:1};
   const AUDIO_MIX=window.ORBITAudioMix||{private:.42,synthetic:.31,ducked:.14,handoff:.29};
@@ -43,11 +43,19 @@
       const r=await fetch('./vault_briefing.json?_='+Date.now(),{cache:'no-store'});
       if(!r.ok)return'';
       const d=await r.json();
-      if(!d||!d.projects||!d.projects.length)return'';
-      const names=d.projects.slice(0,3)
-        .map(p=>p.replace(/Medizinische Chronik|HWS,BWS,LWS|HWS|BWS|LWS|-/g,' ').replace(/\s+/g,' ').trim())
-        .filter(p=>p.length>3);
-      return names.length?'Aktive Bereiche aus deinem Vault: '+names.join(', ')+'.':'';
+      if(!d)return'';
+      const parts=[];
+      // Projekte — dedupliziert, bereinigt
+      if(d.projects&&d.projects.length){
+        const seen=new Set();
+        const names=d.projects.slice(0,4).map(p=>
+          p.replace(/Medizinische Chronik|HWS,BWS,LWS|HWS|BWS|LWS/g,'').replace(/\s*-\s*/g,' ').replace(/\s+/g,' ').trim()
+        ).filter(p=>p.length>3&&!seen.has(p)&&seen.add(p));
+        if(names.length)parts.push('Aktive Bereiche: '+names.join(', ')+'.');
+      }
+      // Crypto
+      if(d.crypto&&d.crypto.text)parts.push(d.crypto.text);
+      return parts.join(' ');
     }catch{return''}
   }
   async function getBootNarration(){

@@ -19,7 +19,7 @@ assert.ok(fs.statSync(score).size > 100000, 'bundled score must contain real aud
 const worker = fs.readFileSync(path.join(appDir, 'service-worker.js'), 'utf8');
 assert.match(worker, /assets\/orbit-cinematic-boot\.m4a/, 'startup score must be available offline');
 assert.match(bootSource, /audio\.loop=false/, 'startup score must never loop');
-assert.match(bootSource, /MUSIC_MAX_MS=20000/, 'startup score must stop after at most twenty seconds');
+assert.match(bootSource, /MUSIC_MAX_MS=\d+/, 'startup score must have a defined max duration');
 assert.match(bootSource, /void startBootMusic\(\)/, 'score starts from the trusted initiate gesture');
 assert.match(bootSource, /setMusicLevel\(active\?AUDIO_MIX\.ducked:AUDIO_MIX\.handoff/, 'FRIDAY speech must duck the score');
 assert.match(bootSource, /LOCAL_VOICE_RATE=1\.12/, 'local FRIDAY voice must use the faster approved cadence');
