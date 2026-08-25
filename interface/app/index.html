@@ -15,10 +15,17 @@
   <link rel="stylesheet" href="start-v2.css?v=21" />
 
   <link rel="stylesheet" href="integrations.css?v=1" />
+  <link rel="stylesheet" href="panorama.css?v=1" />
 </head>
 <body>
   <section id="splash" class="splash" aria-label="FRIDAY Start">
     <canvas id="fridayHologram" class="friday-hologram" aria-hidden="true"></canvas>
+    <aside class="panorama-wing panorama-left" aria-label="Tageslage">
+      <span class="wing-kicker">FRIDAY / TAGESLAGE</span><h2>Willkommen zurück.</h2>
+      <div class="wing-module"><span>DATUM</span><strong id="panoramaDate">Systemzeit wird synchronisiert</strong></div>
+      <div class="wing-module"><span>KALENDER</span><strong id="panoramaCalendar">Termine werden geladen</strong><small>Google Kalender · Live-Briefing</small></div>
+      <div class="wing-module priority"><span>NÄCHSTE PRIORITÄT</span><strong id="panoramaPriority">ORBIT analysiert den Tagesplan</strong></div>
+    </aside>
     <div class="neural-stage">
       <header class="neural-identity"><b>ORBIT</b><span>NEURAL INTELLIGENCE · FRIDAY</span></header>
       <div id="fridayVoiceOrb" class="friday-orb" data-state="idle" aria-hidden="true"></div>
@@ -29,6 +36,12 @@
         <small class="start-hint">Neural Core aktivieren</small>
       </div>
     </div>
+    <aside class="panorama-wing panorama-right" aria-label="Kommunikationslage">
+      <span class="wing-kicker">ORBIT / KOMMUNIKATION</span><h2>Systeme online.</h2>
+      <div class="wing-module"><span>GMAIL</span><strong id="panoramaMail">Posteingang wird geprüft</strong><small>Relevante Nachrichten für das Briefing</small></div>
+      <div class="wing-module"><span>AUFGABEN</span><strong id="panoramaTasks">Aufgabenstatus wird geladen</strong><small>Offen · Heute · Überfällig</small></div>
+      <div class="wing-module priority"><span>MISSION</span><strong>ORBIT · FRIDAY</strong><small>Präzise. Verbunden. Einsatzbereit.</small></div>
+    </aside>
   </section>
   <div id="app" class="app hidden">
     <header class="topbar"><div><span class="eyebrow">ORBIT CONTROL CENTER</span><h2>Guten Tag, Mr. Stark.</h2></div><div class="topbar-actions"><button id="voiceCoreBtn" class="icon-btn voice-core-btn" data-state="idle" aria-label="Mit FRIDAY sprechen" aria-pressed="false">◉</button><button id="settingsBtn" class="icon-btn" aria-label="Einstellungen">⚙</button></div></header>
@@ -56,13 +69,14 @@
   <script src="three.r128.min.js"></script>
   <script src="neural-core-v2.js?v=7"></script>
   <script src="audio-mix.js?v=1"></script>
+  <script src="panorama.js?v=1"></script>
 
-  <script src="start-v2.js?v=20"></script>
+  <script src="start-v2.js?v=21"></script>
   <script src="companion-state.js?v=1"></script>
   <script src="companion-runtime.js?v=1"></script>
   <script src="companion-sync.js?v=1"></script>
   <script src="app.js?v=11"></script>
   <script src="voice-core.js?v=5"></script>
-  <script src="integrations.js?v=5"></script>
+  <script src="integrations.js?v=6"></script>
 </body>
 </html>

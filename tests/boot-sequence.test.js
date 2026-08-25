@@ -16,6 +16,6 @@ assert.match(start, /setTimeout\(launchApp,HANDOFF_DELAY\)/, 'handoff uses the r
 assert.match(start, /app\.classList\.add\(['"]handoff-underlay['"]\)/, 'control center must become a visible underlay before docking');
 assert.match(start, /splash\.classList\.add\(['"]handoff-out['"]\)/, 'splash must crossfade instead of remaining empty');
 assert.ok(start.indexOf("app.classList.add('handoff-underlay')") < start.indexOf('ORBITNeuralCore?.dockTo'), 'underlay must be established before the core starts docking');
-assert.doesNotMatch(start, /void startBootMusic\(\)/, 'continuous music is not started by initiate');
+assert.match(start, /void startBootMusic\(\)/, 'finite cinematic score starts during assembly');
 assert.doesNotMatch(appJs, /initiateBtn'\)\.onclick=showApp/, 'legacy click handler must not bypass assembly');
 console.log('6 Neural Core boot handoff tests passed');
