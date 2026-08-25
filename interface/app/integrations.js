@@ -9,6 +9,8 @@
   function getSyncKey(interactive=false){
     let key=(localStorage.getItem(SYNC_KEY_STORAGE)||'').trim();
     if(!key&&interactive){setGoogleStatus('Google-Verbindung nicht eingerichtet');return''}
+    // Key nochmal frisch laden — könnte gerade über Settings gespeichert worden sein
+    if(!key)key=(localStorage.getItem(SYNC_KEY_STORAGE)||'').trim();
     return key;
   }
 

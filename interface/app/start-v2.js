@@ -70,14 +70,14 @@
 
   async function tryBundledMusic(){
     try{
-      const audio=new Audio(BUNDLED_MUSIC_URL);audio.loop=false;audio.preload='auto';audio.volume=AUDIO_MIX.private;
+      const audio=new Audio(BUNDLED_MUSIC_URL);audio.loop=true;audio.preload='auto';audio.volume=AUDIO_MIX.private;
       await audio.play();privateMusic=audio;usingPrivateMusic=true;setMusicLevel(orb()?.dataset.state==='speaking'?AUDIO_MIX.ducked:AUDIO_MIX.private,.18);return true;
     }catch{try{privateMusic?.pause()}catch{}privateMusic=null;usingPrivateMusic=false;return false}
   }
   async function tryPrivateMusic(){
     if(privateMusic&&usingPrivateMusic){try{await privateMusic.play();return true}catch{return false}}
     try{
-      const audio=new Audio(PRIVATE_MUSIC_URL);audio.loop=false;audio.preload='auto';audio.volume=AUDIO_MIX.private;
+      const audio=new Audio(PRIVATE_MUSIC_URL);audio.loop=true;audio.preload='auto';audio.volume=AUDIO_MIX.private;
       await audio.play();privateMusic=audio;usingPrivateMusic=true;setMusicLevel(orb()?.dataset.state==='speaking'?AUDIO_MIX.ducked:AUDIO_MIX.private,.18);return true;
     }catch{try{privateMusic?.pause()}catch{}privateMusic=null;usingPrivateMusic=false;return false}
   }

@@ -106,7 +106,29 @@ $('#entryForm').addEventListener('submit',e=>{if(e.submitter?.value==='cancel')r
 $('#deleteBtn').onclick=()=>{if(!editingId)return;if(confirm('Diesen Eintrag wirklich dauerhaft löschen?')&&confirm('Letzte Sicherheitsabfrage: Löschen bestätigen?')){entries=entries.filter(e=>e.id!==editingId);editingId=null;$('#entryDialog').close();save()}};
 $('#settingsBtn').onclick=()=>$('#settingsDialog').showModal();
 const storageStatus=$('#storageStatus');
-if(storageStatus){storageStatus.title='Antippen, um ORBIT Sync einzurichten';storageStatus.onclick=()=>setupSync()}
+if(storageStatus){storageStatus.title='ORBIT System';storageStatus.onclick=()=>$('#settingsDialog').showModal()}
+
+// Settings-Dialog: Sync-Key + Google
+$('#settingsDialog').addEventListener('show',()=>{
+  const inp=$('#syncKeyInput'),st=$('#syncKeyStatus');
+  if(inp){inp.value=localStorage.getItem(SYNC_KEY_STORAGE)||'';if(inp.value)st.textContent='✓ Sync-Code gespeichert';}
+});
+const syncKeySaveBtn=$('#syncKeySaveBtn');
+if(syncKeySaveBtn)syncKeySaveBtn.onclick=()=>{
+  const val=($('#syncKeyInput')?.value||'').trim();
+  if(!val){$('#syncKeyStatus').textContent='Bitte Code eingeben.';return}
+  syncKey=val;localStorage.setItem(SYNC_KEY_STORAGE,val);
+  $('#syncKeyStatus').textContent='✓ Gespeichert — Verbindung wird aufgebaut …';
+  connectSync().then(()=>{$('#syncKeyStatus').textContent='✓ ORBIT Sync aktiv'});
+};
+const googleConnectBtn=$('#googleConnectBtn');
+if(googleConnectBtn)googleConnectBtn.onclick=()=>{
+  const key=(localStorage.getItem(SYNC_KEY_STORAGE)||'').trim();
+  if(!key){$('#googleConnectStatus').textContent='Zuerst Sync-Code speichern.';return}
+  $('#googleConnectStatus').textContent='Google wird geöffnet …';
+  if(window.ORBITIntegrations?.connectGoogle)window.ORBITIntegrations.connectGoogle();
+  else{$('#googleConnectStatus').textContent='Google-Verbindung wird initialisiert …';$('#mailConnectBtn')?.click()}
+};
 function renderCompanionStatus(){
   if(!companionRuntime)return;
   const state=companionRuntime.snapshot(),online=window.ORBITCompanionState.listOnlineDevices(state,Date.now(),45000),peers=online.filter(device=>device.id!==companionRuntime.deviceId),status=$('#deviceStatus'),button=$('#handoffBtn');
