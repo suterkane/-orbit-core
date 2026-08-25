@@ -17,5 +17,6 @@ const score = path.join(appDir, 'assets', 'orbit-cinematic-boot.m4a');
 assert.ok(fs.existsSync(score), 'bundled Safari-compatible score must exist');
 assert.ok(fs.statSync(score).size > 100000, 'bundled score must contain real audio');
 const worker = fs.readFileSync(path.join(appDir, 'service-worker.js'), 'utf8');
-assert.match(worker, /assets\/orbit-cinematic-boot\.m4a/, 'service worker must cache Safari-compatible music');
-console.log('10 cinematic audio tests passed');
+assert.doesNotMatch(worker, /assets\/orbit-cinematic-boot\.m4a/, 'inactive score must not create a startup request');
+assert.doesNotMatch(bootSource, /void startBootMusic\(\)/, 'score remains optional and outside the active initiate path');
+console.log('11 optional audio isolation tests passed');

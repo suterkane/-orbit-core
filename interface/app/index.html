@@ -4,35 +4,31 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <meta name="theme-color" content="#001014" />
+  <meta name="mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
   <title>ORBIT · FRIDAY</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='22' fill='none' stroke='%2300e5ff' stroke-width='5'/%3E%3Ccircle cx='32' cy='32' r='7' fill='%23ff9500'/%3E%3C/svg%3E" />
   <link rel="manifest" href="manifest.webmanifest" />
   <link rel="stylesheet" href="styles.css?v=5" />
-  <link rel="stylesheet" href="start-v2.css?v=18" />
-  <link rel="stylesheet" href="boot-sequence.css?v=4" />
+  <link rel="stylesheet" href="start-v2.css?v=20" />
+
   <link rel="stylesheet" href="integrations.css?v=1" />
   <link rel="stylesheet" href="handoff.css?v=1" />
 </head>
 <body>
   <section id="splash" class="splash" aria-label="FRIDAY Start">
     <canvas id="fridayHologram" class="friday-hologram" aria-hidden="true"></canvas>
-    <div class="splash-frame">
-      <div>
-        <div class="brand-top">ORBIT <span>AI ASSISTANT SYSTEM</span></div>
-        <div class="friday-kicker">Neural Interface · Online</div>
-        <div class="friday-title"><h1>FRIDAY</h1><em>V2</em></div>
-        <p class="friday-subtitle">Intelligence · Precision · Presence</p>
+    <div class="neural-stage">
+      <header class="neural-identity"><b>ORBIT</b><span>NEURAL INTELLIGENCE · FRIDAY</span></header>
+      <div id="fridayVoiceOrb" class="friday-orb" data-state="idle" aria-hidden="true"></div>
+      <div class="neural-readout">
+        <div class="friday-greeting"><strong>Guten Tag, Mr. Stark.</strong><span>Neural Core im Ruhezustand.</span></div>
+        <div class="friday-statusbar"><span><i></i>CORE LINK · LOCAL</span><strong>STANDBY</strong></div>
+        <button id="initiateBtn" class="initiate">INITIALISIEREN</button>
+        <small class="start-hint">Neural Core aktivieren</small>
       </div>
-      <div class="friday-core-wrap" aria-hidden="true">
-        <div id="fridayVoiceOrb" class="friday-orb" data-state="idle"><span class="voice-wave"></span><span class="voice-wave"></span></div>
-        <div class="friday-core-label">FRIDAY · VOICE CORE</div>
-      </div>
-      <div class="friday-greeting"><strong>Guten Tag, Mr. Stark.</strong><span>ORBIT ist bereit.</span></div>
-      <div class="friday-statusbar"><span><i></i>CORE LINK · ORBIT SYNC</span><strong>ONLINE</strong></div>
-      <button id="initiateBtn" class="initiate">INITIATE</button>
-      <small class="start-hint">Tippen, um FRIDAY zu öffnen</small>
     </div>
   </section>
   <div id="app" class="app hidden">
@@ -59,10 +55,10 @@
   <dialog id="entryDialog"><form method="dialog" id="entryForm"><div class="dialog-head"><h3 id="dialogTitle">Eintrag</h3><button value="cancel" class="icon-btn">×</button></div><input id="editText" required placeholder="Inhalt" /><div class="form-row"><select id="editCategory"><option value="thought">Gedanke</option><option value="task">Aufgabe</option><option value="idea">Idee</option></select><input id="editDue" type="date" /></div><label class="check"><input id="editImportant" type="checkbox" /> Wichtig</label><div class="dialog-actions"><button type="button" id="deleteBtn" class="danger-btn">Löschen</button><button value="save" id="saveBtn" class="primary-btn">Speichern</button></div></form></dialog>
   <dialog id="settingsDialog"><form method="dialog"><div class="dialog-head"><h3>FRIDAY Einstellungen</h3><button value="close" class="icon-btn">×</button></div><p>ORBIT synchronisiert Einträge geschützt über ORBIT Sync. PC und iPhone verwenden denselben Sync-Code und damit denselben Datenstand.</p><p>Gmail und Google Kalender werden separat über Google OAuth verbunden. Private Inhalte und private Musik werden nicht im GitHub-Repository gespeichert.</p><button value="close" class="primary-btn full">Fertig</button></form></dialog>
   <script src="three.r128.min.js"></script>
-  <script src="friday-hologram.js?v=1"></script>
+  <script src="neural-core-v2.js?v=6"></script>
   <script src="audio-mix.js?v=1"></script>
-  <script src="boot-sequence.js?v=4"></script>
-  <script src="start-v2.js?v=16"></script>
+
+  <script src="start-v2.js?v=18"></script>
   <script src="app.js?v=10"></script>
   <script src="voice-core.js?v=3"></script>
   <script src="handoff.js?v=1"></script>

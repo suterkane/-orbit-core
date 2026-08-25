@@ -1,6 +1,6 @@
 /* FRIDAY STARTSCREEN · TRUE SPATIAL 3D · CYAN+ORANGE */
 .splash{position:relative;overflow:hidden;min-height:100dvh;display:grid;place-items:center;padding:18px;background:#000;perspective:1800px;perspective-origin:50% 40%;isolation:isolate;transform-style:preserve-3d}
-.friday-hologram{position:absolute;inset:0;width:100%;height:100%;z-index:-1;pointer-events:none;opacity:.88;filter:drop-shadow(0 0 22px rgba(0,229,255,.2))}
+.friday-hologram{position:absolute;inset:0;width:100%;height:100%;z-index:1;pointer-events:none;opacity:1;filter:drop-shadow(0 0 28px rgba(0,229,255,.24))}
 .splash:before{content:"";position:absolute;inset:-25%;z-index:-5;background:
 radial-gradient(ellipse at 48% 38%,rgba(0,229,255,.32) 0 5%,rgba(0,180,220,.15) 12%,transparent 32%),
 radial-gradient(ellipse at 52% 62%,rgba(255,149,0,.18) 0 8%,transparent 28%),
@@ -55,3 +55,20 @@ radial-gradient(circle at 50% 50%,transparent 0 40%,rgba(0,0,0,.15) 72%,rgba(0,0
 @keyframes ringOrbOuter{to{transform:translateZ(85px) rotateX(22deg) rotate(360deg)}}
 @keyframes orbFloat{0%,100%{transform:translateZ(220px) rotateX(-24deg) scale(.96)}50%{transform:translateZ(258px) rotateX(-18deg) scale(1.06)}}
 @keyframes wave3d{0%{opacity:.68;transform:translateZ(18px) scale(.58)}100%{opacity:0;transform:translateZ(-42px) scale(1.4)}}
+/* Neural Core V2 is the sole visible core surface. */
+.friday-orb { display:none; }
+.neural-core-fallback { position:absolute; inset:50% auto auto 50%; width:min(52vw,260px); aspect-ratio:1; transform:translate(-50%,-50%); border-radius:50%; background:radial-gradient(circle,#dfffff 0 2%,#32e6ff55 12%,#00bcd422 48%,transparent 70%); box-shadow:0 0 42px #00bcd488,inset 0 0 28px #32e6ff66; opacity:.86; }
+.neural-core-fallback::after { content:""; position:absolute; inset:18%; border:1px dotted #dfffffaa; border-radius:50%; }
+@media (prefers-reduced-motion:reduce) { .neural-core-fallback { transition:none!important; animation:none!important; } }
+
+/* Neural Core V2 composition: the intelligence is the interface. */
+.neural-stage{position:relative;z-index:3;width:100%;min-height:100dvh;display:grid;grid-template-rows:auto 1fr auto;padding:max(24px,env(safe-area-inset-top)) clamp(20px,5vw,72px) max(26px,env(safe-area-inset-bottom));pointer-events:none}
+.neural-identity{align-self:start;display:flex;align-items:center;justify-content:space-between;border-top:1px solid rgba(0,229,255,.28);padding-top:12px;font:600 9px/1.2 ui-monospace,SFMono-Regular,Consolas,monospace;letter-spacing:.3em;color:rgba(111,226,242,.58);text-transform:uppercase}
+.neural-identity b{font-size:12px;letter-spacing:.55em;color:#8ff5ff;text-shadow:0 0 16px rgba(0,229,255,.5)}
+.neural-readout{align-self:end;justify-self:center;width:min(92vw,460px);display:grid;gap:10px;justify-items:center;padding:20px 18px 6px;background:linear-gradient(180deg,transparent,rgba(0,10,15,.72) 34%,rgba(0,7,11,.92));mask:linear-gradient(transparent,#000 30%);pointer-events:auto}
+.neural-readout .friday-greeting{margin:0;transform:none}.neural-readout .friday-greeting strong{font-size:clamp(14px,3.8vw,18px);font-weight:450}.neural-readout .friday-greeting span{font-size:8px;color:#5cb6c2}
+.neural-readout .friday-statusbar{width:100%;margin:0;transform:none;background:rgba(0,13,18,.5);border-color:rgba(0,229,255,.18)}
+.neural-readout .initiate{margin-top:2px;transform:none;min-width:min(78vw,280px);border-color:rgba(0,229,255,.36);background:linear-gradient(180deg,rgba(0,67,82,.78),rgba(0,17,24,.95));color:#bffbff;box-shadow:inset 0 0 28px rgba(0,229,255,.13),0 0 36px rgba(0,210,255,.13);font-size:10px}
+.neural-readout .start-hint{transform:none;color:#456c73}
+@media(max-width:620px){.neural-stage{padding-left:16px;padding-right:16px}.neural-identity span{font-size:6px;letter-spacing:.2em}.neural-readout{padding-bottom:2px}}
+.hud-core.neural-docked>div{opacity:0!important;transition:opacity .28s ease}.hud-core.neural-docked{position:relative;overflow:hidden;background:radial-gradient(circle,rgba(0,229,255,.08),transparent 67%)}
