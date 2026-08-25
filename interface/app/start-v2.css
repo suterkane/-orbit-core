@@ -72,3 +72,7 @@ radial-gradient(circle at 50% 50%,transparent 0 40%,rgba(0,0,0,.15) 72%,rgba(0,0
 .neural-readout .start-hint{transform:none;color:#456c73}
 @media(max-width:620px){.neural-stage{padding-left:16px;padding-right:16px}.neural-identity span{font-size:6px;letter-spacing:.2em}.neural-readout{padding-bottom:2px}}
 .hud-core.neural-docked>div{opacity:0!important;transition:opacity .28s ease}.hud-core.neural-docked{position:relative;overflow:hidden;background:radial-gradient(circle,rgba(0,229,255,.08),transparent 67%)}
+/* Persistent-core handoff: reveal the destination below the moving canvas. */
+.app.handoff-underlay{position:fixed;inset:0;z-index:4;overflow:auto;opacity:1}
+.splash{transition:opacity 500ms cubic-bezier(.2,.8,.2,1)}
+.splash.handoff-out{position:fixed;inset:0;z-index:10;opacity:0;pointer-events:none}
