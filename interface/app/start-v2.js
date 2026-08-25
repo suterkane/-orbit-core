@@ -38,13 +38,26 @@
       ['Guten Abend, Boss.','Guten Abend, Mister Stark.','Da sind Sie ja, Boss. Der Tag war offenbar noch nicht teuer genug.','Guten Abend. Ich hatte schon befürchtet, Sie machen heute pünktlich Schluss.'];
     return pick(pool);
   }
+  async function getVaultBriefing(){
+    try{
+      const r=await fetch('./vault_briefing.json?_='+Date.now(),{cache:'no-store'});
+      if(!r.ok)return'';
+      const d=await r.json();
+      if(!d||!d.projects||!d.projects.length)return'';
+      const names=d.projects.slice(0,3)
+        .map(p=>p.replace(/Medizinische Chronik|HWS,BWS,LWS|HWS|BWS|LWS|-/g,' ').replace(/\s+/g,' ').trim())
+        .filter(p=>p.length>3);
+      return names.length?'Aktive Bereiche aus deinem Vault: '+names.join(', ')+'.':'';
+    }catch{return''}
+  }
   async function getBootNarration(){
     let briefing='',briefingData=null;
     try{if(window.ORBITIntegrations?.getBriefingData){briefingData=await window.ORBITIntegrations.getBriefingData();briefing=window.ORBITIntegrations.buildBriefingSummary(briefingData)}else if(window.ORBITIntegrations?.getBriefingSummary)briefing=await window.ORBITIntegrations.getBriefingSummary()}catch{}
+    let vaultInfo='';try{vaultInfo=await getVaultBriefing()}catch{}
     const now=new Date(),dateText=new Intl.DateTimeFormat('de-DE',{weekday:'long',day:'numeric',month:'long'}).format(now);window.ORBITPanorama?.applyBriefing(briefingData||{date:dateText});
     const situation=getSituation();
     const closing=situation==='serious'?'Ich habe die kritischen Punkte priorisiert. Wir können anfangen.':pick(['Alle Systeme stabil. Bereit.','Systeme bereit, Boss.','ORBIT steht. Ich auch.','Bereit, Mister Stark.']);
-    return [getGreeting(),`Heute ist ${dateText}.`,'ORBIT Core ist online.',briefing,closing].filter(Boolean).join(' ');
+    return [getGreeting(),`Heute ist ${dateText}.`,'ORBIT Core ist online.',briefing,vaultInfo,closing].filter(Boolean).join(' ');
   }
 
   async function tryBundledMusic(){
