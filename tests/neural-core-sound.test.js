@@ -66,7 +66,6 @@ assert.match(source, /sound\.cue\s*\(machine\.state\)/, 'visual state transition
 assert.match(source, /sound\.setVoiceActive/, 'voice activity is explicitly prioritized');
 const launchBody = start.match(/async function launchWithVoice\([^]*?(?=\n\s*window\.ORBITFriday)/);
 assert.ok(launchBody, 'launch handler exists');
-assert.match(launchBody[0], /unlockAudio\(\)[^]*?assemble\(\)/, 'AudioContext unlock happens in the initiate handler before assembly');
-assert.doesNotMatch(launchBody[0], /startBootMusic\s*\(/, 'rejected continuous score remains outside the active path');
+assert.match(launchBody[0], /unlockAudio\(\)[^]*?startBootMusic\(\)[^]*?assemble\(\)/, 'trusted initiate gesture unlocks audio, starts finite score, then assembles');
 
 console.log('Neural Core reactive one-shot sound contracts passed');

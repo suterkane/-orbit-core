@@ -35,6 +35,6 @@ assert.match(voice, /const sharedState=next==='replying'\?'speaking':next[\s\S]*
 assert.match(voice, /ORBITCompanion\?\.updateShared\(\{conversation:/, 'completed dialogue turns must be shared');
 
 for(const asset of ['companion-state.js?v=1','companion-runtime.js?v=1','companion-sync.js?v=1','app.js?v=11','voice-core.js?v=5'])assert.ok(sw.includes(`'${asset}'`), `${asset} must be precached`);
-assert.match(sw, /orbit-neural-core-v2-presence-r7/);
+assert.match(sw, /orbit-neural-core-v2-panorama-r8/);
 
 console.log('ORBIT Companion browser integration contracts passed');

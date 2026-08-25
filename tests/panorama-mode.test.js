@@ -1,0 +1,26 @@
+const assert=require('node:assert/strict');
+const fs=require('node:fs');
+const path=require('node:path');
+const root=path.join(__dirname,'..');
+const app=path.join(root,'interface','app');
+const html=fs.readFileSync(path.join(app,'index.html'),'utf8');
+const css=fs.readFileSync(path.join(app,'panorama.css'),'utf8');
+const js=fs.readFileSync(path.join(app,'panorama.js'),'utf8');
+const launcher=fs.readFileSync(path.join(root,'start-orbit-panorama.cmd'),'utf8');
+
+assert.match(html,/panorama\.css\?v=1/);
+assert.match(html,/panorama\.js\?v=1/);
+assert.match(html,/class="panorama-wing panorama-left"/);
+assert.match(html,/class="panorama-wing panorama-right"/);
+assert.match(js,/URLSearchParams\(location\.search\)[\s\S]*panorama/);
+assert.match(js,/documentElement\.classList\.add\('orbit-panorama'\)/);
+assert.match(css,/\.orbit-panorama \.splash\s*\{[^}]*width:5120px[^}]*height:1440px/s);
+assert.match(css,/\.orbit-panorama \.neural-stage\s*\{[^}]*left:2560px/s);
+assert.match(css,/\.orbit-panorama \.panorama-left\s*\{[^}]*left:clamp\(/s);
+assert.match(css,/\.orbit-panorama \.panorama-right\s*\{[^}]*right:clamp\(/s);
+assert.match(css,/@media\(max-aspect-ratio:3\/1\)[\s\S]*\.panorama-wing\s*\{display:none/);
+assert.match(launcher,/--window-position=0,0/);
+assert.match(launcher,/--window-size=5120,1440/);
+assert.match(launcher,/panorama=dual/);
+assert.doesNotMatch(launcher,/--kiosk/, 'kiosk would fullscreen onto only one monitor');
+console.log('ORBIT dual-monitor panorama contracts passed');

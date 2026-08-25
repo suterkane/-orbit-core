@@ -1,0 +1,25 @@
+const assert=require('node:assert/strict');
+const fs=require('node:fs');
+const path=require('node:path');
+const app=path.join(__dirname,'..','interface','app');
+const start=fs.readFileSync(path.join(app,'start-v2.js'),'utf8');
+const integrations=fs.readFileSync(path.join(app,'integrations.js'),'utf8');
+const panorama=fs.readFileSync(path.join(app,'panorama.js'),'utf8');
+const sw=fs.readFileSync(path.join(app,'service-worker.js'),'utf8');
+
+assert.match(integrations,/function buildBriefingData\(\)/);
+assert.match(integrations,/mailRows\.slice\(0,2\)/, 'briefing may name at most two current mails');
+assert.match(integrations,/nextEvent/, 'briefing must identify the next real calendar event');
+assert.match(integrations,/getBriefingData/, 'structured briefing must be public');
+assert.match(panorama,/function applyBriefing\(data(?:=\{\})?\)/);
+for(const id of ['panoramaDate','panoramaCalendar','panoramaMail','panoramaTasks','panoramaPriority'])assert.match(panorama,new RegExp(id));
+assert.match(start,/weekday:'long'[\s\S]*day:'numeric'[\s\S]*month:'long'/, 'FRIDAY states the current date');
+assert.match(start,/getBriefingData/);
+assert.match(start,/ORBITPanorama\?\.applyBriefing/);
+assert.match(start,/MUSIC_MAX_MS=20000/);
+assert.match(start,/audio\.loop=false/);
+assert.match(start,/void startBootMusic\(\)/);
+assert.match(start,/speak\(narration,\{onend:\(\)=>stopBootMusic\(\)\}\)/);
+assert.match(start,/setMusicLevel\(active\?AUDIO_MIX\.ducked:AUDIO_MIX\.handoff/);
+assert.match(sw,/assets\/orbit-cinematic-boot\.m4a/);
+console.log('ORBIT cinematic briefing contracts passed');

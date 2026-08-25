@@ -47,26 +47,33 @@
     const upcoming=dated.filter(x=>x.date>=now).sort((a,b)=>a.date-b.date)[0];if(upcoming&&focus){const strong=focus.querySelector('strong'),small=focus.querySelector('small'),current=strong?.textContent||'';if(!current||current==='Keine geplante Aufgabe'||current===focus.dataset.calendarTitle){if(strong)strong.textContent=upcoming.event.summary||'Kalendertermin';if(small)small.textContent=`${formatEventStart(upcoming.event.start)} · Google Kalender`;focus.dataset.calendarTitle=upcoming.event.summary||'Kalendertermin';focus.onclick=null}}
   }
 
-  function buildBriefingSummary(){
+  function buildBriefingData(){
     const now=new Date(),today=dayKey(now),weekEnd=new Date(now);weekEnd.setDate(weekEnd.getDate()+7);
-    const dated=calendarRows.map(e=>eventDate(e.start)).filter(Boolean);
-    const todayEvents=dated.filter(d=>dayKey(d)===today).length;
-    const weekEvents=dated.filter(d=>d>now&&d<=weekEnd).length;
-    const overdue=Number(qs('#overdueCount')?.textContent)||0;
-    const open=Number(qs('#openCount')?.textContent)||0;
+    const dated=calendarRows.map(event=>({event,date:eventDate(event.start)})).filter(x=>x.date).sort((a,b)=>a.date-b.date);
+    const todayEvents=dated.filter(x=>dayKey(x.date)===today);
+    const weekEvents=dated.filter(x=>x.date>now&&x.date<=weekEnd);
+    const nextEvent=dated.find(x=>x.date>=now)||null;
+    const overdue=Number(qs('#overdueCount')?.textContent)||0,open=Number(qs('#openCount')?.textContent)||0;
+    const mails=mailRows.slice(0,2).map(mail=>String(mail.subject||'E-Mail ohne Betreff').replace(/\s+/g,' ').trim().slice(0,120));
+    const calendarText=nextEvent?`${nextEvent.event.summary||'Kalendertermin'}, ${formatEventStart(nextEvent.event.start)}`:todayEvents.length?`${todayEvents.length} Termine heute`:weekEvents.length?`${weekEvents.length} Termine in den nächsten sieben Tagen`:'Keine dringenden Termine';
+    const mailText=mails.length?`${mailRows.length} aktuell. ${mails.join('. ')}`:'Keine neuen E-Mails';
+    const taskText=overdue?`${overdue} überfällig, ${open} offen`:open?`${open} Aufgaben offen`:'Keine offenen Aufgaben';
+    const priority=overdue?'Überfällige Aufgaben zuerst':nextEvent?(nextEvent.event.summary||'Nächsten Termin vorbereiten'):open?'Offene Aufgaben priorisieren':'Keine akute Priorität';
+    return{date:new Intl.DateTimeFormat('de-DE',{weekday:'long',day:'numeric',month:'long',year:'numeric'}).format(now),mailCount:mailRows.length,mails,mailText,todayEvents:todayEvents.length,weekEvents:weekEvents.length,nextEvent:nextEvent?{summary:nextEvent.event.summary||'Kalendertermin',start:formatEventStart(nextEvent.event.start)}:null,calendarText,overdue,open,taskText,priority};
+  }
+
+  function buildBriefingSummary(data=buildBriefingData()){
     const parts=[];
-    parts.push(`Im Posteingang liegen ${mailRows.length} aktuelle E-Mail${mailRows.length===1?'':'s'}.`);
-    if(todayEvents>0)parts.push(`Für heute stehen ${todayEvents} Kalendereintrag${todayEvents===1?'':'e'} an.`);
-    else if(weekEvents>0)parts.push(`In den nächsten sieben Tagen stehen ${weekEvents} Termine an.`);
-    else parts.push('Im Kalender liegt aktuell kein dringender Termin an.');
-    if(overdue>0)parts.push(`${overdue} Aufgabe${overdue===1?' ist':'n sind'} überfällig.`);
-    else if(open>0)parts.push(`${open} offene Aufgabe${open===1?' wartet':'n warten'} in ORBIT.`);
+    parts.push(data.mailCount?`Im Posteingang liegen ${data.mailCount} aktuelle E-Mail${data.mailCount===1?'':'s'}.`:'Der Posteingang ist ruhig.');
+    if(data.mails.length)parts.push(`Relevant sind ${data.mails.join(' und ')}.`);
+    if(data.nextEvent)parts.push(`Der nächste Termin ist ${data.nextEvent.summary}, ${data.nextEvent.start}.`);else parts.push('Im Kalender liegt kein dringender Termin an.');
+    if(data.overdue)parts.push(`${data.overdue} Aufgabe${data.overdue===1?' ist':'n sind'} überfällig.`);else if(data.open)parts.push(`${data.open} offene Aufgabe${data.open===1?' wartet':'n warten'} in ORBIT.`);
+    parts.push(`Nächste Priorität: ${data.priority}.`);
     return parts.join(' ');
   }
 
-  async function getBriefingSummary(){
-    try{await loadGoogleData();return buildBriefingSummary()}catch{return buildBriefingSummary()}
-  }
+  async function getBriefingData(){try{await loadGoogleData()}catch{}return buildBriefingData()}
+  async function getBriefingSummary(){const data=await getBriefingData();return buildBriefingSummary(data)}
 
   function ensureMailReader(){
     let overlay=qs('#mailReaderOverlay');if(overlay)return overlay;
@@ -123,5 +130,5 @@
     const params=new URLSearchParams(location.search);if(params.get('google')==='connected'){history.replaceState({},'',location.pathname);setGoogleStatus('Google verbunden · Live-Daten werden geladen …');loadGoogleData()}else if(params.get('google')==='error'){history.replaceState({},'',location.pathname);setGoogleStatus('Google-Freigabe abgebrochen')}else loadGoogleData();
   });
 
-  window.ORBITIntegrations={openTaskDialog,connectGoogle,loadGoogleData,applyCalendarToDashboard,openMail,trashCurrentMail,getBriefingSummary,buildBriefingSummary};
+  window.ORBITIntegrations={openTaskDialog,connectGoogle,loadGoogleData,applyCalendarToDashboard,openMail,trashCurrentMail,getBriefingData,getBriefingSummary,buildBriefingData,buildBriefingSummary};
 })();
