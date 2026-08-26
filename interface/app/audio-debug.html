@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Audio Debug Test</title>
+  <style>
+    body {
+      background: #000;
+      color: #00e5ff;
+      font-family: monospace;
+      padding: 20px;
+    }
+    button {
+      padding: 15px 30px;
+      margin: 10px;
+      background: #00e5ff;
+      border: none;
+      color: #000;
+      font-size: 16px;
+      cursor: pointer;
+      border-radius: 5px;
+    }
+    button:hover {
+      background: #00ff88;
+    }
+    #log {
+      margin-top: 20px;
+      padding: 15px;
+      background: #001a1f;
+      border: 1px solid #00e5ff;
+      max-height: 400px;
+      overflow-y: auto;
+    }
+    .log-entry {
+      margin: 5px 0;
+      padding: 5px;
+    }
+    .error { color: #ff4444; }
+    .success { color: #00ff88; }
+    .info { color: #00e5ff; }
+  </style>
+</head>
+<body>
+  <h1>JARVIS Audio Debug</h1>
+  
+  <button id="test-music">Test Music</button>
+  <button id="test-beep">Test Beep</button>
+  <button id="clear-log">Clear Log</button>
+  
+  <div id="log"></div>
+  
+  <script>
+    const log = document.getElementById('log');
+    
+    function addLog(message, type = 'info') {
+      const entry = document.createElement('div');
+      entry.className = `log-entry ${type}`;
+      entry.textContent = `[${new Date().toLocaleTimeString()}] ${message}`;
+      log.appendChild(entry);
+      log.scrollTop = log.scrollHeight;
+      console.log(message);
+    }
+    
+    let audioContext = null;
+    let musicBuffer = null;
+    let beepBuffer = null;
+    
+    async function initAudio() {
+      addLog('Initializing audio context...', 'info');
+      
+      try {
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        audioContext = new AudioContext();
+        addLog(`✓ AudioContext created (state: ${audioContext.state})`, 'success');
+        
+        // Load music
+        addLog('Loading jarvis-real.wav...', 'info');
+        try {
+          const musicResponse = await fetch('./private-assets/jarvis-real.wav');
+          addLog(`Music fetch status: ${musicResponse.status}`, musicResponse.ok ? 'success' : 'error');
+          
+          if (musicResponse.ok) {
+            const size = musicResponse.headers.get('content-length');
+            addLog(`Music file size: ${size} bytes`, 'info');
+            
+            const arrayBuffer = await musicResponse.arrayBuffer();
+            addLog(`Downloaded ${arrayBuffer.byteLength} bytes`, 'success');
+            
+            musicBuffer = await audioContext.decodeAudioData(arrayBuffer);
+            addLog(`✓ Music decoded: ${musicBuffer.duration.toFixed(2)}s, ${musicBuffer.numberOfChannels} channels`, 'success');
+          }
+        } catch (err) {
+          addLog(`❌ Music load failed: ${err.message}`, 'error');
+          console.error('Music error:', err);
+        }
+        
+        // Load beep
+        addLog('Loading beep.wav...', 'info');
+        try {
+          const beepResponse = await fetch('./private-assets/sounds/beep.wav');
+          if (beepResponse.ok) {
+            const beepArrayBuffer = await beepResponse.arrayBuffer();
+            beepBuffer = await audioContext.decodeAudioData(beepArrayBuffer);
+            addLog(`✓ Beep decoded: ${beepBuffer.duration.toFixed(2)}s`, 'success');
+          }
+        } catch (err) {
+          addLog(`❌ Beep load failed: ${err.message}`, 'error');
+        }
+        
+        return true;
+        
+      } catch (error) {
+        addLog(`❌ Audio init failed: ${error.message}`, 'error');
+        console.error('Init error:', error);
+        return false;
+      }
+    }
+    
+    async function playMusic() {
+      if (!audioContext) {
+        addLog('❌ Audio context not initialized', 'error');
+        return;
+      }
+      
+      if (!musicBuffer) {
+        addLog('❌ Music buffer not loaded', 'error');
+        return;
+      }
+      
+      try {
+        addLog('Resuming audio context...', 'info');
+        await audioContext.resume();
+        addLog(`AudioContext state: ${audioContext.state}`, 'info');
+        
+        addLog('Creating audio source...', 'info');
+        const source = audioContext.createBufferSource();
+        const gain = audioContext.createGain();
+        
+        source.buffer = musicBuffer;
+        source.loop = false; // Don't loop for test
+        gain.gain.value = 0.7;
+        
+        source.connect(gain);
+        gain.connect(audioContext.destination);
+        
+        source.onended = () => {
+          addLog('✓ Music playback ended', 'success');
+        };
+        
+        addLog('Starting playback...', 'info');
+        source.start(0);
+        addLog('✓ Music playing!', 'success');
+        
+      } catch (err) {
+        addLog(`❌ Playback failed: ${err.message}`, 'error');
+        console.error('Playback error:', err);
+      }
+    }
+    
+    async function playBeep() {
+      if (!audioContext || !beepBuffer) {
+        addLog('❌ Beep not ready', 'error');
+        return;
+      }
+      
+      try {
+        await audioContext.resume();
+        const source = audioContext.createBufferSource();
+        const gain = audioContext.createGain();
+        
+        source.buffer = beepBuffer;
+        gain.gain.value = 0.5;
+        
+        source.connect(gain);
+        gain.connect(audioContext.destination);
+        
+        source.start(0);
+        addLog('✓ Beep played', 'success');
+        
+      } catch (err) {
+        addLog(`❌ Beep failed: ${err.message}`, 'error');
+      }
+    }
+    
+    // Initialize on load
+    window.addEventListener('DOMContentLoaded', async () => {
+      addLog('=== JARVIS Audio Debug Started ===', 'info');
+      await initAudio();
+    });
+    
+    // Button handlers
+    document.getElementById('test-music').addEventListener('click', playMusic);
+    document.getElementById('test-beep').addEventListener('click', playBeep);
+    document.getElementById('clear-log').addEventListener('click', () => {
+      log.innerHTML = '';
+    });
+  </script>
+</body>
+</html>

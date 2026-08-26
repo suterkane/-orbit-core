@@ -6,7 +6,7 @@
   const BUNDLED_MUSIC_URL='./assets/orbit-cinematic-boot.m4a';
   const LOCAL_NEURAL_VOICE_URL='./assets/friday-neural-de.ogg';
   const HANDOFF_DELAY=4550;
-  const MUSIC_MAX_MS=90000;
+  const MUSIC_MAX_MS=20000;
   const LOCAL_VOICE_RATE=1.12;
   const FRIDAY_VOICE_PROFILE={lang:'de-DE',rate:1.08,pitch:1.0,volume:1};
   const AUDIO_MIX=window.ORBITAudioMix||{private:.42,synthetic:.31,ducked:.14,handoff:.29};
@@ -70,14 +70,14 @@
 
   async function tryBundledMusic(){
     try{
-      const audio=new Audio(BUNDLED_MUSIC_URL);audio.loop=true;audio.preload='auto';audio.volume=AUDIO_MIX.private;
+      const audio=new Audio(BUNDLED_MUSIC_URL);audio.loop=false;audio.preload='auto';audio.volume=AUDIO_MIX.private;
       await audio.play();privateMusic=audio;usingPrivateMusic=true;setMusicLevel(orb()?.dataset.state==='speaking'?AUDIO_MIX.ducked:AUDIO_MIX.private,.18);return true;
     }catch{try{privateMusic?.pause()}catch{}privateMusic=null;usingPrivateMusic=false;return false}
   }
   async function tryPrivateMusic(){
     if(privateMusic&&usingPrivateMusic){try{await privateMusic.play();return true}catch{return false}}
     try{
-      const audio=new Audio(PRIVATE_MUSIC_URL);audio.loop=true;audio.preload='auto';audio.volume=AUDIO_MIX.private;
+      const audio=new Audio(PRIVATE_MUSIC_URL);audio.loop=false;audio.preload='auto';audio.volume=AUDIO_MIX.private;
       await audio.play();privateMusic=audio;usingPrivateMusic=true;setMusicLevel(orb()?.dataset.state==='speaking'?AUDIO_MIX.ducked:AUDIO_MIX.private,.18);return true;
     }catch{try{privateMusic?.pause()}catch{}privateMusic=null;usingPrivateMusic=false;return false}
   }

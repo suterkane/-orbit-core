@@ -12,7 +12,7 @@ const pullCloudSource = app.slice(app.indexOf('async function pullCloud'), app.i
 const stateIndex = html.indexOf('companion-state.js?v=1');
 const runtimeIndex = html.indexOf('companion-runtime.js?v=1');
 const syncIndex = html.indexOf('companion-sync.js?v=1');
-const appIndex = html.indexOf('app.js?v=11');
+const appIndex = html.indexOf('app.js?v=13');
 assert.ok(stateIndex >= 0 && stateIndex < runtimeIndex && runtimeIndex < syncIndex && syncIndex < appIndex, 'companion scripts must load before app.js in dependency order');
 assert.match(html, /id="deviceStatus"/);
 assert.match(html, /id="handoffBtn"/);
@@ -34,7 +34,7 @@ assert.doesNotMatch(app, /updateShared\([^)]*syncKey/s, 'sync key must never ent
 assert.match(voice, /const sharedState=next==='replying'\?'speaking':next[\s\S]*ORBITCompanion\?\.updateShared\(\{voice:\{state:sharedState\}\}\)/, 'voice UI replying state must map to protocol speaking state');
 assert.match(voice, /ORBITCompanion\?\.updateShared\(\{conversation:/, 'completed dialogue turns must be shared');
 
-for(const asset of ['companion-state.js?v=1','companion-runtime.js?v=1','companion-sync.js?v=1','app.js?v=11','voice-core.js?v=5'])assert.ok(sw.includes(`'${asset}'`), `${asset} must be precached`);
-assert.match(sw, /orbit-neural-core-v2-panorama-r8/);
+for(const asset of ['companion-state.js?v=1','companion-runtime.js?v=1','companion-sync.js?v=1','app.js?v=13','voice-core.js?v=5'])assert.ok(sw.includes(`'${asset}'`), `${asset} must be precached`);
+assert.match(sw, /orbit-neural-core-v2-panorama-r12/);
 
 console.log('ORBIT Companion browser integration contracts passed');
