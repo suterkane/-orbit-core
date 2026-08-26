@@ -86,7 +86,13 @@
   <script src="three.r128.min.js"></script>
   <script src="neural-core-v2.js?v=7"></script>
   <script src="audio-mix.js?v=1"></script>
-  <script src="panorama.js?v=1"></script>
+  <script>
+    // Redirect zu Startup auf erstem Load
+    if (!sessionStorage.getItem('startup-shown')) {
+      sessionStorage.setItem('startup-shown', 'true');
+      window.location.href = '/startup.html';
+    }
+  </script>
 
   <script src="friday-v2-storage.js"></script>
   <script src="friday-v2-neural.js"></script>
