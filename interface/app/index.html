@@ -87,11 +87,13 @@
   <script src="neural-core-v2.js?v=7"></script>
   <script src="audio-mix.js?v=1"></script>
   <script>
-    // Redirect zu Startup auf erstem Load
-    if (!sessionStorage.getItem('startup-shown')) {
-      sessionStorage.setItem('startup-shown', 'true');
-      window.location.href = '/startup.html';
-    }
+    // Auto-redirect zu Startup beim ersten Load
+    window.addEventListener('DOMContentLoaded', () => {
+      if (!localStorage.getItem('startup-done')) {
+        localStorage.setItem('startup-done', 'true');
+        window.location.href = '/startup.html';
+      }
+    });
   </script>
 
   <script src="friday-v2-storage.js"></script>
