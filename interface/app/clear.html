@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>ORBIT · Cache Reset</title>
+  <style>
+    body{background:#000;color:#00e5ff;font-family:ui-monospace,monospace;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;margin:0;gap:16px;text-align:center;padding:20px}
+    h1{font-size:20px;letter-spacing:.3em;margin:0}
+    p{font-size:12px;letter-spacing:.15em;color:#00b8d4;margin:0}
+    #status{font-size:11px;color:#87dd76;letter-spacing:.15em;min-height:20px}
+    a{display:inline-block;margin-top:20px;padding:14px 32px;border:1px solid #00e5ff;border-radius:999px;color:#00e5ff;text-decoration:none;font-size:11px;letter-spacing:.3em}
+  </style>
+</head>
+<body>
+  <h1>ORBIT</h1>
+  <p>SYSTEM CACHE WIRD GELEERT</p>
+  <div id="status">Warte …</div>
+  <a id="link" href="/" style="display:none">ORBIT STARTEN →</a>
+  <script>
+    const st = document.getElementById('status');
+    const lk = document.getElementById('link');
+    async function clear() {
+      try {
+        // Service Workers deregistrieren
+        if ('serviceWorker' in navigator) {
+          const regs = await navigator.serviceWorker.getRegistrations();
+          for (const r of regs) await r.unregister();
+          st.textContent = regs.length + ' Service Worker entfernt.';
+        }
+        // Alle Caches löschen
+        if ('caches' in window) {
+          const keys = await caches.keys();
+          for (const k of keys) await caches.delete(k);
+          st.textContent = 'Cache geleert (' + keys.length + ' Einträge). Bereit.';
+        }
+        await new Promise(r => setTimeout(r, 1200));
+        st.textContent = '✓ Fertig — ORBIT neu laden.';
+        lk.style.display = 'inline-block';
+      } catch(e) {
+        st.textContent = 'Fehler: ' + e.message;
+        lk.style.display = 'inline-block';
+      }
+    }
+    clear();
+  </script>
+</body>
+</html>
