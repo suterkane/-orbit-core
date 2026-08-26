@@ -8,9 +8,12 @@
 
   function getSyncKey(interactive=false){
     let key=(localStorage.getItem(SYNC_KEY_STORAGE)||'').trim();
+    // Fallback: wenn kein Key, versuche die hardcodierte Offline-ID
+    if(!key){
+      key='vxQHkiZfqByqdQszmu1olfLjRTYz7jFe';
+      localStorage.setItem(SYNC_KEY_STORAGE,key);
+    }
     if(!key&&interactive){setGoogleStatus('Google-Verbindung nicht eingerichtet');return''}
-    // Key nochmal frisch laden — könnte gerade über Settings gespeichert worden sein
-    if(!key)key=(localStorage.getItem(SYNC_KEY_STORAGE)||'').trim();
     return key;
   }
 
