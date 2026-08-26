@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#001014" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+  <title>ORBIT · FRIDAY</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='22' fill='none' stroke='%2300e5ff' stroke-width='5'/%3E%3Ccircle cx='32' cy='32' r='7' fill='%23ff9500'/%3E%3C/svg%3E" />
+  <link rel="manifest" href="manifest.webmanifest" />
+  <link rel="stylesheet" href="friday-cinematic.css" />
+  <link rel="stylesheet" href="styles.css?v=8" />
+  <link rel="stylesheet" href="start-v2.css?v=21" />
+
+  <link rel="stylesheet" href="integrations.css?v=1" />
+  <link rel="stylesheet" href="panorama.css?v=1" />
+</head>
+<body>
+  <section id="splash" class="splash" aria-label="FRIDAY Start">
+    <canvas id="fridayHologram" class="friday-hologram" aria-hidden="true"></canvas>
+    <aside class="panorama-wing panorama-left" aria-label="Tageslage">
+      <span class="wing-kicker">FRIDAY / TAGESLAGE</span><h2>Willkommen zurück.</h2>
+      <div class="wing-module">
+        <span>WETTER</span>
+        <strong id="panorama-weather">Wetterdaten werden geladen</strong>
+        <small id="panorama-weather-detail">Live-Aktualisierung</small>
+      </div>
+      <div class="wing-module">
+        <span>VAULT FOCUS</span>
+        <strong id="panorama-vault-focus">ORBIT · FRIDAY</strong>
+        <small id="panorama-vault-mission">Mission 21 · Begleiter</small>
+      </div>
+      <div class="wing-module priority">
+        <span>NÄCHSTE PRIORITÄT</span>
+        <strong id="panorama-priority">Keine geplante Aufgabe</strong>
+        <small id="panorama-priority-detail">Bereit für nächsten Auftrag</small>
+      </div>
+    </aside>
+    <div class="neural-stage">
+      <header class="neural-identity"><b>ORBIT</b><span>NEURAL INTELLIGENCE · FRIDAY</span></header>
+      <div id="fridayVoiceOrb" class="friday-orb" data-state="idle" aria-hidden="true"></div>
+      <div class="neural-readout">
+        <div class="friday-greeting" id="fridayGreeting"><strong>Guten Tag, Mr. Stark.</strong><span>Neural Core im Ruhezustand.</span></div>
+        <div class="friday-statusbar"><span><i></i>CORE LINK · LOCAL</span><strong>STANDBY</strong></div>
+        <button id="initiateBtn" class="initiate">INITIALISIEREN</button>
+        <small class="start-hint">Neural Core aktivieren</small>
+      </div>
+    </div>
+    <aside class="panorama-wing panorama-right" aria-label="Kommunikationslage">
+      <span class="wing-kicker">ORBIT / KOMMUNIKATION</span><h2>Systeme online.</h2>
+      <div class="wing-module">
+        <span>GMAIL STATUS</span>
+        <strong id="panorama-gmail-status">Posteingang wird geprüft</strong>
+        <span id="panorama-gmail-badge" style="visibility:hidden">0</span>
+        <small id="panorama-gmail-detail">Ungelesen · Live-Check</small>
+      </div>
+      <div class="wing-module" data-task-module>
+        <span>AUFGABEN-COUNTER</span>
+        <strong id="panorama-tasks-counter">0 offen</strong>
+        <small>
+          <div id="panorama-tasks-today">0 heute</div>
+          <div id="panorama-tasks-overdue">0 überfällig</div>
+        </small>
+      </div>
+      <div class="wing-module priority">
+        <span>CRYPTO LIVE</span>
+        <div id="panorama-crypto-list" style="margin-top:8px"></div>
+        <small style="margin-top:12px">CoinGecko API · 30s Refresh</small>
+      </div>
+    </aside>
+  </section>
+  <div id="app" class="app hidden">
+    <header class="topbar"><div><span class="eyebrow">ORBIT CONTROL CENTER</span><h2>Guten Tag, Mr. Stark.</h2></div><div class="topbar-actions"><button id="voiceCoreBtn" class="icon-btn voice-core-btn" data-state="idle" aria-label="Mit FRIDAY sprechen" aria-pressed="false">◉</button><button id="settingsBtn" class="icon-btn" aria-label="Einstellungen">⚙</button></div></header>
+    <main>
+      <section id="dashboard" class="view active">
+        <section id="voiceDialogue" class="voice-dialogue" aria-live="polite"><div><span>VOICE CORE</span><strong id="voiceState">Bereit</strong></div><p id="voiceTranscript">Tippe auf den leuchtenden Voice-Core und sprich mit FRIDAY.</p><small id="voiceResponse">Unterstützt: Zentrale, Aufgaben, Status und neue Einträge.</small></section>
+        <div class="hero-card hud-hero"><div class="hud-copy"><span>FRIDAY / ORBIT CORE</span><h3>System online.</h3><p id="heroText">Bereit für die nächste präzise Aktion.</p><div class="hud-statusline"><i></i> CORE LINK <strong>STABIL</strong></div></div><div class="hud-core" aria-hidden="true"><div class="hud-ring ring-a"></div><div class="hud-ring ring-b"></div><div class="hud-ring ring-c"></div><div class="hud-ticks"></div><div class="hud-crosshair"></div><div class="hud-energy"><span></span></div><div class="hud-core-label"><b>ORBIT</b><small>FRIDAY</small></div></div></div>
+        <div class="metric-grid"><button class="metric" data-route="today"><span>Heute</span><strong id="todayCount">0</strong><small>AKTIV</small></button><button class="metric danger" data-route="overdue"><span>Überfällig</span><strong id="overdueCount">0</strong><small>PRIORITÄT</small></button><button class="metric gold" data-route="week"><span>Nächste 7 Tage</span><strong id="weekCount">0</strong><small>VORAUSSCHAU</small></button><button class="metric" data-route="open"><span>Offen</span><strong id="openCount">0</strong><small>QUEUE</small></button></div>
+        <section class="integration-grid" aria-label="Kommunikation und Planung">
+          <article class="integration-card mail-card"><div class="integration-head"><span>✉</span><small>GMAIL</small></div><strong id="mailHeadline">E-Mail</strong><p id="mailStatus">Google-Verbindung erforderlich</p><div id="mailPreview" class="integration-preview"><span>Neue Nachrichten erscheinen hier.</span></div><button id="mailConnectBtn" class="integration-action">Gmail verbinden</button></article>
+          <article class="integration-card calendar-card"><div class="integration-head"><span>◫</span><small>KALENDER</small></div><strong id="calendarHeadline">Nächste Termine</strong><p id="calendarStatus">Google-Verbindung erforderlich</p><div id="calendarPreview" class="integration-preview"><span>Deine nächsten Termine erscheinen hier.</span></div><button id="calendarConnectBtn" class="integration-action">Kalender verbinden</button></article>
+          <article class="integration-card task-card"><div class="integration-head"><span>＋</span><small>AUFGABEN</small></div><strong>Neue Aufgabe</strong><p>Direkt in ORBIT erfassen.</p><div class="integration-preview"><span id="taskQuickStatus">Bereit für einen neuen Auftrag.</span></div><button id="taskQuickBtn" class="integration-action">Aufgabe anlegen</button></article>
+        </section>
+        <button id="nextFocus" class="focus-card"><span>NÄCHSTER FOKUS</span><strong>Keine geplante Aufgabe</strong><small>Friday hält den Kurs frei.</small></button>
+        <section class="capture-card"><label for="quickInput">SCHNELLERFASSUNG / COMMAND INPUT</label><div class="capture-row"><input id="quickInput" placeholder="Gedanke, Aufgabe oder Idee …" autocomplete="off" /><button id="captureBtn">Erfassen</button></div></section>
+      </section>
+      <section id="inbox" class="view"><div class="section-head"><div><span class="eyebrow">EINGANG</span><h3>Alles an einem Ort.</h3></div><button id="newEntryBtn" class="small-btn">+ Neu</button></div><div class="toolbar"><input id="searchInput" type="search" placeholder="Suchen …" /><select id="categoryFilter"><option value="all">Alle Kategorien</option><option value="thought">Gedanken</option><option value="task">Aufgaben</option><option value="idea">Idee</option></select><select id="dateFilter"><option value="all">Alle Termine</option><option value="today">Heute</option><option value="overdue">Überfällig</option><option value="planned">Geplant</option><option value="week">Nächste 7 Tage</option></select></div><div id="entryList" class="entry-list"></div></section>
+      <section id="missions" class="view"><div class="section-head"><div><span class="eyebrow">MISSIONEN</span><h3>Mission 21 · ORBIT Companion V1</h3></div></div><article class="mission-card"><span class="live-dot"></span><strong>AKTIV</strong><p>PC und iPhone teilen einen sicheren ORBIT-Zustand statt zwei getrennte Assistenten zu bilden.</p><ul><li>gemeinsamer Aufgabenstand über ORBIT Sync</li><li>Geräte-Presence mit Ablaufzeit</li><li>Ansicht, Voice-Zustand und Dialogturn synchronisieren</li><li>gezielter Session-Handoff mit Quittierung</li><li>Offline-first und konfliktfest</li><li>keine zusätzlichen Laufzeitdienste</li></ul></article></section>
+      <section id="system" class="view"><div class="section-head"><div><span class="eyebrow">SYSTEM</span><h3>ORBIT Core</h3></div></div><div class="system-grid"><div><span>Status</span><strong>ONLINE</strong></div><div><span>Speicher</span><strong id="storageStatus">LOKAL</strong></div><div><span>Companion</span><strong id="deviceStatus">LOKAL · 1 GERÄT</strong></div><div><span>Mission</span><strong>21</strong></div><div><span>Theme</span><strong>ORBIT COMPANION</strong></div></div><button id="handoffBtn" class="primary-btn full" type="button" disabled>KEIN COMPANION ONLINE</button></section>
+    </main>
+    <nav class="bottom-nav"><button data-view="dashboard" class="active">Zentrale</button><button data-view="inbox">Eingang</button><button data-view="missions">Missionen</button><button data-view="system">System</button></nav>
+  </div>
+  <dialog id="entryDialog"><form method="dialog" id="entryForm"><div class="dialog-head"><h3 id="dialogTitle">Eintrag</h3><button value="cancel" class="icon-btn">×</button></div><input id="editText" required placeholder="Inhalt" /><div class="form-row"><select id="editCategory"><option value="thought">Gedanke</option><option value="task">Aufgabe</option><option value="idea">Idee</option></select><input id="editDue" type="date" /></div><label class="check"><input id="editImportant" type="checkbox" /> Wichtig</label><div class="dialog-actions"><button type="button" id="deleteBtn" class="danger-btn">Löschen</button><button value="save" id="saveBtn" class="primary-btn">Speichern</button></div></form></dialog>
+  <dialog id="settingsDialog"><form method="dialog"><div class="dialog-head"><h3>FRIDAY Einstellungen</h3><button value="close" class="icon-btn">×</button></div>
+  <div class="settings-section">
+    <label class="settings-label">ORBIT SYNC-CODE</label>
+    <p class="settings-desc">Verbindet PC und iPhone. Einmal eingeben — danach läuft alles automatisch.</p>
+    <div class="capture-row"><input id="syncKeyInput" type="text" placeholder="Sync-Code eingeben …" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" /><button type="button" id="syncKeySaveBtn" class="primary-btn">Speichern</button></div>
+    <small id="syncKeyStatus" style="color:#00b8d4;letter-spacing:.12em;font-size:8px;margin-top:6px;display:block"></small>
+  </div>
+  <div class="settings-section" style="margin-top:18px">
+    <label class="settings-label">GOOGLE VERBINDEN</label>
+    <p class="settings-desc">Gmail und Kalender werden über dein Google-Konto verbunden. Sync-Code muss zuerst gespeichert sein.</p>
+    <button type="button" id="googleConnectBtn" class="integration-action full" style="margin-top:8px">Gmail &amp; Kalender verbinden</button>
+    <small id="googleConnectStatus" style="color:#00b8d4;letter-spacing:.12em;font-size:8px;margin-top:6px;display:block"></small>
+  </div>
+  <div class="settings-section" style="margin-top:18px">
+    <p class="settings-desc">Private Inhalte und Musik werden nicht im GitHub-Repository gespeichert.</p>
+  </div>
+  <button value="close" class="primary-btn full" style="margin-top:12px">Fertig</button></form></dialog>
+  <script src="three.r128.min.js"></script>
+  <script src="neural-core-v2.js?v=7"></script>
+  <script src="audio-mix.js?v=1"></script>
+  <script src="panorama-wings.js?v=1"></script>
+  <script>
+    // Auto-redirect zu Startup beim ersten Load (aber nicht im Panorama-Mode)
+    document.addEventListener('DOMContentLoaded', () => {
+      const params = new URLSearchParams(location.search);
+      // Skip redirect wenn panorama=dual oder bereits startup abgeschlossen
+      if (params.get('panorama') === 'dual' || localStorage.getItem('startup-done')) {
+        console.log('[ORBIT] Startup redirect skipped (panorama-mode or already done)');
+        return;
+      }
+      localStorage.setItem('startup-done', 'true');
+      console.log('[ORBIT] Redirecting to startup...');
+      window.location.href = 'startup.html';
+    });
+  </script>
+
+  <script src="friday-v2-storage.js"></script>
+  <script src="friday-v2-neural.js"></script>
+  <script src="friday-voice-commands.js"></script>
+  <script src="friday-voice-init.js"></script>
+  <script src="friday-v2-briefing.js"></script>
+  <script src="friday-v2-ai.js"></script>
+  <script src="friday-v2-hologram.js"></script>
+  <script src="friday-v2-voice-advanced.js"></script>
+  <script src="friday-v2-audio-engine.js"></script>
+  <script src="friday-v2-dashboard.js"></script>
+  <script src="friday-v2-voice-sync.js"></script>
+  <script src="friday-v2-init.js"></script>
+  <script src="friday-v2-weather.js"></script>
+  <script src="friday-complete.js"></script>
+  <script src="start-v2.js?v=31"></script>
+  <script src="companion-state.js?v=1"></script>
+  <script src="companion-runtime.js?v=1"></script>
+  <script src="companion-sync.js?v=1"></script>
+  <script src="app.js?v=13"></script>
+  <script src="voice-core.js?v=5"></script>
+  <script src="integrations.js?v=8"></script>
+</body>
+</html>
