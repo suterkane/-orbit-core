@@ -3,9 +3,13 @@
   let db=null;
   const DB_NAME='ORBIT_V2';
   const DB_VERSION=1;
+  let initPromise=null;
   
   async function initDB(){
-    return new Promise((resolve,reject)=>{
+    // Return existing promise if already initializing (prevent race condition)
+    if(initPromise)return initPromise;
+    
+    initPromise=new Promise((resolve,reject)=>{
       const req=indexedDB.open(DB_NAME,DB_VERSION);
       req.onerror=()=>reject(req.error);
       req.onsuccess=()=>{
@@ -22,6 +26,8 @@
         }
       };
     });
+    
+    return initPromise;
   }
   
   async function saveBriefing(data){

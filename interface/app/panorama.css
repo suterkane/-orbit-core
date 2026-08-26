@@ -1,22 +1,388 @@
-.panorama-wing{display:none}
-.orbit-panorama{background:#000;overflow:hidden}
-.orbit-panorama body{width:5120px;min-width:5120px;height:1440px;min-height:1440px;overflow:hidden}
-.orbit-panorama .splash{position:relative;width:5120px;max-width:100vw;height:1440px;max-height:100vh;min-height:0;padding:0;overflow:hidden;background:radial-gradient(ellipse at 50% 44%,rgba(0,229,255,.12),transparent 22%),linear-gradient(90deg,#010508,#020a0e 25%,#02070a 50%,#020a0e 75%,#010508)}
-.orbit-panorama .splash:after{content:"";position:absolute;z-index:2;left:calc(50% - 1px);top:0;width:2px;height:100%;background:linear-gradient(transparent,rgba(0,229,255,.08) 25%,rgba(0,229,255,.16) 50%,rgba(0,229,255,.08) 75%,transparent);pointer-events:none}
-.orbit-panorama .friday-hologram{inset:0;width:100%;height:100%}
-.orbit-panorama .neural-stage{position:absolute;z-index:4;left:2560px;top:50%;width:1080px;max-width:none;height:1120px;transform:translate(-50%,-50%);display:flex;flex-direction:column;justify-content:space-between;padding:72px 90px 64px;border-left:1px solid rgba(0,229,255,.08);border-right:1px solid rgba(0,229,255,.08);background:linear-gradient(90deg,transparent,rgba(0,229,255,.025) 50%,transparent)}
-.orbit-panorama .panorama-wing{display:block;position:absolute;z-index:5;top:150px;width:clamp(620px,15vw,780px);height:1120px;padding:36px;border:1px solid rgba(0,229,255,.16);background:linear-gradient(145deg,rgba(3,17,23,.72),rgba(2,8,12,.4));clip-path:polygon(0 0,94% 0,100% 5%,100% 95%,94% 100%,0 100%);backdrop-filter:blur(10px);box-shadow:inset 0 0 60px rgba(0,229,255,.035);opacity:0;transform:translateY(32px);transition:opacity 420ms ease,transform 420ms cubic-bezier(.2,.8,.2,1)}
-.orbit-panorama .panorama-left{left:clamp(240px,7vw,360px)}
-.orbit-panorama .panorama-right{right:clamp(240px,7vw,360px);clip-path:polygon(6% 0,100% 0,100% 100%,6% 100%,0 95%,0 5%)}
-.orbit-panorama .panorama-wing .wing-kicker{font:10px/1.4 ui-monospace,Consolas,monospace;letter-spacing:.34em;color:#00e5ff}
-.orbit-panorama .panorama-wing h2{margin:18px 0 42px;font-size:38px;font-weight:420;letter-spacing:.08em;color:#dffcff}
-.orbit-panorama .wing-module{position:relative;margin:0 0 24px;padding:22px 24px;border-left:2px solid rgba(0,229,255,.52);background:linear-gradient(90deg,rgba(0,229,255,.07),transparent);min-height:125px}
-.orbit-panorama .wing-module.priority{border-left-color:#ff9500;background:linear-gradient(90deg,rgba(255,149,0,.07),transparent)}
-.orbit-panorama .wing-module span{display:block;margin-bottom:10px;font:9px/1.4 ui-monospace,Consolas,monospace;letter-spacing:.25em;color:#6fa9b2}
-.orbit-panorama .wing-module strong{font-size:19px;font-weight:480;color:#e9fdff}
-.orbit-panorama .wing-module small{display:block;margin-top:10px;color:#78949c;font-size:12px;line-height:1.5}
-.orbit-panorama .app{width:5120px;max-width:100vw;height:1440px;max-height:100vh;overflow:hidden;padding:34px 64px 96px}
-.orbit-panorama .app main{height:calc(100vh - 115px);overflow:auto}
-.orbit-panorama #dashboard.active{display:grid;grid-template-columns:1fr 1.32fr 1fr;grid-template-areas:"voice voice voice" "mail hero calendar" "metrics hero task" "focus capture capture";gap:20px}
-.orbit-panorama #voiceDialogue{grid-area:voice}.orbit-panorama .hud-hero{grid-area:hero;min-height:780px}.orbit-panorama .metric-grid{grid-area:metrics;grid-template-columns:repeat(2,1fr)}.orbit-panorama .integration-grid{display:contents}.orbit-panorama .mail-card{grid-area:mail}.orbit-panorama .calendar-card{grid-area:calendar}.orbit-panorama .task-card{grid-area:task}.orbit-panorama .focus-card{grid-area:focus}.orbit-panorama .capture-card{grid-area:capture}
-@media(max-aspect-ratio:3/1){.orbit-panorama body,.orbit-panorama .splash,.orbit-panorama .app{width:100%;min-width:0;height:auto;min-height:100dvh;max-height:none;overflow-x:hidden}.orbit-panorama .panorama-wing{display:none}.orbit-panorama .neural-stage{position:relative;left:auto;top:auto;width:100%;height:100dvh;transform:none}.orbit-panorama #dashboard.active{display:block}}
+/* ============================================
+   PANORAMA WINGS - PROFESSIONAL DESIGN
+   5120×1440 Ultra-wide Dual Monitor Display
+   Left Wing: Briefing | Right Wing: Communications
+   ============================================ */
+
+.panorama-wing {
+  display: none;
+}
+
+/* ===== PANORAMA MODE ACTIVATION ===== */
+.orbit-panorama {
+  background: #000;
+  overflow: hidden;
+}
+
+.orbit-panorama body {
+  width: 5120px;
+  min-width: 5120px;
+  height: 1440px;
+  min-height: 1440px;
+  overflow: hidden;
+}
+
+.orbit-panorama .splash {
+  position: relative;
+  width: 5120px;
+  max-width: 100vw;
+  height: 1440px;
+  max-height: 100vh;
+  min-height: 0;
+  padding: 0;
+  overflow: hidden;
+  background: radial-gradient(ellipse at 50% 44%, rgba(0, 229, 255, 0.12), transparent 22%),
+              linear-gradient(90deg, 
+                #010508 0%,
+                #020a0e 25%,
+                #02070a 50%,
+                #020a0e 75%,
+                #010508 100%);
+}
+
+.orbit-panorama .splash::after {
+  content: '';
+  position: absolute;
+  z-index: 2;
+  left: calc(50% - 1px);
+  top: 0;
+  width: 2px;
+  height: 100%;
+  background: linear-gradient(
+    transparent,
+    rgba(0, 229, 255, 0.08) 25%,
+    rgba(0, 229, 255, 0.16) 50%,
+    rgba(0, 229, 255, 0.08) 75%,
+    transparent
+  );
+  pointer-events: none;
+}
+
+.orbit-panorama .friday-hologram {
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+/* ===== NEURAL STAGE (CENTER) ===== */
+.orbit-panorama .neural-stage {
+  position: absolute;
+  z-index: 4;
+  left: 2560px;
+  top: 50%;
+  width: 1080px;
+  max-width: none;
+  height: 1120px;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 72px 90px 64px;
+  border-left: 1px solid rgba(0, 229, 255, 0.08);
+  border-right: 1px solid rgba(0, 229, 255, 0.08);
+  background: linear-gradient(90deg, transparent, rgba(0, 229, 255, 0.025) 50%, transparent);
+}
+
+/* ===== PANORAMA WINGS - MAIN STYLING ===== */
+.orbit-panorama .panorama-wing {
+  display: block;
+  position: absolute;
+  z-index: 5;
+  top: 150px;
+  width: clamp(620px, 15vw, 780px);
+  height: 1120px;
+  padding: 42px 40px;
+  
+  /* Professional glass morphism */
+  border: 1px solid rgba(0, 229, 255, 0.24);
+  background: linear-gradient(
+    145deg,
+    rgba(3, 17, 23, 0.78),
+    rgba(2, 8, 12, 0.48)
+  );
+  clip-path: polygon(0 0, 94% 0, 100% 5%, 100% 95%, 94% 100%, 0 100%);
+  backdrop-filter: blur(14px);
+  box-shadow: 
+    inset 0 0 60px rgba(0, 229, 255, 0.04),
+    0 20px 80px rgba(0, 0, 0, 0.4);
+  
+  /* Smooth entrance animation */
+  opacity: 1;
+  transform: translateY(0);
+  transition: all 520ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+/* Hover effect - lift & glow */
+.orbit-panorama .panorama-wing:hover {
+  opacity: 1;
+  transform: translateY(-8px);
+  border-color: rgba(0, 229, 255, 0.48);
+  background: linear-gradient(
+    145deg,
+    rgba(3, 17, 23, 0.88),
+    rgba(2, 8, 12, 0.58)
+  );
+  box-shadow: 
+    inset 0 0 80px rgba(0, 229, 255, 0.08),
+    0 30px 120px rgba(0, 229, 255, 0.15);
+}
+
+/* LEFT WING POSITION */
+.orbit-panorama .panorama-left {
+  left: clamp(240px, 7vw, 360px);
+}
+
+/* RIGHT WING POSITION - mirror clip path */
+.orbit-panorama .panorama-right {
+  right: clamp(240px, 7vw, 360px);
+  clip-path: polygon(6% 0, 100% 0, 100% 100%, 6% 100%, 0 95%, 0 5%);
+}
+
+/* ===== WING HEADER ===== */
+.orbit-panorama .panorama-wing .wing-kicker {
+  font: 10px/1.4 ui-monospace, Consolas, monospace;
+  letter-spacing: 0.34em;
+  color: #00e5ff;
+  text-transform: uppercase;
+  opacity: 0.8;
+  display: block;
+  margin-bottom: 8px;
+}
+
+.orbit-panorama .panorama-wing h2 {
+  margin: 18px 0 48px 0;
+  font-size: 42px;
+  font-weight: 420;
+  letter-spacing: 0.08em;
+  color: #dffcff;
+  line-height: 1.1;
+}
+
+/* ===== WING MODULES ===== */
+.orbit-panorama .wing-module {
+  position: relative;
+  margin: 0 0 32px 0;
+  padding: 26px 28px;
+  
+  border-left: 3px solid rgba(0, 229, 255, 0.52);
+  background: linear-gradient(90deg, rgba(0, 229, 255, 0.08), transparent);
+  
+  border-radius: 6px;
+  backdrop-filter: blur(8px);
+  transition: all 280ms ease;
+  
+  min-height: auto;
+  overflow: hidden;
+}
+
+/* Module hover */
+.orbit-panorama .wing-module:hover {
+  border-left-color: rgba(0, 229, 255, 0.78);
+  background: linear-gradient(90deg, rgba(0, 229, 255, 0.14), transparent);
+  padding-left: 32px;
+  transform: translateX(4px);
+}
+
+/* Priority/Alert variant */
+.orbit-panorama .wing-module.priority {
+  border-left-color: #ff9500;
+  background: linear-gradient(90deg, rgba(255, 149, 0, 0.09), transparent);
+}
+
+.orbit-panorama .wing-module.priority:hover {
+  border-left-color: #ffb347;
+  background: linear-gradient(90deg, rgba(255, 149, 0, 0.16), transparent);
+}
+
+/* Module label (small caps) */
+.orbit-panorama .wing-module span {
+  display: block;
+  margin-bottom: 12px;
+  font: 8px/1.4 ui-monospace, Consolas, monospace;
+  letter-spacing: 0.28em;
+  color: #6fa9b2;
+  text-transform: uppercase;
+  opacity: 0.8;
+}
+
+/* Module main content */
+.orbit-panorama .wing-module strong {
+  font-size: 22px;
+  font-weight: 480;
+  color: #e9fdff;
+  display: block;
+  line-height: 1.3;
+  letter-spacing: 0.02em;
+}
+
+/* Module detail text */
+.orbit-panorama .wing-module small {
+  display: block;
+  margin-top: 12px;
+  color: #78949c;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+/* ===== CRYPTO LIST (Right Wing) ===== */
+#panorama-crypto-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.crypto-item {
+  display: grid;
+  grid-template-columns: 80px 1fr 120px;
+  gap: 12px;
+  align-items: center;
+  padding: 8px;
+  border-radius: 4px;
+  background: rgba(0, 229, 255, 0.04);
+  font-size: 13px;
+  transition: all 160ms ease;
+}
+
+.crypto-item:hover {
+  background: rgba(0, 229, 255, 0.12);
+  transform: translateX(4px);
+}
+
+.crypto-symbol {
+  font-weight: 600;
+  color: #00e5ff;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.crypto-price {
+  color: #e9fdff;
+  font-family: 'Courier New', monospace;
+  text-align: right;
+}
+
+.crypto-change {
+  font-weight: 500;
+  text-align: right;
+  font-size: 12px;
+}
+
+/* ===== GMAIL BADGE ===== */
+#panorama-gmail-badge {
+  display: inline-block;
+  min-width: 24px;
+  height: 24px;
+  padding: 0 6px;
+  background: linear-gradient(135deg, #ff6b6b, #ff9500);
+  color: #fff;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 24px;
+  text-align: center;
+  margin-left: 8px;
+  box-shadow: 0 4px 12px rgba(255, 107, 107, 0.4);
+  animation: pulse-badge 2s infinite;
+}
+
+@keyframes pulse-badge {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.08); }
+}
+
+/* ===== RESPONSIVE FALLBACK ===== */
+@media (max-aspect-ratio: 3/1) {
+  .orbit-panorama body,
+  .orbit-panorama .splash,
+  .orbit-panorama .app {
+    width: 100%;
+    min-width: 0;
+    height: auto;
+    min-height: 100dvh;
+    max-height: none;
+    overflow-x: hidden;
+  }
+  
+  .orbit-panorama .panorama-wing {
+    display: none;
+  }
+  
+  .orbit-panorama .neural-stage {
+    position: relative;
+    left: auto;
+    top: auto;
+    width: 100%;
+    height: 100dvh;
+    transform: none;
+  }
+  
+  .orbit-panorama #dashboard.active {
+    display: block;
+  }
+}
+
+/* ===== APP LAYOUT ===== */
+.orbit-panorama .app {
+  width: 5120px;
+  max-width: 100vw;
+  height: 1440px;
+  max-height: 100vh;
+  overflow: hidden;
+  padding: 34px 64px 96px;
+}
+
+.orbit-panorama .app main {
+  height: calc(100vh - 115px);
+  overflow: auto;
+}
+
+/* Dashboard grid for panorama */
+.orbit-panorama #dashboard.active {
+  display: grid;
+  grid-template-columns: 1fr 1.32fr 1fr;
+  grid-template-areas:
+    "voice voice voice"
+    "mail hero calendar"
+    "metrics hero task"
+    "focus capture capture";
+  gap: 20px;
+}
+
+.orbit-panorama #voiceDialogue { grid-area: voice; }
+.orbit-panorama .hud-hero { grid-area: hero; min-height: 780px; }
+.orbit-panorama .metric-grid { grid-area: metrics; grid-template-columns: repeat(2, 1fr); }
+.orbit-panorama .integration-grid { display: contents; }
+.orbit-panorama .mail-card { grid-area: mail; }
+.orbit-panorama .calendar-card { grid-area: calendar; }
+.orbit-panorama .task-card { grid-area: task; }
+.orbit-panorama .focus-card { grid-area: focus; }
+.orbit-panorama .capture-card { grid-area: capture; }
+
+/* ===== SMOOTH SCROLLING ===== */
+.orbit-panorama * {
+  scroll-behavior: smooth;
+}
+
+/* ===== ANIMATION ENTRANCE ===== */
+@keyframes wingEntrance {
+  from {
+    opacity: 0;
+    transform: translateY(32px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.orbit-panorama .panorama-wing {
+  animation: wingEntrance 640ms cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+}
+
+.orbit-panorama .panorama-left {
+  animation-delay: 200ms;
+}
+
+.orbit-panorama .panorama-right {
+  animation-delay: 400ms;
+}

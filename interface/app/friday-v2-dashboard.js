@@ -76,7 +76,7 @@
   }
 
   function renderProjectsWidget(projects){
-    if(!projects||!projects.length)return;
+    if(!projects||!Array.isArray(projects)||!projects.length)return;
     let el=document.querySelector('#orbitProjectsWidget');
     if(!el){
       el=document.createElement('div');
@@ -103,7 +103,7 @@
     }
 
     const clean=projects.map(p=>
-      p.replace(/Medizinische Chronik|HWS,BWS,LWS|HWS|BWS|LWS/g,'')
+      String(p).replace(/Medizinische Chronik|HWS,BWS,LWS|HWS|BWS|LWS/g,'')
        .replace(/\s*-\s*/g,' ').replace(/\s+/g,' ').trim()
     ).filter(p=>p.length>3).slice(0,5);
 

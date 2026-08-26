@@ -3,11 +3,13 @@
   const INIT_TIMEOUT=5000;
   const requiredModules=['ORBITStorageV2','ORBITNeuralCore','ORBITFridayAI','ORBITVoiceV2'];
   let initTimer=null;
+  let checkInterval=null;
   
   function checkReady(){
     const ready=requiredModules.every(m=>window[m]);
     if(ready){
       clearTimeout(initTimer);
+      clearInterval(checkInterval);
       console.log('✓ FRIDAY v2 modules ready',{
         storage:!!window.ORBITStorageV2,
         neural:!!window.ORBITNeuralCore,
@@ -24,7 +26,7 @@
   }
   
   // Check jede 100ms
-  const checkInterval=setInterval(()=>{
+  checkInterval=setInterval(()=>{
     if(checkReady()){
       clearInterval(checkInterval);
     }

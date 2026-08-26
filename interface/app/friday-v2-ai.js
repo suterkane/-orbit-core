@@ -52,7 +52,7 @@
     // Pattern matching for common intents
     if(lower.includes('briefing')||lower.includes('status'))
       return {intent:'status_report',action:'get_briefing',params:{}};
-    if(lower.includes('musik')||lower.includes('musik'))
+    if(lower.includes('musik'))
       return {intent:'media_control',action:'play_music',params:{volume:0.5}};
     if(lower.includes('vault')||lower.includes('notiz'))
       return {intent:'vault_query',action:'search_vault',params:{query:text}};

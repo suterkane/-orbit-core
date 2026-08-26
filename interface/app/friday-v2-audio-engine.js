@@ -23,8 +23,8 @@
     analyser.smoothingTimeConstant=0.85;
     dataArray=new Uint8Array(analyser.frequencyBinCount);
     
-    // Connect audio source
-    if(audioElement){
+    // Connect audio source (prevent double-connect)
+    if(audioElement&&!audioSource){
       audioSource=audioCtx.createMediaElementAudioSource(audioElement);
       audioSource.connect(analyser);
     }

@@ -12,7 +12,14 @@
     scene.background=new THREE.Color(0x030e17);
     scene.fog=new THREE.Fog(0x030e17,50,100);
     
-    camera=new THREE.PerspectiveCamera(75,window.innerWidth/window.innerHeight,0.1,1000);
+    // Get dimensions safely (container must have size)
+    const rect=container.getBoundingClientRect();
+    if(rect.width===0||rect.height===0){
+      console.warn('[HOLOGRAM] Container has no dimensions');
+      return;
+    }
+    
+    camera=new THREE.PerspectiveCamera(75,rect.width/rect.height,0.1,1000);
     camera.position.z=15;
     
     renderer=new THREE.WebGLRenderer({antialias:true,alpha:true});
@@ -95,6 +102,7 @@
       for(let i=0;i<PARTICLE_COUNT;i++){
         positions[i*3]+=Math.sin(Date.now()*0.0001+i)*0.01;
         positions[i*3+1]+=Math.cos(Date.now()*0.0001+i)*0.01;
+        positions[i*3+2]+=Math.sin(Date.now()*0.00005+i)*0.005;
       }
       particleSystem.geometry.attributes.position.needsUpdate=true;
     }

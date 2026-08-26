@@ -112,7 +112,7 @@
     if(cmd.includes('briefing')||cmd.includes('was geht')) showBriefing();
     else if(cmd.includes('musik')){
       const audio=document.querySelector('audio[data-music]');
-      if(audio)audio.playing?audio.pause():audio.play();
+      if(audio)audio.paused?audio.play():audio.pause();
     }
     else if(cmd.includes('hilfe')) showHelp();
   };
