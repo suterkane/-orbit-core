@@ -31,6 +31,8 @@
       const origStart=utterance.onstart;
       utterance.onstart=(e)=>{
         isSpeaking=true;
+        const indicator=document.querySelector('.hud-statusline i');
+        if(indicator)indicator.classList.add('speaking');
         if(window.ORBITNeuralCore)window.ORBITNeuralCore.setState('speaking');
         startDriving();
         if(origStart)origStart(e);
@@ -39,6 +41,8 @@
       const origEnd=utterance.onend;
       utterance.onend=(e)=>{
         isSpeaking=false;
+        const indicator=document.querySelector('.hud-statusline i');
+        if(indicator)indicator.classList.remove('speaking');
         stopDriving();
         if(window.ORBITNeuralCore){
           window.ORBITNeuralCore.pushVoiceFrame({active:false,phase:'idle',rms:0,low:0,mid:0,high:0,transient:0});
