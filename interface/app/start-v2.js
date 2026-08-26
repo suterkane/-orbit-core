@@ -6,6 +6,11 @@
   const BUNDLED_MUSIC_URL='./assets/orbit-cinematic-boot.m4a';
   const LOCAL_NEURAL_VOICE_URL='./assets/friday-neural-de.ogg';
   const HANDOFF_DELAY=4550;
+// === ENHANCED BOOT SEQUENCE (Idea Architect Pipeline v2) ===
+const PANEL_REVEAL_DURATION = 1800; // ms
+const PANEL_STAGGER_DELAY = 120;    // ms between panels
+const ASSEMBLY_PHASE2_DURATION = 2600; // ms
+const VOICE_TO_PANEL_DELAY = 3400; // ms after voice start
   const MUSIC_MAX_MS=90000;
   const LOCAL_VOICE_RATE=1.12;
   const FRIDAY_VOICE_PROFILE={lang:'de-DE',rate:1.08,pitch:1.0,volume:1};
@@ -121,7 +126,48 @@
   async function speakLocalNeural({onend}={}){try{cleanupAudio();let finished=false;const finish=()=>{if(finished)return;finished=true;clearTimeout(launchTimer);setSpeaking(false);cleanupAudio();onend?.()};activeAudio=new Audio(LOCAL_NEURAL_VOICE_URL);activeAudio.preload='auto';activeAudio.playbackRate=LOCAL_VOICE_RATE;activeAudio.preservesPitch=true;activeAudio.onplay=()=>{setSpeaking(true);const status=statusText();if(status)status.textContent='FRIDAY spricht · NEURAL LOCAL'};activeAudio.onended=finish;activeAudio.onerror=finish;await activeAudio.play();launchTimer=setTimeout(finish,30000);return true}catch{cleanupAudio();setSpeaking(false);return false}}
   async function speak(text,{onend}={}){const status=statusText();if(status)status.textContent='FRIDAY initialisiert Seraphina HD …';const played=await speakSeraphina(text,{onend});if(played)return true;if(status)status.textContent='FRIDAY startet lokale Neuralstimme …';const localPlayed=await speakLocalNeural({onend});if(localPlayed)return true;if(status)status.textContent='FRIDAY startet Browser-Notfallstimme …';return speakBrowser(text,{onend})}
   function launchApp(){const status=statusText();setOrbState('online');if(status)status.textContent='FRIDAY · ONLINE';const app=document.querySelector('#app'),splash=document.querySelector('#splash'),target=document.querySelector('.hud-core');if(app){app.classList.remove('hidden');app.classList.add('handoff-underlay')}if(splash)splash.classList.add('handoff-out');window.ORBITNeuralCore?.dockTo(target);setTimeout(()=>{if(typeof window.showApp==='function')window.showApp();if(app)app.classList.remove('handoff-underlay')},560)}
-  async function launchWithVoice(event){if(launching)return;launching=true;event.preventDefault();event.stopImmediatePropagation();window.ORBITNeuralCore?.unlockAudio();void startBootMusic();const status=statusText();setOrbState('booting');if(window.ORBITNeuralCore)window.ORBITNeuralCore.assemble();if(status)status.textContent='FRIDAY erstellt Lagebericht …';setTimeout(launchApp,HANDOFF_DELAY);const narration=await getBootNarration();speak(narration,{onend:()=>stopBootMusic()}).catch(()=>stopBootMusic())}
+  let panelRevealTimer=null;
+  function revealPanoramaPanels(){
+    const wings=document.querySelectorAll('.panorama-wing');
+    if(!wings.length)return;
+    wings.forEach((wing,i)=>{
+      setTimeout(()=>{
+        wing.style.opacity='1';
+        wing.style.transform='translateY(0)';
+      },i*PANEL_STAGGER_DELAY);
+    });
+    panelRevealTimer=setTimeout(()=>{
+      clearTimeout(panelRevealTimer);panelRevealTimer=null;
+    },wings.length*PANEL_STAGGER_DELAY+500);
+  }
+  async function launchWithVoice(event){
+    if(launching)return;
+    launching=true;
+    event.preventDefault();
+    event.stopImmediatePropagation();
+    window.ORBITNeuralCore?.unlockAudio();
+    void startBootMusic();
+
+    // Phase 1: Boot
+    const status=statusText();
+    setOrbState('booting');
+    if(window.ORBITNeuralCore)window.ORBITNeuralCore.assemble();
+    if(status)status.textContent='FRIDAY erstellt Lagebericht …';
+
+    // Phase 2: Voice start → delay → panel reveal
+    clearTimeout(panelRevealTimer);
+    panelRevealTimer=setTimeout(revealPanoramaPanels,VOICE_TO_PANEL_DELAY);
+
+    // Phase 3: Build narration → speak → handoff
+    setTimeout(launchApp,HANDOFF_DELAY);
+    const narration=await getBootNarration();
+    const played=await speak(narration,{onend:()=>{clearTimeout(panelRevealTimer);panelRevealTimer=null;stopBootMusic()}});
+    if(!played){
+      // Offline fallback — no Supabase / sync key unavailable
+      const status=statusText();if(status)status.textContent='FRIDAY im Offline-Modus · Browser-Stimme';
+      await speakBrowser(narration,{onend:()=>{clearTimeout(panelRevealTimer);panelRevealTimer=null;stopBootMusic()}});
+    }
+  }
 
   window.ORBITFriday={setSpeaking,setOrbState,setMusicLevel,speak,stopSpeaking,getGreeting,getBootNarration,pickGermanVoice,speakSeraphina,speakLocalNeural,startBootMusic,stopBootMusic,voiceProfile:FRIDAY_VOICE_PROFILE,bundledMusicUrl:BUNDLED_MUSIC_URL,privateMusicUrl:PRIVATE_MUSIC_URL,localNeuralVoiceUrl:LOCAL_NEURAL_VOICE_URL};
   document.addEventListener('DOMContentLoaded',()=>{const btn=document.querySelector('#initiateBtn');if(btn)btn.addEventListener('click',launchWithVoice,{capture:true});setOrbState('idle');warmVoices();if('speechSynthesis'in window)window.speechSynthesis.addEventListener?.('voiceschanged',warmVoices,{once:true})});
