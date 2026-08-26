@@ -23,9 +23,21 @@
     <canvas id="fridayHologram" class="friday-hologram" aria-hidden="true"></canvas>
     <aside class="panorama-wing panorama-left" aria-label="Tageslage">
       <span class="wing-kicker">FRIDAY / TAGESLAGE</span><h2>Willkommen zurück.</h2>
-      <div class="wing-module"><span>WETTER</span><strong id="panoramaWeather">Wetterdaten werden geladen</strong></div>
-      <div class="wing-module"><span>KALENDER</span><strong id="panoramaCalendar">Termine werden geladen</strong><small>Google Kalender · Live-Briefing</small></div>
-      <div class="wing-module priority"><span>NÄCHSTE PRIORITÄT</span><strong id="panoramaPriority">ORBIT analysiert den Tagesplan</strong></div>
+      <div class="wing-module">
+        <span>WETTER</span>
+        <strong id="panorama-weather">Wetterdaten werden geladen</strong>
+        <small id="panorama-weather-detail">Live-Aktualisierung</small>
+      </div>
+      <div class="wing-module">
+        <span>VAULT FOCUS</span>
+        <strong id="panorama-vault-focus">ORBIT · FRIDAY</strong>
+        <small id="panorama-vault-mission">Mission 21 · Begleiter</small>
+      </div>
+      <div class="wing-module priority">
+        <span>NÄCHSTE PRIORITÄT</span>
+        <strong id="panorama-priority">Keine geplante Aufgabe</strong>
+        <small id="panorama-priority-detail">Bereit für nächsten Auftrag</small>
+      </div>
     </aside>
     <div class="neural-stage">
       <header class="neural-identity"><b>ORBIT</b><span>NEURAL INTELLIGENCE · FRIDAY</span></header>
@@ -39,9 +51,25 @@
     </div>
     <aside class="panorama-wing panorama-right" aria-label="Kommunikationslage">
       <span class="wing-kicker">ORBIT / KOMMUNIKATION</span><h2>Systeme online.</h2>
-      <div class="wing-module"><span>GMAIL</span><strong id="panoramaMail">Posteingang wird geprüft</strong><small>Relevante Nachrichten für das Briefing</small></div>
-      <div class="wing-module"><span>AUFGABEN</span><strong id="panoramaTasks">Aufgabenstatus wird geladen</strong><small>Offen · Heute · Überfällig</small></div>
-      <div class="wing-module priority"><span>MISSION</span><strong>ORBIT · FRIDAY</strong><small>Präzise. Verbunden. Einsatzbereit.</small></div>
+      <div class="wing-module">
+        <span>GMAIL STATUS</span>
+        <strong id="panorama-gmail-status">Posteingang wird geprüft</strong>
+        <span id="panorama-gmail-badge" style="visibility:hidden">0</span>
+        <small id="panorama-gmail-detail">Ungelesen · Live-Check</small>
+      </div>
+      <div class="wing-module" data-task-module>
+        <span>AUFGABEN-COUNTER</span>
+        <strong id="panorama-tasks-counter">0 offen</strong>
+        <small>
+          <div id="panorama-tasks-today">0 heute</div>
+          <div id="panorama-tasks-overdue">0 überfällig</div>
+        </small>
+      </div>
+      <div class="wing-module priority">
+        <span>CRYPTO LIVE</span>
+        <div id="panorama-crypto-list" style="margin-top:8px"></div>
+        <small style="margin-top:12px">CoinGecko API · 30s Refresh</small>
+      </div>
     </aside>
   </section>
   <div id="app" class="app hidden">
@@ -86,19 +114,26 @@
   <script src="three.r128.min.js"></script>
   <script src="neural-core-v2.js?v=7"></script>
   <script src="audio-mix.js?v=1"></script>
+  <script src="panorama-wings.js?v=1"></script>
   <script>
-    // Auto-redirect zu Startup beim ersten Load
-    window.addEventListener('DOMContentLoaded', () => {
-      if (!localStorage.getItem('startup-done')) {
-        localStorage.setItem('startup-done', 'true');
-        window.location.href = '/startup.html';
+    // Auto-redirect zu Startup beim ersten Load (aber nicht im Panorama-Mode)
+    document.addEventListener('DOMContentLoaded', () => {
+      const params = new URLSearchParams(location.search);
+      // Skip redirect wenn panorama=dual oder bereits startup abgeschlossen
+      if (params.get('panorama') === 'dual' || localStorage.getItem('startup-done')) {
+        console.log('[ORBIT] Startup redirect skipped (panorama-mode or already done)');
+        return;
       }
+      localStorage.setItem('startup-done', 'true');
+      console.log('[ORBIT] Redirecting to startup...');
+      window.location.href = 'startup.html';
     });
   </script>
 
   <script src="friday-v2-storage.js"></script>
   <script src="friday-v2-neural.js"></script>
-  <script src="friday-v2-voice.js"></script>
+  <script src="friday-voice-commands.js"></script>
+  <script src="friday-voice-init.js"></script>
   <script src="friday-v2-briefing.js"></script>
   <script src="friday-v2-ai.js"></script>
   <script src="friday-v2-hologram.js"></script>

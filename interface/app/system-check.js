@@ -366,6 +366,9 @@
     // Calculate boot time
     systemStatus.bootTime = performance.now() - startTime;
 
+    // Clear the timeout (boot successful)
+    clearBootTimeout();
+
     // Phase 3: Print detailed status
     printSystemStatus();
 
@@ -485,6 +488,11 @@
     });
     printSystemStatus();
   }, SYSTEMCHECK_TIMEOUT);
+
+  // Cleanup timeout on success
+  function clearBootTimeout() {
+    clearTimeout(checkTimeout);
+  }
 
   // ─────────────────────────────────────────────────────────────────────────
   // PUBLIC API

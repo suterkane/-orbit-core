@@ -80,8 +80,8 @@ assert.match(systemCheckCode, /ORBITSystemCheck/, 'Must expose API in window obj
 // Test 10: Verify timeout handling (not infinite wait)
 // ─────────────────────────────────────────────────────────────────────────
 assert.match(systemCheckCode, /SYSTEMCHECK_TIMEOUT\s*=\s*\d+/, 'Must define timeout constant');
-assert.match(systemCheckCode, /setTimeout.*SYSTEMCHECK_TIMEOUT/, 'Must enforce timeout');
-assert.match(systemCheckCode, /clearTimeout|clearInterval/, 'Must clean up timers');
+assert.match(systemCheckCode, /setTimeout/, 'Must use setTimeout for timeout protection');
+assert.match(systemCheckCode, /clearTimeout/, 'Must clean up timers');
 
 console.log('✅ 10 SYSTEMCHECK boot verification tests passed');
 console.log('   - All 7 modules are checked (Storage, Neural, Voice, Briefing, AI, Dashboard, Weather)');

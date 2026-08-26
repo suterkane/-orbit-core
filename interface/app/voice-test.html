@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FRIDAY Voice Commands — Test</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Monaco', 'Courier New', monospace;
+      background: #0a1420;
+      color: #00e5ff;
+      padding: 20px;
+      line-height: 1.6;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    h1 {
+      margin-bottom: 10px;
+      font-size: 24px;
+      color: #ff9500;
+      border-bottom: 2px solid #00e5ff;
+      padding-bottom: 10px;
+    }
+
+    .section {
+      background: #001014;
+      border: 1px solid #00e5ff;
+      border-radius: 4px;
+      padding: 20px;
+      margin-bottom: 20px;
+    }
+
+    .section h2 {
+      font-size: 16px;
+      margin-bottom: 15px;
+      color: #00e5ff;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+    }
+
+    .control-group {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 15px;
+      flex-wrap: wrap;
+    }
+
+    button {
+      padding: 10px 20px;
+      background: #00e5ff;
+      color: #001014;
+      border: none;
+      border-radius: 4px;
+      font-family: 'Monaco', 'Courier New', monospace;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    button:hover {
+      background: #00ffff;
+      box-shadow: 0 0 10px #00e5ff;
+    }
+
+    button:active {
+      transform: scale(0.95);
+    }
+
+    button.secondary {
+      background: #ff9500;
+      color: white;
+    }
+
+    button.secondary:hover {
+      background: #ffaa00;
+    }
+
+    .status-panel {
+      background: #0a1420;
+      border: 1px solid #ff9500;
+      border-radius: 4px;
+      padding: 15px;
+      margin-bottom: 15px;
+      font-size: 12px;
+    }
+
+    .status-line {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 8px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid rgba(0, 229, 255, 0.2);
+    }
+
+    .status-line:last-child {
+      border-bottom: none;
+      margin-bottom: 0;
+      padding-bottom: 0;
+    }
+
+    .label {
+      color: #ff9500;
+      font-weight: bold;
+      min-width: 100px;
+    }
+
+    .value {
+      color: #00e5ff;
+      word-break: break-all;
+    }
+
+    .log {
+      background: #000;
+      border: 1px solid #00e5ff;
+      border-radius: 4px;
+      padding: 15px;
+      height: 300px;
+      overflow-y: auto;
+      font-size: 11px;
+      margin-top: 15px;
+      font-family: 'Courier New', monospace;
+    }
+
+    .log-line {
+      margin-bottom: 6px;
+      padding: 2px 0;
+      border-left: 2px solid #ff9500;
+      padding-left: 8px;
+    }
+
+    .log-line.voice {
+      border-left-color: #00e5ff;
+      color: #00e5ff;
+    }
+
+    .log-line.error {
+      border-left-color: #ff3333;
+      color: #ff6666;
+    }
+
+    .log-line.success {
+      border-left-color: #00ff00;
+      color: #00ff00;
+    }
+
+    .transcript-display {
+      background: #0a1420;
+      border: 2px solid #00e5ff;
+      border-radius: 4px;
+      padding: 15px;
+      margin-bottom: 15px;
+      min-height: 60px;
+      font-size: 16px;
+      line-height: 1.8;
+    }
+
+    .transcript-display.interim {
+      color: #999;
+      font-style: italic;
+    }
+
+    .transcript-display.final {
+      color: #00e5ff;
+      font-weight: bold;
+    }
+
+    .voice-state {
+      display: inline-block;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: bold;
+      letter-spacing: 1px;
+      margin-left: 10px;
+    }
+
+    .voice-state.idle {
+      background: #00e5ff;
+      color: #001014;
+    }
+
+    .voice-state.listening {
+      background: #00ff00;
+      color: #001014;
+      animation: pulse 0.5s infinite;
+    }
+
+    .voice-state.processing {
+      background: #ff9500;
+      color: #001014;
+      animation: pulse 0.3s infinite;
+    }
+
+    .voice-state.speaking {
+      background: #ff3333;
+      color: white;
+      animation: pulse 0.6s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.6; }
+    }
+
+    .command-result {
+      background: #0a1420;
+      border: 1px solid #00ff00;
+      border-radius: 4px;
+      padding: 15px;
+      margin-top: 15px;
+      display: none;
+    }
+
+    .command-result.active {
+      display: block;
+    }
+
+    .command-result h3 {
+      color: #00ff00;
+      margin-bottom: 10px;
+      font-size: 14px;
+    }
+
+    .command-data {
+      font-size: 12px;
+      color: #00e5ff;
+      line-height: 1.8;
+    }
+
+    .test-commands {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 10px;
+      margin-top: 15px;
+    }
+
+    .test-commands button {
+      padding: 12px 16px;
+      font-size: 12px;
+      text-align: center;
+    }
+
+    .info-box {
+      background: #001014;
+      border-left: 4px solid #00ff00;
+      padding: 15px;
+      margin-bottom: 15px;
+      font-size: 12px;
+      line-height: 1.8;
+    }
+
+    .info-box strong {
+      color: #00ff00;
+    }
+
+    .divider {
+      height: 1px;
+      background: linear-gradient(to right, transparent, #00e5ff, transparent);
+      margin: 20px 0;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🎤 FRIDAY Voice Commands — Real Test (NOT Headless)</h1>
+
+    <div class="info-box">
+      <strong>⚡ Browser Voice Recognition Test</strong><br>
+      Diese Seite testet die echte Web Speech API Spracherkennung mit dem Mikrofon deines Computers.
+      Es ist KEIN Headless-Test — der Browser muss wirklich hören können!
+      <br><br>
+      <strong>Verfügbare Befehle:</strong>
+      <ul style="margin-left: 20px; margin-top: 8px;">
+        <li><strong>Briefing:</strong> "Briefing", "Brief", "Guten Morgen"</li>
+        <li><strong>Wetter:</strong> "Wetter", "Wie ist das Wetter", "Wetterbericht"</li>
+        <li><strong>Aufgaben:</strong> "Aufgaben", "Tagesplan", "Was ist heute"</li>
+        <li><strong>Stop:</strong> "Stopp", "Stop", "Ruhe"</li>
+      </ul>
+    </div>
+
+    <!-- CONTROL SECTION -->
+    <div class="section">
+      <h2>🎙️ Voice Control</h2>
+      
+      <div class="control-group">
+        <button id="initBtn" class="secondary">Initialize Voice</button>
+        <button id="startBtn">Start Listening 🎤</button>
+        <button id="stopBtn">Stop</button>
+        <button id="clearLogBtn" class="secondary">Clear Log</button>
+      </div>
+
+      <div class="status-panel">
+        <div class="status-line">
+          <span class="label">Status:</span>
+          <span class="value">
+            <span id="voiceState">Not initialized</span>
+            <span id="voiceStateIndicator" class="voice-state idle">IDLE</span>
+          </span>
+        </div>
+        <div class="status-line">
+          <span class="label">Browser Support:</span>
+          <span class="value" id="browserSupport">Checking...</span>
+        </div>
+        <div class="status-line">
+          <span class="label">Language:</span>
+          <span class="value">de-DE (German)</span>
+        </div>
+        <div class="status-line">
+          <span class="label">Last Command:</span>
+          <span class="value" id="lastCommand">-</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- TRANSCRIPT DISPLAY -->
+    <div class="section">
+      <h2>📝 Transcript</h2>
+      <div class="transcript-display" id="transcriptDisplay">
+        Drücke "Start Listening" und spreche einen Befehl ...
+      </div>
+    </div>
+
+    <!-- TEST COMMANDS -->
+    <div class="section">
+      <h2>🧪 Manual Test (ohne Mikrofon)</h2>
+      <p style="color: #999; margin-bottom: 15px; font-size: 12px;">
+        Für schnelle Tests — diese Befehle simulieren die Spracherkennung:
+      </p>
+      <div class="test-commands">
+        <button class="secondary" id="testBriefing">Test: Briefing</button>
+        <button class="secondary" id="testWeather">Test: Wetter</button>
+        <button class="secondary" id="testTasks">Test: Aufgaben</button>
+        <button class="secondary" id="testStop">Test: Stop</button>
+      </div>
+    </div>
+
+    <!-- COMMAND RESULT -->
+    <div id="commandResult" class="command-result">
+      <h3 id="commandTitle">Befehl ausgeführt</h3>
+      <div class="command-data" id="commandData"></div>
+    </div>
+
+    <!-- LOG -->
+    <div class="section">
+      <h2>📊 Debug Log</h2>
+      <div class="log" id="debugLog"></div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script>
+    // Simple logging system
+    const logLines = [];
+    const maxLogs = 100;
+
+    function addLog(msg, type = 'info') {
+      const timestamp = new Date().toLocaleTimeString('de-DE');
+      logLines.push({ msg, type, time: timestamp });
+      if (logLines.length > maxLogs) logLines.shift();
+      renderLog();
+      console.log(`[${type.toUpperCase()}] ${msg}`);
+    }
+
+    function renderLog() {
+      const logEl = document.querySelector('#debugLog');
+      logEl.innerHTML = logLines.map(line => {
+        return `<div class="log-line ${line.type}">[${line.time}] ${line.msg}</div>`;
+      }).join('');
+      logEl.scrollTop = logEl.scrollHeight;
+    }
+
+    function clearLog() {
+      logLines.length = 0;
+      renderLog();
+    }
+
+    // UI Updates
+    function updateVoiceState(state, label) {
+      document.querySelector('#voiceState').textContent = label;
+      const indicator = document.querySelector('#voiceStateIndicator');
+      indicator.className = `voice-state ${state}`;
+    }
+
+    function updateTranscript(text, isFinal = false) {
+      const el = document.querySelector('#transcriptDisplay');
+      el.textContent = text || 'Sprich jetzt …';
+      el.className = `transcript-display ${isFinal ? 'final' : 'interim'}`;
+    }
+
+    function showCommandResult(title, data) {
+      const el = document.querySelector('#commandResult');
+      document.querySelector('#commandTitle').textContent = title;
+      document.querySelector('#commandData').innerHTML = Object.entries(data)
+        .map(([k, v]) => `<div><strong>${k}:</strong> ${v}</div>`)
+        .join('');
+      el.classList.add('active');
+      setTimeout(() => el.classList.remove('active'), 5000);
+    }
+
+    // Check browser support
+    function checkBrowserSupport() {
+      const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+      const TTS = window.speechSynthesis;
+      const supported = SR && TTS;
+      
+      const msg = supported
+        ? `✓ Yes (Recognition + TTS)`
+        : `✗ No (SR: ${!!SR}, TTS: ${!!TTS})`;
+      
+      document.querySelector('#browserSupport').textContent = msg;
+      addLog(`Browser support: ${msg}`, supported ? 'success' : 'error');
+      return supported;
+    }
+
+    // Load main module
+    checkBrowserSupport();
+  </script>
+
+  <!-- Load FRIDAY Voice Commands module -->
+  <script src="friday-voice-commands.js"></script>
+
+  <!-- Test harness -->
+  <script>
+    let isInitialized = false;
+
+    document.querySelector('#initBtn').addEventListener('click', () => {
+      if (isInitialized) {
+        addLog('Already initialized', 'info');
+        return;
+      }
+
+      const success = FRIDAYVoiceCommands.init();
+      isInitialized = success;
+      addLog(`Initialization: ${success ? '✓ Success' : '✗ Failed'}`, success ? 'success' : 'error');
+      updateVoiceState('idle', 'Ready');
+    });
+
+    document.querySelector('#startBtn').addEventListener('click', () => {
+      if (!isInitialized) {
+        addLog('Not initialized! Click "Initialize Voice" first.', 'error');
+        return;
+      }
+      
+      addLog('Starting voice recognition (de-DE)...', 'voice');
+      updateVoiceState('listening', 'Listening...');
+      FRIDAYVoiceCommands.startListening();
+    });
+
+    document.querySelector('#stopBtn').addEventListener('click', () => {
+      addLog('Stopping voice recognition', 'voice');
+      FRIDAYVoiceCommands.stopListening();
+      updateVoiceState('idle', 'Stopped');
+    });
+
+    document.querySelector('#clearLogBtn').addEventListener('click', clearLog);
+
+    // Test commands
+    document.querySelector('#testBriefing').addEventListener('click', async () => {
+      addLog('TEST: Executing handleBriefing()', 'success');
+      updateVoiceState('processing', 'Processing Briefing...');
+      await FRIDAYVoiceCommands.executeTest('briefing');
+      
+      const state = FRIDAYVoiceCommands.getState();
+      showCommandResult('Briefing Result', {
+        'Status': state.briefingData ? '✓ Loaded' : '✗ No data',
+        'Projects': state.briefingData?.projects?.length || 0,
+        'Data': JSON.stringify(state.briefingData).substring(0, 100)
+      });
+    });
+
+    document.querySelector('#testWeather').addEventListener('click', async () => {
+      addLog('TEST: Executing handleWeather()', 'success');
+      updateVoiceState('processing', 'Processing Weather...');
+      await FRIDAYVoiceCommands.executeTest('weather');
+      
+      const state = FRIDAYVoiceCommands.getState();
+      showCommandResult('Weather Result', {
+        'Temp': state.weatherData?.temp || '?',
+        'Weather': state.weatherData?.weather || '?',
+        'Wind': (state.weatherData?.wind || '?') + ' km/h'
+      });
+    });
+
+    document.querySelector('#testTasks').addEventListener('click', async () => {
+      addLog('TEST: Executing handleTasks()', 'success');
+      updateVoiceState('processing', 'Processing Tasks...');
+      await FRIDAYVoiceCommands.executeTest('tasks');
+      
+      const state = FRIDAYVoiceCommands.getState();
+      showCommandResult('Tasks Result', {
+        'Today': state.tasksData?.today || 0,
+        'Overdue': state.tasksData?.overdue || 0,
+        'This Week': state.tasksData?.week || 0
+      });
+    });
+
+    document.querySelector('#testStop').addEventListener('click', async () => {
+      addLog('TEST: Executing handleStop()', 'success');
+      await FRIDAYVoiceCommands.executeTest('stop');
+      updateVoiceState('idle', 'Stopped');
+    });
+
+    // Auto-initialize on load
+    window.addEventListener('load', () => {
+      addLog('Page loaded. Click "Initialize Voice" to begin.', 'info');
+    });
+  </script>
+</body>
+</html>
