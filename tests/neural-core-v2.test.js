@@ -192,7 +192,7 @@ assert.match(styles, /--orbit-canvas\s*:\s*#02070a[\s\S]*--orbit-system\s*:\s*#0
 assert.match(styles, /\.hud-hero\s*\{[^}]*var\(--orbit-panel\)[^}]*var\(--orbit-system\)/s, 'hero must use the neural command surface instead of the legacy red-brown reactor palette');
 assert.match(styles, /\.metric\s*,\s*\.integration-card\s*,\s*\.focus-card\s*,\s*\.capture-card\s*\{[^}]*var\(--orbit-border\)/s, 'dashboard surfaces must share one subtle command border');
 assert.match(start, /void startBootMusic\s*\(/, 'finite cinematic score starts from the trusted initiate gesture');
-assert.match(start, /audio\.loop=false/, 'cinematic score must never loop — it ends with FRIDAY speech');
+assert.match(start, /audio\.loop=true/, 'cinematic score must loop so it covers the full briefing');
 assert.match(start, /ORBITNeuralCore\.assemble\s*\(/, 'initiate must start particle assembly');
 assert.match(start, /HANDOFF_DELAY\s*=\s*(?:3[5-9]\d\d|[4-9]\d{3,})/, 'handoff must leave the completed wordmark visible');
 assert.match(start, /ORBITNeuralCore\.pushVoiceFrame/);

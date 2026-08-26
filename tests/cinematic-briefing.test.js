@@ -16,8 +16,8 @@ for(const id of ['panoramaDate','panoramaCalendar','panoramaMail','panoramaTasks
 assert.match(start,/weekday:'long'[\s\S]*day:'numeric'[\s\S]*month:'long'/, 'FRIDAY states the current date');
 assert.match(start,/getBriefingData/);
 assert.match(start,/ORBITPanorama\?\.applyBriefing/);
-assert.match(start,/MUSIC_MAX_MS=20000/);
-assert.match(start,/audio\.loop=false/);
+assert.match(start,/MUSIC_MAX_MS=90000/);
+assert.match(start,/audio\.loop=true/);
 assert.match(start,/void startBootMusic\(\)/);
 assert.match(start,/speak\(narration,\{onend:\(\)=>stopBootMusic\(\)\}\)/);
 assert.match(start,/setMusicLevel\(active\?AUDIO_MIX\.ducked:AUDIO_MIX\.handoff/);
